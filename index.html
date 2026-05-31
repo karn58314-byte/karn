@@ -1197,15 +1197,81 @@
     }, { passive: true });
 
     /* ----------------------------------------------------------
-       CONTACT FORM feedback
+       CONTACT FORM — ส่งข้อมูลไปยัง Discord Webhook
+       วาง Webhook URL ของคุณที่ DISCORD_WEBHOOK_URL ด้านล่าง
     ---------------------------------------------------------- */
-    document.getElementById('submitBtn').addEventListener('click', function () {
-      this.textContent = 'ส่งแล้ว ✓';
-      this.style.background = '#27AE60';
-      setTimeout(() => {
-        this.textContent = 'ส่งข้อความ →';
-        this.style.background = '';
-      }, 2800);
+
+    // ⚠️ แทนที่ URL นี้ด้วย Webhook URL จาก Discord ของคุณ
+    const DISCORD_WEBHOOK_URL = 'https://discord.gg/rjzbxWCV';
+
+    document.getElementById('submitBtn').addEventListener('click', async function () {
+      const btn = this;
+
+      // ดึงข้อมูลจาก input fields
+      const fields = document.querySelectorAll('#page-about .fg input, #page-about .fg textarea');
+      const name    = fields[0]?.value.trim();
+      const room    = fields[1]?.value.trim();
+      const email   = fields[2]?.value.trim();
+      const subject = fields[3]?.value.trim();
+      const message = fields[4]?.value.trim();
+
+      // ตรวจสอบว่ากรอกชื่อและข้อความครบ
+      if (!name || !message) {
+        btn.textContent = '⚠ กรุณากรอกชื่อและข้อความ';
+        btn.style.background = '#e67e22';
+        setTimeout(() => { btn.textContent = 'ส่งข้อความ →'; btn.style.background = ''; }, 2500);
+        return;
+      }
+
+      // สร้าง Discord embed message
+      const payload = {
+        username: '📬 สภานักเรียน — ข้อความใหม่',
+        embeds: [{
+          title: `📩 ${subject || 'ข้อความจากเว็บไซต์'}`,
+          color: 0xff0000, // สีแดง
+          fields: [
+            { name: '👤 ชื่อ-นามสกุล', value: name || '—',    inline: true  },
+            { name: '🏫 ห้องเรียน',     value: room || '—',    inline: true  },
+            { name: '📧 อีเมล',          value: email || '—',   inline: false },
+            { name: '💬 ข้อความ',        value: message || '—', inline: false }
+          ],
+          footer: { text: 'ส่งจากเว็บไซต์สภานักเรียน' },
+          timestamp: new Date().toISOString()
+        }]
+      };
+
+      // แสดงสถานะกำลังส่ง
+      btn.textContent = 'กำลังส่ง...';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch(DISCORD_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          // ส่งสำเร็จ — แสดงผลและเคลียร์ form
+          btn.textContent = 'ส่งแล้ว ✓';
+          btn.style.background = '#27AE60';
+          btn.style.opacity = '1';
+          // เคลียร์ทุก field
+          fields.forEach(f => f.value = '');
+          setTimeout(() => { btn.textContent = 'ส่งข้อความ →'; btn.style.background = ''; btn.disabled = false; }, 3000);
+        } else {
+          throw new Error('HTTP ' + res.status);
+        }
+      } catch (err) {
+        // ส่งไม่สำเร็จ
+        btn.textContent = '❌ ส่งไม่สำเร็จ ลองใหม่';
+        btn.style.background = '#c0392b';
+        btn.style.opacity = '1';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = 'ส่งข้อความ →'; btn.style.background = ''; }, 3000);
+        console.error('Discord webhook error:', err);
+      }
     });
 
     /* ----------------------------------------------------------
