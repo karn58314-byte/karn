@@ -8,208 +8,210 @@
 
   <style>
     /* ============================================================
-       RESET & ROOT VARIABLES
+       RESET & CSS VARIABLES
     ============================================================ */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* --- Color Palette (Red + Gray dominant) --- */
-      --red:        #ff0000;   /* primary red */
-      --red-deep:   #cc0000;   /* dark red for hover */
-      --red-mid:    #ff3333;   /* lighter red accent */
-      --red-glow:   rgba(255,0,0,0.15);
+      --red:       #ff0000;
+      --red-deep:  #cc0000;
+      --red-mid:   #ff3333;
+      --red-glow:  rgba(255,0,0,0.13);
 
-      --gray-900:   #111111;   /* near-black */
-      --gray-800:   #1E1E1E;   /* dark bg */
-      --gray-700:   #2D2D2D;   /* dark card bg */
-      --gray-600:   #444444;
-      --gray-400:   #7A7A7A;
-      --gray-200:   #C8C8C8;
-      --gray-100:   #EBEBEB;
-      --gray-50:    #F5F5F5;
-      --white:      #FFFFFF;
+      --g900: #111111;
+      --g800: #1e1e1e;
+      --g700: #2d2d2d;
+      --g600: #444444;
+      --g400: #7a7a7a;
+      --g200: #c8c8c8;
+      --white: #ffffff;
 
-      /* --- Typography --- */
       --font: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
 
-      /* --- Spacing --- */
-      --nav-h: 68px;
-      --section-px: clamp(20px, 5vw, 80px);
-      --section-py: clamp(60px, 8vw, 110px);
+      /* nav height — used as offset everywhere */
+      --nav-h: 60px;
+
+      /* responsive padding: 16px on phone → 80px on desktop */
+      --px: clamp(16px, 5vw, 80px);
+      --py: clamp(48px, 7vw, 100px);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       font-family: var(--font);
-      background: var(--gray-900);
+      background: var(--g900);
       color: var(--white);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ============================================================
-       SCROLLBAR
-    ============================================================ */
+    /* ── scrollbar ── */
     ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--gray-800); }
-    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+    ::-webkit-scrollbar-track { background: var(--g800); }
+    ::-webkit-scrollbar-thumb { background: var(--red); }
 
     /* ============================================================
-       UTILITY CLASSES
+       SHARED UTILITIES
     ============================================================ */
+
+    /* small label above section titles */
     .tag {
       display: inline-flex; align-items: center; gap: 8px;
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--red-mid);
-      margin-bottom: 16px;
+      color: var(--red-mid); margin-bottom: 14px;
     }
     .tag::before {
-      content: ''; display: inline-block;
-      width: 18px; height: 2px; background: var(--red);
+      content: ''; width: 16px; height: 2px; background: var(--red);
     }
 
+    /* main section heading */
     .section-title {
-      font-size: clamp(28px, 4vw, 52px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 16px;
+      font-size: clamp(24px, 4vw, 50px);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
+      margin-bottom: 14px;
     }
+
+    /* sub-paragraph under title */
     .section-lead {
-      font-size: clamp(14px, 1.5vw, 16px);
-      font-weight: 300;
-      color: var(--gray-400);
-      line-height: 1.8;
+      font-size: clamp(13px, 1.5vw, 15px);
+      font-weight: 300; color: var(--g400); line-height: 1.8;
     }
 
-    /* Red accent text */
-    .red { color: var(--red-mid); }
+    /* red horizontal bar accent */
+    .divider { width: 40px; height: 3px; background: var(--red); margin: 18px 0; }
 
-    /* Horizontal divider */
-    .divider {
-      width: 48px; height: 3px;
-      background: var(--red);
-      margin: 20px 0;
-    }
-
-    /* Reveal animation */
+    /* scroll-reveal base state */
     .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.visible { opacity: 1; transform: none; }
 
     /* ============================================================
        NAVIGATION
     ============================================================ */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
       height: var(--nav-h);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--section-px);
-      background: rgba(17,17,17,0.92);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 var(--px);
+      background: rgba(17,17,17,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
       transition: box-shadow 0.3s;
     }
 
-    /* Logo area */
-    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    /* logo */
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
 
     .logo-hex {
-      width: 38px; height: 38px; flex-shrink: 0;
+      width: 34px; height: 34px; flex-shrink: 0;
       background: var(--red);
       clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
       display: flex; align-items: center; justify-content: center;
       animation: spin 14s linear infinite;
     }
-    .logo-hex span { font-size: 12px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+    .logo-hex span { font-size: 11px; font-weight: 800; color: #fff; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .nav-brand {
-      display: flex; flex-direction: column; line-height: 1.1;
-    }
-    .nav-brand .th { font-size: 14px; font-weight: 700; color: var(--white); }
-    .nav-brand .en { font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-400); }
+    .nav-brand { display: flex; flex-direction: column; line-height: 1.2; }
+    .nav-brand .th { font-size: 13px; font-weight: 700; color: var(--white); }
+    .nav-brand .en { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
 
-    /* Desktop nav links */
-    .nav-links { display: flex; gap: 0; list-style: none; }
-    .nav-links li a {
-      display: block;
-      padding: 8px 18px;
+    /* ── hide old desktop link list (replaced by single menu btn) ── */
+    .nav-links { display: none !important; }
+
+    /* ── single menu button — always visible ── */
+    .menu-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: none; border: 1.5px solid var(--g600);
+      cursor: pointer; padding: 8px 16px;
+      font-family: var(--font); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--g200);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      position: relative; z-index: 310;
+    }
+    .menu-btn:hover { border-color: var(--red); color: var(--white); }
+    .menu-btn.open  { border-color: var(--red); color: var(--white); background: rgba(255,0,0,0.08); }
+
+    /* three-line icon inside button */
+    .menu-btn-icon {
+      display: flex; flex-direction: column; gap: 4px; width: 16px;
+    }
+    .menu-btn-icon span {
+      display: block; height: 1.5px; background: currentColor;
+      transition: transform 0.3s, opacity 0.3s, width 0.3s;
+    }
+    .menu-btn-icon span:nth-child(3) { width: 60%; } /* short bottom line */
+    /* morph to X when open */
+    .menu-btn.open .menu-btn-icon span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+    .menu-btn.open .menu-btn-icon span:nth-child(2) { opacity: 0; }
+    .menu-btn.open .menu-btn-icon span:nth-child(3) { width: 100%; transform: translateY(-5.5px) rotate(-45deg); }
+
+    /* ── dropdown panel ── */
+    .nav-dropdown {
+      position: fixed;
+      /* align to right edge of nav */
+      top: var(--nav-h); right: var(--px);
+      width: 220px;
+      background: var(--g800);
+      border: 1px solid var(--g700);
+      border-top: 3px solid var(--red);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      z-index: 299;
+      /* hidden by default — scale + fade */
+      opacity: 0; pointer-events: none;
+      transform: translateY(-8px) scaleY(0.95);
+      transform-origin: top right;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .nav-dropdown.open {
+      opacity: 1; pointer-events: auto;
+      transform: translateY(0) scaleY(1);
+    }
+
+    /* each menu item */
+    .nav-dropdown a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
       font-size: 12px; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--gray-400);
-      text-decoration: none;
-      border-radius: 2px;
-      transition: color 0.2s, background 0.2s;
+      color: var(--g200); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: color 0.2s, background 0.2s, padding-left 0.2s;
       position: relative;
     }
-    .nav-links li a::after {
-      content: '';
-      position: absolute; bottom: 4px; left: 18px; right: 18px;
-      height: 1.5px; background: var(--red);
-      transform: scaleX(0); transform-origin: left;
-      transition: transform 0.3s;
+    .nav-dropdown a:last-child { border-bottom: none; }
+    .nav-dropdown a:hover { color: var(--white); background: rgba(255,0,0,0.07); padding-left: 26px; }
+    .nav-dropdown a.active { color: var(--red-mid); }
+    .nav-dropdown a.active::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--red);
     }
-    .nav-links li a:hover { color: var(--white); }
-    .nav-links li a:hover::after { transform: scaleX(1); }
-    .nav-links li a.active { color: var(--red-mid); }
-
-    /* Hamburger button (mobile) */
-    .nav-burger {
-      display: none;
-      flex-direction: column; gap: 5px;
-      cursor: pointer; padding: 6px;
-      background: none; border: none;
+    /* icon dot next to each item */
+    .nav-dropdown a .di {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--g600); flex-shrink: 0;
+      transition: background 0.2s;
     }
-    .nav-burger span {
-      display: block; width: 24px; height: 2px;
-      background: var(--white);
-      transition: transform 0.3s, opacity 0.3s;
-    }
-    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav-burger.open span:nth-child(2) { opacity: 0; }
-    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    /* Mobile drawer */
-    .nav-drawer {
-      display: none;
-      position: fixed; top: var(--nav-h); left: 0; right: 0;
-      background: var(--gray-800);
-      border-bottom: 2px solid var(--red);
-      z-index: 199;
-      flex-direction: column;
-      transform: translateY(-100%);
-      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-    }
-    .nav-drawer.open { transform: translateY(0); }
-    .nav-drawer a {
-      display: block; padding: 18px var(--section-px);
-      font-size: 14px; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--gray-200); text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      transition: color 0.2s, padding-left 0.2s;
-    }
-    .nav-drawer a:hover { color: var(--red-mid); padding-left: calc(var(--section-px) + 8px); }
+    .nav-dropdown a:hover .di,
+    .nav-dropdown a.active .di { background: var(--red); }
 
     /* ============================================================
-       PAGE SYSTEM — show/hide pages via JS
+       PAGE SWITCHING SYSTEM
     ============================================================ */
     .page { display: none; }
     .page.active { display: block; }
 
     /* ============================================================
-       MARQUEE BANNER
+       MARQUEE TICKER
     ============================================================ */
     .marquee-wrap {
-      overflow: hidden;
-      background: var(--red);
-      padding: 12px 0;
+      overflow: hidden; background: var(--red);
+      padding: 10px 0;
       border-top: 1px solid var(--red-deep);
       border-bottom: 1px solid var(--red-deep);
     }
@@ -218,19 +220,34 @@
       animation: marquee 22s linear infinite;
     }
     .marquee-track span {
-      font-size: 10px; font-weight: 700;
+      font-size: 9px; font-weight: 700;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: rgba(255,255,255,0.85);
-      padding: 0 32px; white-space: nowrap;
+      padding: 0 28px; white-space: nowrap;
     }
-    .marquee-track span::after { content: '◆'; margin-left: 32px; color: rgba(255,255,255,0.35); }
+    .marquee-track span::after { content: '◆'; margin-left: 28px; color: rgba(255,255,255,0.3); }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     /* ============================================================
-       ① PAGE: HOME (หน้าแรก)
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-block; padding: 12px 28px;
+      font-family: var(--font); font-size: 11px;
+      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all 0.25s; text-align: center;
+    }
+    .btn-red  { background: var(--red); color: #fff; }
+    .btn-red:hover  { background: var(--red-deep); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,0,0,0.3); }
+    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid var(--g600); }
+    .btn-outline:hover { border-color: var(--red); color: var(--red-mid); transform: translateY(-2px); }
+
+    /* ============================================================
+       ① HOME PAGE
     ============================================================ */
 
-    /* --- Hero --- */
+    /* --- Hero: 2-col on desktop, stacked on mobile --- */
     .hero {
       min-height: 100vh;
       padding-top: var(--nav-h);
@@ -238,424 +255,363 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    /* left text panel */
     .hero-left {
       display: flex; flex-direction: column; justify-content: center;
-      padding: clamp(40px,6vw,90px) clamp(20px,4vw,60px) clamp(40px,6vw,90px) var(--section-px);
-      background: var(--gray-900);
-      position: relative;
+      padding: clamp(40px,6vw,90px) clamp(16px,4vw,60px) clamp(40px,6vw,90px) var(--px);
+      background: var(--g900); position: relative;
     }
-    /* Left red stripe */
+    /* red left stripe */
     .hero-left::before {
-      content: ''; position: absolute; left: 0; top: 25%; bottom: 25%;
-      width: 4px;
-      background: linear-gradient(to bottom, transparent, var(--red), transparent);
+      content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
+      width: 4px; background: linear-gradient(to bottom, transparent, var(--red), transparent);
     }
 
     .hero-eyebrow {
-      font-size: 11px; font-weight: 700;
+      font-size: 10px; font-weight: 700;
       letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--red-mid); margin-bottom: 20px;
+      color: var(--red-mid); margin-bottom: 18px;
       display: flex; align-items: center; gap: 10px;
     }
-    .hero-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--red); }
+    .hero-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--red); }
 
     .hero-title {
-      font-size: clamp(48px,6vw,88px);
+      font-size: clamp(42px, 6vw, 86px);
       font-weight: 800; line-height: 1.0;
       letter-spacing: -0.04em; margin-bottom: 8px;
     }
     .hero-title .line2 {
       display: block; color: var(--red-mid);
-      text-shadow: 0 0 40px rgba(255,0,0,0.35);
+      text-shadow: 0 0 40px rgba(255,0,0,0.3);
     }
 
     .hero-sub {
-      font-size: 13px; font-weight: 400;
-      color: var(--gray-400); letter-spacing: 0.15em;
-      text-transform: uppercase; margin-bottom: 28px;
+      font-size: 12px; font-weight: 400;
+      color: var(--g400); letter-spacing: 0.15em;
+      text-transform: uppercase; margin-bottom: 20px;
     }
 
     .hero-desc {
-      font-size: clamp(14px,1.4vw,16px); font-weight: 300;
-      color: var(--gray-200); line-height: 1.8;
-      max-width: 420px; margin-bottom: 44px;
+      font-size: clamp(13px, 1.4vw, 15px); font-weight: 300;
+      color: var(--g200); line-height: 1.8;
+      max-width: 400px; margin-bottom: 36px;
     }
 
-    .hero-btns { display: flex; flex-wrap: wrap; gap: 14px; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
 
-    /* Buttons */
-    .btn {
-      display: inline-block; padding: 13px 30px;
-      font-family: var(--font); font-size: 12px;
-      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      cursor: pointer; border: none; text-decoration: none;
-      transition: all 0.25s;
-    }
-    .btn-red { background: var(--red); color: white; }
-    .btn-red:hover { background: var(--red-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,0,0,0.30); }
-    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid var(--gray-600); }
-    .btn-outline:hover { border-color: var(--red); color: var(--red-mid); transform: translateY(-2px); }
-
-    /* Hero right — dark visual panel */
+    /* right decorative panel */
     .hero-right {
-      background: var(--gray-800);
-      position: relative; overflow: hidden;
+      background: var(--g800); position: relative; overflow: hidden;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 0;
     }
-    /* Red radial glow */
     .hero-right::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 40% 50%, rgba(255,0,0,0.24) 0%, transparent 68%);
+      background: radial-gradient(ellipse at 40% 50%, rgba(255,0,0,0.22) 0%, transparent 68%);
     }
-    /* Decorative rotating squares */
+    /* rotating geo shapes */
     .geo { position: absolute; border: 1px solid rgba(255,255,255,0.05); }
-    .geo-1 { width: 400px; height: 400px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(12deg); animation: geo-rot 20s linear infinite; }
-    .geo-2 { width: 280px; height: 280px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(35deg); animation: geo-rot 14s linear infinite reverse; }
-    .geo-3 { width: 160px; height: 160px; top:50%; left:50%; transform:translate(-50%,-50%); background: rgba(192,57,43,0.1); border-color: var(--red); animation: geo-rot 8s linear infinite; }
-    @keyframes geo-rot { to { transform: translate(-50%,-50%) rotate(360deg); } }
+    .geo-1 { width: 360px; height: 360px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(12deg); animation: g-rot 20s linear infinite; }
+    .geo-2 { width: 240px; height: 240px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(35deg); animation: g-rot 14s linear infinite reverse; }
+    .geo-3 { width: 140px; height: 140px; top:50%; left:50%; transform:translate(-50%,-50%); background: rgba(255,0,0,0.08); border-color: var(--red); animation: g-rot 8s linear infinite; }
+    @keyframes g-rot { to { transform: translate(-50%,-50%) rotate(360deg); } }
 
     .hero-center-text { position: relative; z-index: 2; text-align: center; }
-    .hero-year { font-size: clamp(72px,8vw,120px); font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; letter-spacing: -0.05em; }
+    .hero-year { font-size: clamp(60px,8vw,110px); font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; letter-spacing: -0.05em; }
     .hero-center-label {
       position: absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      font-size: 13px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
       color: rgba(255,255,255,0.8); white-space: nowrap;
     }
 
-    /* Stats row inside hero right */
+    /* stats row */
     .hero-stats {
-      position: absolute; bottom: 40px; left: 0; right: 0;
-      display: flex; justify-content: center; gap: clamp(30px,5vw,60px);
+      position: absolute; bottom: 32px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: clamp(20px,5vw,56px);
     }
     .stat { text-align: center; }
-    .stat-n { font-size: clamp(24px,3vw,36px); font-weight: 800; color: white; letter-spacing: -0.03em; }
+    .stat-n { font-size: clamp(22px,3vw,34px); font-weight: 800; color: #fff; letter-spacing: -0.03em; }
     .stat-n em { color: var(--red-mid); font-style: normal; }
-    .stat-l { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-400); margin-top: 4px; }
+    .stat-l { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--g400); margin-top: 4px; }
 
-    /* --- Home: News strip --- */
-    .news-strip {
-      background: var(--gray-800);
-      padding: clamp(40px,5vw,72px) var(--section-px);
-    }
+    /* news section */
+    .news-strip { background: var(--g800); padding: var(--py) var(--px); }
     .news-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1px; background: var(--gray-700);
-      border: 1px solid var(--gray-700);
-      margin-top: 44px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px; background: var(--g700);
+      border: 1px solid var(--g700);
+      margin-top: 36px;
     }
     .news-card {
-      background: var(--gray-800);
-      padding: 28px 24px;
-      transition: background 0.3s;
-      position: relative; overflow: hidden;
+      background: var(--g800); padding: 24px 20px;
+      transition: background 0.3s; position: relative; overflow: hidden;
     }
     .news-card::before {
-      content: ''; position: absolute; top:0; left:0; right:0;
-      height: 3px; background: var(--red);
-      transform: scaleX(0); transform-origin: left;
-      transition: transform 0.35s;
+      content: ''; position: absolute; top:0; left:0; right:0; height: 3px;
+      background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
     }
     .news-card:hover::before { transform: scaleX(1); }
-    .news-card:hover { background: var(--gray-700); }
-    .news-date { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 10px; }
-    .news-card h3 { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
-    .news-card p { font-size: 13px; font-weight: 300; color: var(--gray-400); line-height: 1.65; }
+    .news-card:hover { background: var(--g700); }
+    .news-date { font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 8px; }
+    .news-card h3 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
+    .news-card p  { font-size: 12px; font-weight: 300; color: var(--g400); line-height: 1.6; }
 
     /* ============================================================
-       ② PAGE: POLICY (นโยบาย)
+       ② POLICY PAGE
     ============================================================ */
-    .policy-hero {
-      background: var(--gray-800);
-      padding: calc(var(--nav-h) + 60px) var(--section-px) 60px;
-      border-bottom: 1px solid var(--gray-700);
+    .page-hero {
+      background: var(--g800);
+      padding: calc(var(--nav-h) + 48px) var(--px) 48px;
+      border-bottom: 1px solid var(--g700);
       position: relative; overflow: hidden;
     }
-    .policy-hero::after {
-      content: 'POLICY';
-      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
-      font-size: clamp(80px,10vw,160px); font-weight: 800;
+    /* large watermark text */
+    .page-hero::after {
+      content: attr(data-wm);
+      position: absolute; right: var(--px); top: 50%; transform: translateY(-50%);
+      font-size: clamp(56px, 10vw, 150px); font-weight: 800;
       color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
-      white-space: nowrap; pointer-events: none;
+      white-space: nowrap; pointer-events: none; line-height: 1;
     }
 
-    .policy-list {
-      padding: var(--section-py) var(--section-px);
-      display: flex; flex-direction: column; gap: 2px;
-    }
+    .policy-list { padding: var(--py) var(--px); display: flex; flex-direction: column; gap: 2px; }
+
     .policy-item {
-      display: grid; grid-template-columns: 80px 1fr;
-      align-items: start; gap: 24px;
-      padding: 32px 28px;
-      background: var(--gray-800);
-      border: 1px solid var(--gray-700);
+      display: grid; grid-template-columns: 64px 1fr;
+      align-items: start; gap: 20px;
+      padding: 28px 24px;
+      background: var(--g800); border: 1px solid var(--g700);
       position: relative; overflow: hidden;
       transition: background 0.3s, border-color 0.3s;
     }
-    .policy-item:hover { background: var(--gray-700); border-color: var(--red); }
-    /* Red left bar on hover */
+    .policy-item:hover { background: var(--g700); border-color: var(--red); }
+    /* animated left red bar */
     .policy-item::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0;
       width: 4px; background: var(--red);
-      transform: scaleY(0); transform-origin: top;
-      transition: transform 0.35s;
+      transform: scaleY(0); transform-origin: top; transition: transform 0.35s;
     }
     .policy-item:hover::before { transform: scaleY(1); }
 
     .policy-num {
-      font-size: 36px; font-weight: 800; color: var(--red);
-      line-height: 1; letter-spacing: -0.04em; opacity: 0.6;
+      font-size: clamp(24px,3vw,34px); font-weight: 800; color: var(--red);
+      line-height: 1; letter-spacing: -0.04em; opacity: 0.55;
     }
-    .policy-content h3 { font-size: clamp(16px,2vw,20px); font-weight: 700; color: var(--white); margin-bottom: 10px; }
-    .policy-content p { font-size: 14px; font-weight: 300; color: var(--gray-400); line-height: 1.75; }
+    .policy-content h3 { font-size: clamp(14px,2vw,18px); font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+    .policy-content p  { font-size: 13px; font-weight: 300; color: var(--g400); line-height: 1.75; }
     .policy-badge {
-      display: inline-block; margin-top: 12px;
-      padding: 4px 12px;
-      font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      display: inline-block; margin-top: 10px;
+      padding: 3px 10px;
+      font-size: 8px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
       background: var(--red-glow); color: var(--red-mid);
-      border: 1px solid rgba(255,0,0,0.28);
+      border: 1px solid rgba(255,0,0,0.25);
     }
 
     /* ============================================================
-       ③ PAGE: MEMBERS (สมาชิก)
+       ③ MEMBERS PAGE
     ============================================================ */
-    .members-hero {
-      background: var(--gray-800);
-      padding: calc(var(--nav-h) + 60px) var(--section-px) 60px;
-      border-bottom: 1px solid var(--gray-700);
-      position: relative; overflow: hidden;
-    }
-    .members-hero::after {
-      content: 'MEMBERS';
-      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
-      font-size: clamp(70px,9vw,140px); font-weight: 800;
-      color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
-      white-space: nowrap; pointer-events: none;
-    }
-
     .members-grid {
-      padding: var(--section-py) var(--section-px);
+      padding: var(--py) var(--px);
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 2px; background: var(--gray-700);
+      /* fills columns naturally; min 160px so small phones get 2 cols */
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 2px; background: var(--g700);
     }
 
     .member-card {
-      background: var(--gray-800);
-      padding: 32px 24px 24px;
+      background: var(--g800); padding: 28px 20px 20px;
       position: relative; overflow: hidden;
       transition: background 0.3s, transform 0.3s;
-      cursor: default;
     }
-    .member-card:hover { background: var(--gray-700); transform: translateY(-4px); }
-
-    /* Avatar circle */
-    .member-avatar {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gray-700), var(--red));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 800; color: white;
-      margin-bottom: 16px;
-      border: 2px solid rgba(255,0,0,0.35);
-    }
-    /* President gets special gold ring */
-    .member-card.president .member-avatar {
-      background: linear-gradient(135deg, var(--red-deep), var(--red-mid));
-      border-color: var(--red-mid);
-      box-shadow: 0 0 20px rgba(255,0,0,0.35);
-    }
-
-    .member-pos {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--red-mid); margin-bottom: 6px;
-    }
-    .member-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .member-class { font-size: 12px; font-weight: 300; color: var(--gray-400); }
-
-    /* Red top border on hover */
+    .member-card:hover { background: var(--g700); transform: translateY(-4px); }
     .member-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--red); transform: scaleX(0); transform-origin: left;
-      transition: transform 0.35s;
+      background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
     }
     .member-card:hover::before { transform: scaleX(1); }
 
-    /* Member number badge */
-    .member-num {
-      position: absolute; top: 16px; right: 16px;
-      font-size: 10px; font-weight: 800;
-      color: var(--gray-600); letter-spacing: 0.1em;
+    /* avatar circle */
+    .member-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--g700), var(--red));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 800; color: #fff;
+      margin-bottom: 14px;
+      border: 2px solid rgba(255,0,0,0.3);
     }
+    /* president: glowing red ring */
+    .member-card.president .member-avatar {
+      background: linear-gradient(135deg, var(--red-deep), var(--red-mid));
+      border-color: var(--red-mid);
+      box-shadow: 0 0 18px rgba(255,0,0,0.4);
+    }
+
+    .member-pos  { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 5px; }
+    .member-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; line-height: 1.3; }
+    .member-class{ font-size: 11px; font-weight: 300; color: var(--g400); }
+    .member-num  { position: absolute; top: 12px; right: 14px; font-size: 9px; font-weight: 800; color: var(--g600); }
 
     /* ============================================================
-       ④ PAGE: ABOUT (เกี่ยวกับเรา)
+       ④ ABOUT PAGE
     ============================================================ */
-    .about-hero {
-      background: var(--gray-800);
-      padding: calc(var(--nav-h) + 60px) var(--section-px) 60px;
-      border-bottom: 1px solid var(--gray-700);
-      position: relative; overflow: hidden;
-    }
-    .about-hero::after {
-      content: 'ABOUT';
-      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
-      font-size: clamp(80px,10vw,160px); font-weight: 800;
-      color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
-      white-space: nowrap; pointer-events: none;
-    }
 
-    /* Vision / Mission block */
+    /* vision / mission 2-col grid */
     .vm-grid {
-      padding: var(--section-py) var(--section-px);
+      padding: var(--py) var(--px);
       display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-      background: var(--gray-700);
+      background: var(--g700);
     }
-    .vm-card {
-      background: var(--gray-800); padding: 44px 36px;
-      position: relative; overflow: hidden;
-    }
+    .vm-card { background: var(--g800); padding: 40px 32px; }
     .vm-card.red-bg { background: var(--red); }
-    .vm-card.red-bg .section-title, .vm-card.red-bg p { color: white; }
+    .vm-card.red-bg .section-title,
+    .vm-card.red-bg p { color: #fff; }
     .vm-card.red-bg .tag { color: rgba(255,255,255,0.7); }
     .vm-card.red-bg .tag::before { background: rgba(255,255,255,0.5); }
-    .vm-card h2 { color: var(--white); }
-    .vm-card p { font-size: 15px; font-weight: 300; color: var(--gray-400); line-height: 1.8; }
+    .vm-card p { font-size: 14px; font-weight: 300; color: var(--g400); line-height: 1.8; }
 
-    /* Values row */
+    /* core values */
     .values-row {
-      padding: 0 var(--section-px) var(--section-py);
+      padding: 0 var(--px) var(--py);
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2px; background: var(--gray-700);
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2px; background: var(--g700);
     }
     .value-card {
-      background: var(--gray-900); padding: 32px 24px;
+      background: var(--g900); padding: 28px 20px;
       border-top: 3px solid transparent;
       transition: border-color 0.3s, background 0.3s;
     }
-    .value-card:hover { border-color: var(--red); background: var(--gray-800); }
-    .value-icon { font-size: 28px; margin-bottom: 14px; }
-    .value-card h3 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-    .value-card p { font-size: 13px; font-weight: 300; color: var(--gray-400); line-height: 1.65; }
+    .value-card:hover { border-color: var(--red); background: var(--g800); }
+    .value-icon { font-size: 26px; margin-bottom: 12px; }
+    .value-card h3 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .value-card p  { font-size: 12px; font-weight: 300; color: var(--g400); line-height: 1.65; }
 
-    /* --- Contact Section (inside About page) --- */
+    /* ── contact section ── */
     .contact-section {
-      background: var(--gray-800);
-      padding: var(--section-py) var(--section-px);
-      border-top: 1px solid var(--gray-700);
+      background: var(--g800);
+      padding: var(--py) var(--px);
+      border-top: 1px solid var(--g700);
     }
     .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr; gap: 60px;
-      margin-top: 48px; align-items: start;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; margin-top: 40px; align-items: start;
     }
 
-    /* Contact info items */
-    .contact-items { display: flex; flex-direction: column; gap: 0; }
+    /* contact info list */
+    .contact-items { display: flex; flex-direction: column; }
     .ci {
-      display: flex; align-items: center; gap: 18px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--gray-700);
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 0; border-bottom: 1px solid var(--g700);
     }
+    .ci:last-child { border: none; }
     .ci-icon {
-      width: 46px; height: 46px; flex-shrink: 0;
-      background: var(--red-glow);
-      border: 1px solid rgba(255,0,0,0.28);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: var(--red-glow); border: 1px solid rgba(255,0,0,0.22);
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
     }
-    .ci-label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 4px; }
-    .ci-val { font-size: 14px; font-weight: 400; color: var(--gray-200); }
+    .ci-label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 3px; }
+    .ci-val   { font-size: 13px; font-weight: 400; color: var(--g200); }
 
-    /* Contact form */
-    .contact-form { display: flex; flex-direction: column; gap: 14px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .fg { display: flex; flex-direction: column; gap: 6px; }
-    .fg label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray-400); }
+    /* contact form */
+    .contact-form { display: flex; flex-direction: column; gap: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+    .fg label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
     .fg input, .fg textarea {
-      padding: 13px 16px;
-      background: var(--gray-900); border: 1.5px solid var(--gray-700);
-      font-family: var(--font); font-size: 14px; font-weight: 300;
-      color: var(--white); outline: none; resize: none;
-      transition: border-color 0.25s;
+      padding: 12px 14px; background: var(--g900);
+      border: 1.5px solid var(--g700);
+      font-family: var(--font); font-size: 13px; font-weight: 300;
+      color: var(--white); outline: none; resize: none; transition: border-color 0.25s;
     }
     .fg input:focus, .fg textarea:focus { border-color: var(--red); }
-    .fg input::placeholder, .fg textarea::placeholder { color: var(--gray-600); }
-    .fg textarea { min-height: 110px; }
+    .fg input::placeholder, .fg textarea::placeholder { color: var(--g600); }
+    .fg textarea { min-height: 100px; }
     .btn-submit {
-      padding: 15px;
-      background: var(--red); color: white; border: none;
-      font-family: var(--font); font-size: 12px; font-weight: 700;
+      padding: 14px; background: var(--red); color: #fff; border: none;
+      font-family: var(--font); font-size: 11px; font-weight: 700;
       letter-spacing: 0.15em; text-transform: uppercase;
       cursor: pointer; transition: background 0.25s, transform 0.2s;
     }
     .btn-submit:hover { background: var(--red-deep); transform: translateY(-2px); }
 
     /* ============================================================
-       FOOTER (shared)
+       FOOTER
     ============================================================ */
     footer {
-      background: var(--gray-900);
-      padding: clamp(28px,4vw,44px) var(--section-px);
+      background: var(--g900); padding: clamp(24px,4vw,40px) var(--px);
       display: flex; flex-wrap: wrap;
-      align-items: center; justify-content: space-between; gap: 20px;
-      border-top: 1px solid var(--gray-700);
+      align-items: center; justify-content: space-between; gap: 16px;
+      border-top: 1px solid var(--g700);
     }
-    .foot-brand { display: flex; align-items: center; gap: 12px; }
-    .foot-brand .th { font-size: 13px; font-weight: 700; color: var(--white); }
-    .foot-brand .copy { font-size: 11px; font-weight: 300; color: var(--gray-600); }
-    .foot-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+    .foot-brand { display: flex; align-items: center; gap: 10px; }
+    .foot-brand .th   { font-size: 12px; font-weight: 700; color: var(--white); }
+    .foot-brand .copy { font-size: 10px; font-weight: 300; color: var(--g600); }
+    .foot-nav { display: flex; flex-wrap: wrap; gap: 4px; }
     .foot-nav button {
       background: none; border: none; cursor: pointer;
-      font-family: var(--font); font-size: 11px; font-weight: 600;
+      font-family: var(--font); font-size: 10px; font-weight: 600;
       letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--gray-400); padding: 6px 12px;
-      transition: color 0.2s;
+      color: var(--g400); padding: 6px 10px; transition: color 0.2s;
     }
     .foot-nav button:hover { color: var(--red-mid); }
 
     /* ============================================================
-       RESPONSIVE BREAKPOINTS
+       RESPONSIVE — TABLET  ≤ 900px
     ============================================================ */
-
-    /* Tablet (≤ 900px) */
     @media (max-width: 900px) {
+      /* hero: stack vertically */
       .hero { grid-template-columns: 1fr; }
-      .hero-right { min-height: 300px; }
+      /* show a shorter decorative panel instead of hiding it */
+      .hero-right { min-height: 220px; }
+
+      /* vision/mission: stack */
       .vm-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+
+      /* contact: stack */
+      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
       .form-row { grid-template-columns: 1fr; }
-      .policy-item { grid-template-columns: 60px 1fr; gap: 16px; }
     }
 
-    /* Mobile (≤ 640px) */
+    /* ============================================================
+       RESPONSIVE — MOBILE  ≤ 640px
+    ============================================================ */
     @media (max-width: 640px) {
-      .nav-links { display: none !important; }
-      .nav-burger { display: flex; }
-      .nav-drawer { display: flex; }
+      /* single menu btn already works on all sizes — nothing extra needed */
 
-      .hero-right { display: none; } /* hide decorative panel on small screens */
+      /* hide the right panel on very small screens to save space */
+      .hero-right { display: none; }
 
+      /* buttons full-width on mobile */
+      .hero-btns { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
+
+      /* policy: hide number column — show number inline instead */
+      .policy-item { grid-template-columns: 48px 1fr; gap: 12px; padding: 20px 16px; }
+      .policy-num  { font-size: 20px; }
+
+      /* members: 2 columns */
       .members-grid { grid-template-columns: 1fr 1fr; }
 
-      .policy-item { grid-template-columns: 1fr; }
-      .policy-num { font-size: 24px; }
-
+      /* footer: center everything */
       footer { flex-direction: column; text-align: center; }
       .foot-nav { justify-content: center; }
-
-      .hero-btns { flex-direction: column; }
-      .btn { text-align: center; }
     }
 
-    /* Very small mobile (≤ 380px) */
+    /* ============================================================
+       RESPONSIVE — TINY PHONE  ≤ 380px
+    ============================================================ */
     @media (max-width: 380px) {
+      /* single column for members */
       .members-grid { grid-template-columns: 1fr; }
+      /* hide policy number col */
+      .policy-item { grid-template-columns: 1fr; }
+      .policy-num  { font-size: 16px; margin-bottom: 4px; }
     }
 
-    /* Large screens (≥ 1400px) */
+    /* ============================================================
+       RESPONSIVE — LARGE DESKTOP  ≥ 1400px
+    ============================================================ */
     @media (min-width: 1400px) {
       .members-grid { grid-template-columns: repeat(7, 1fr); }
     }
@@ -664,11 +620,10 @@
 <body>
 
   <!-- ============================================================
-       NAVIGATION BAR
+       NAV BAR
   ============================================================ -->
   <nav id="mainNav">
-    <!-- Logo -->
-    <a class="nav-logo" href="#" onclick="showPage('home')">
+    <a class="nav-logo" href="#" onclick="return showPage('home')">
       <div class="logo-hex"><span>SC</span></div>
       <div class="nav-brand">
         <span class="th">สภานักเรียน</span>
@@ -676,38 +631,31 @@
       </div>
     </a>
 
-    <!-- Desktop nav links -->
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#" onclick="showPage('home')"   id="nav-home">หน้าแรก</a></li>
-      <li><a href="#" onclick="showPage('policy')" id="nav-policy">นโยบาย</a></li>
-      <li><a href="#" onclick="showPage('members')" id="nav-members">สมาชิก</a></li>
-      <li><a href="#" onclick="showPage('about')"  id="nav-about">เกี่ยวกับเรา</a></li>
-    </ul>
-
-    <!-- Hamburger (mobile) -->
-    <button class="nav-burger" id="burger" aria-label="เมนู">
-      <span></span><span></span><span></span>
+    <!-- single menu button (works on all screen sizes) -->
+    <button class="menu-btn" id="menuBtn" aria-label="เมนู">
+      <div class="menu-btn-icon">
+        <span></span><span></span><span></span>
+      </div>
+      เมนู
     </button>
   </nav>
 
-  <!-- Mobile Drawer -->
-  <nav class="nav-drawer" id="drawer">
-    <a href="#" onclick="showPage('home');closeDrawer()">หน้าแรก</a>
-    <a href="#" onclick="showPage('policy');closeDrawer()">นโยบาย</a>
-    <a href="#" onclick="showPage('members');closeDrawer()">สมาชิก</a>
-    <a href="#" onclick="showPage('about');closeDrawer()">เกี่ยวกับเรา</a>
-  </nav>
+  <!-- dropdown panel -->
+  <div class="nav-dropdown" id="dropdown">
+    <a href="#" onclick="return navTo('home')"    id="nav-home">   <span class="di"></span>หน้าแรก</a>
+    <a href="#" onclick="return navTo('policy')"  id="nav-policy"> <span class="di"></span>นโยบาย</a>
+    <a href="#" onclick="return navTo('members')" id="nav-members"><span class="di"></span>สมาชิก</a>
+    <a href="#" onclick="return navTo('about')"   id="nav-about">  <span class="di"></span>เกี่ยวกับเรา</a>
+  </div>
 
 
   <!-- ============================================================
-       ① PAGE: HOME
+       ① HOME PAGE
   ============================================================ -->
   <div id="page-home" class="page active">
 
-    <!-- Hero Section -->
+    <!-- hero -->
     <section class="hero">
-
-      <!-- Left: Text content -->
       <div class="hero-left">
         <span class="hero-eyebrow">ปีการศึกษา 2568</span>
         <h1 class="hero-title">
@@ -720,12 +668,12 @@
           และพัฒนาโรงเรียนให้เป็นพื้นที่แห่งการเรียนรู้อย่างยั่งยืน
         </p>
         <div class="hero-btns">
-          <a class="btn btn-red"     href="#" onclick="showPage('policy')">ดูนโยบาย</a>
-          <a class="btn btn-outline" href="#" onclick="showPage('members')">รู้จักทีม</a>
+          <a class="btn btn-red"     href="#" onclick="return showPage('policy')">ดูนโยบาย</a>
+          <a class="btn btn-outline" href="#" onclick="return showPage('members')">รู้จักทีม</a>
         </div>
       </div>
 
-      <!-- Right: Decorative panel -->
+      <!-- decorative right panel (hidden on small mobile) -->
       <div class="hero-right">
         <div class="geo geo-1"></div>
         <div class="geo geo-2"></div>
@@ -742,14 +690,14 @@
       </div>
     </section>
 
-    <!-- Marquee ticker -->
+    <!-- marquee -->
     <div class="marquee-wrap">
       <div class="marquee-track">
         <span>ตัวแทนนักเรียน</span><span>Student Voice</span>
         <span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span>
         <span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span>
         <span>Community</span><span>ปีการศึกษา 2568</span>
-        <!-- Duplicate for seamless loop -->
+        <!-- dup for seamless loop -->
         <span>ตัวแทนนักเรียน</span><span>Student Voice</span>
         <span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span>
         <span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span>
@@ -757,7 +705,7 @@
       </div>
     </div>
 
-    <!-- News / Announcements strip -->
+    <!-- news -->
     <div class="news-strip">
       <div class="tag reveal">ข่าวสาร & ประกาศ</div>
       <h2 class="section-title reveal">ข่าวล่าสุด</h2>
@@ -772,12 +720,12 @@
           <h3>เปิดรับสมัครอาสาสมัคร</h3>
           <p>เปิดรับนักเรียนที่สนใจเข้าร่วมเป็นอาสาสมัครในกิจกรรมต่าง ๆ</p>
         </div>
-        <div class="news-card reveal" style="transition-delay:.16s">
+        <div class="news-card reveal" style="transition-delay:.14s">
           <div class="news-date">25 พ.ค. 2568</div>
           <h3>กิจกรรม Big Cleaning Day</h3>
           <p>ร่วมกันทำความสะอาดโรงเรียนพร้อมกัน เพื่อสิ่งแวดล้อมที่ดีขึ้น</p>
         </div>
-        <div class="news-card reveal" style="transition-delay:.24s">
+        <div class="news-card reveal" style="transition-delay:.20s">
           <div class="news-date">1 มิ.ย. 2568</div>
           <h3>ประกาศผลการเลือกตั้ง</h3>
           <p>ประกาศผลการเลือกตั้งคณะกรรมการสภานักเรียนชุดใหม่อย่างเป็นทางการ</p>
@@ -785,14 +733,10 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer>
       <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
-        <div>
-          <div class="th">สภานักเรียน</div>
-          <div class="copy">© 2568 Student Council. All rights reserved.</div>
-        </div>
+        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">SC</span></div>
+        <div><div class="th">สภานักเรียน</div><div class="copy">© 2568 Student Council</div></div>
       </div>
       <div class="foot-nav">
         <button onclick="showPage('home')">หน้าแรก</button>
@@ -801,26 +745,23 @@
         <button onclick="showPage('about')">เกี่ยวกับเรา</button>
       </div>
     </footer>
-  </div><!-- /page-home -->
+  </div><!-- /home -->
 
 
   <!-- ============================================================
-       ② PAGE: POLICY (นโยบาย)
+       ② POLICY PAGE
   ============================================================ -->
   <div id="page-policy" class="page">
 
-    <!-- Page hero header -->
-    <div class="policy-hero">
+    <div class="page-hero" data-wm="POLICY">
       <span class="tag">นโยบาย 2568</span>
       <h1 class="section-title">นโยบายสภานักเรียน</h1>
-      <p class="section-lead" style="max-width:520px">
+      <p class="section-lead" style="max-width:500px">
         นโยบายที่เราตั้งใจดำเนินการเพื่อพัฒนาโรงเรียนและยกระดับคุณภาพชีวิตนักเรียน
       </p>
     </div>
 
-    <!-- Policy list -->
     <div class="policy-list">
-
       <div class="policy-item reveal">
         <div class="policy-num">01</div>
         <div class="policy-content">
@@ -829,7 +770,6 @@
           <span class="policy-badge">วิชาการ</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">02</div>
         <div class="policy-content">
@@ -838,7 +778,6 @@
           <span class="policy-badge">สิ่งแวดล้อม</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">03</div>
         <div class="policy-content">
@@ -847,7 +786,6 @@
           <span class="policy-badge">สิทธิ์นักเรียน</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">04</div>
         <div class="policy-content">
@@ -856,7 +794,6 @@
           <span class="policy-badge">ความเป็นผู้นำ</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">05</div>
         <div class="policy-content">
@@ -865,7 +802,6 @@
           <span class="policy-badge">วัฒนธรรม</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">06</div>
         <div class="policy-content">
@@ -874,7 +810,6 @@
           <span class="policy-badge">สัมพันธ์</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">07</div>
         <div class="policy-content">
@@ -883,7 +818,6 @@
           <span class="policy-badge">เทคโนโลยี</span>
         </div>
       </div>
-
       <div class="policy-item reveal">
         <div class="policy-num">08</div>
         <div class="policy-content">
@@ -892,17 +826,12 @@
           <span class="policy-badge">สวัสดิการ</span>
         </div>
       </div>
+    </div>
 
-    </div><!-- /policy-list -->
-
-    <!-- Footer -->
     <footer>
       <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
-        <div>
-          <div class="th">สภานักเรียน</div>
-          <div class="copy">© 2568 Student Council. All rights reserved.</div>
-        </div>
+        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">SC</span></div>
+        <div><div class="th">สภานักเรียน</div><div class="copy">© 2568 Student Council</div></div>
       </div>
       <div class="foot-nav">
         <button onclick="showPage('home')">หน้าแรก</button>
@@ -911,27 +840,24 @@
         <button onclick="showPage('about')">เกี่ยวกับเรา</button>
       </div>
     </footer>
-  </div><!-- /page-policy -->
+  </div><!-- /policy -->
 
 
   <!-- ============================================================
-       ③ PAGE: MEMBERS (สมาชิก 14 คน)
+       ③ MEMBERS PAGE (14 คน)
   ============================================================ -->
   <div id="page-members" class="page">
 
-    <!-- Page hero header -->
-    <div class="members-hero">
+    <div class="page-hero" data-wm="MEMBERS">
       <span class="tag">สมาชิก 14 คน</span>
       <h1 class="section-title">คณะกรรมการ<br>สภานักเรียน</h1>
-      <p class="section-lead" style="max-width:480px">
+      <p class="section-lead" style="max-width:460px">
         ทีมงานที่ทุ่มเทและมีความมุ่งมั่น พร้อมทำงานเพื่อนักเรียนทุกคน
       </p>
     </div>
 
-    <!-- Members grid (14 cards) -->
     <div class="members-grid">
-
-      <!-- 1. ประธาน -->
+      <!-- 01 ประธาน -->
       <div class="member-card president reveal">
         <div class="member-num">#01</div>
         <div class="member-avatar">ป</div>
@@ -939,8 +865,7 @@
         <div class="member-name">นายปัณณวิชญ์ สมใจ</div>
         <div class="member-class">ม.6/1</div>
       </div>
-
-      <!-- 2. รองประธาน 1 -->
+      <!-- 02 -->
       <div class="member-card reveal" style="transition-delay:.05s">
         <div class="member-num">#02</div>
         <div class="member-avatar">ร</div>
@@ -948,8 +873,7 @@
         <div class="member-name">นางสาวรัชนีกร วงศ์ดี</div>
         <div class="member-class">ม.6/2</div>
       </div>
-
-      <!-- 3. รองประธาน 2 -->
+      <!-- 03 -->
       <div class="member-card reveal" style="transition-delay:.10s">
         <div class="member-num">#03</div>
         <div class="member-avatar">ว</div>
@@ -957,8 +881,7 @@
         <div class="member-name">นายวรภัทร จันทร์เพ็ญ</div>
         <div class="member-class">ม.5/3</div>
       </div>
-
-      <!-- 4. เลขานุการ -->
+      <!-- 04 -->
       <div class="member-card reveal" style="transition-delay:.15s">
         <div class="member-num">#04</div>
         <div class="member-avatar">ณ</div>
@@ -966,8 +889,7 @@
         <div class="member-name">นางสาวณัฐธิดา ทองคำ</div>
         <div class="member-class">ม.5/1</div>
       </div>
-
-      <!-- 5. เหรัญญิก -->
+      <!-- 05 -->
       <div class="member-card reveal" style="transition-delay:.20s">
         <div class="member-num">#05</div>
         <div class="member-avatar">ก</div>
@@ -975,8 +897,7 @@
         <div class="member-name">นายกิตติภูมิ แสงทอง</div>
         <div class="member-class">ม.5/2</div>
       </div>
-
-      <!-- 6. ฝ่ายวิชาการ -->
+      <!-- 06 -->
       <div class="member-card reveal" style="transition-delay:.25s">
         <div class="member-num">#06</div>
         <div class="member-avatar">ส</div>
@@ -984,8 +905,7 @@
         <div class="member-name">นางสาวสิริกาญจน์ พรมมา</div>
         <div class="member-class">ม.5/4</div>
       </div>
-
-      <!-- 7. ฝ่ายกิจกรรม -->
+      <!-- 07 -->
       <div class="member-card reveal" style="transition-delay:.30s">
         <div class="member-num">#07</div>
         <div class="member-avatar">ธ</div>
@@ -993,8 +913,7 @@
         <div class="member-name">นายธนากร รุ่งเรือง</div>
         <div class="member-class">ม.5/1</div>
       </div>
-
-      <!-- 8. ฝ่ายประชาสัมพันธ์ -->
+      <!-- 08 -->
       <div class="member-card reveal" style="transition-delay:.35s">
         <div class="member-num">#08</div>
         <div class="member-avatar">พ</div>
@@ -1002,8 +921,7 @@
         <div class="member-name">นางสาวพิมพ์ชนก อินทร์สุข</div>
         <div class="member-class">ม.4/3</div>
       </div>
-
-      <!-- 9. ฝ่ายสิ่งแวดล้อม -->
+      <!-- 09 -->
       <div class="member-card reveal" style="transition-delay:.40s">
         <div class="member-num">#09</div>
         <div class="member-avatar">ภ</div>
@@ -1011,8 +929,7 @@
         <div class="member-name">นายภูวนาท ศรีวิชัย</div>
         <div class="member-class">ม.4/2</div>
       </div>
-
-      <!-- 10. ฝ่ายปฏิคม -->
+      <!-- 10 -->
       <div class="member-card reveal" style="transition-delay:.45s">
         <div class="member-num">#10</div>
         <div class="member-avatar">อ</div>
@@ -1020,8 +937,7 @@
         <div class="member-name">นางสาวอรทัย บุญมี</div>
         <div class="member-class">ม.4/1</div>
       </div>
-
-      <!-- 11. ฝ่ายกีฬา -->
+      <!-- 11 -->
       <div class="member-card reveal" style="transition-delay:.50s">
         <div class="member-num">#11</div>
         <div class="member-avatar">ช</div>
@@ -1029,8 +945,7 @@
         <div class="member-name">นายชินวัตร มั่นคง</div>
         <div class="member-class">ม.4/4</div>
       </div>
-
-      <!-- 12. ฝ่ายสุขภาพ -->
+      <!-- 12 -->
       <div class="member-card reveal" style="transition-delay:.55s">
         <div class="member-num">#12</div>
         <div class="member-avatar">น</div>
@@ -1038,8 +953,7 @@
         <div class="member-name">นางสาวนภัสสร เพชรรัตน์</div>
         <div class="member-class">ม.4/2</div>
       </div>
-
-      <!-- 13. กรรมการ -->
+      <!-- 13 -->
       <div class="member-card reveal" style="transition-delay:.60s">
         <div class="member-num">#13</div>
         <div class="member-avatar">ต</div>
@@ -1047,8 +961,7 @@
         <div class="member-name">นายตะวัน ใจดี</div>
         <div class="member-class">ม.4/3</div>
       </div>
-
-      <!-- 14. กรรมการ -->
+      <!-- 14 -->
       <div class="member-card reveal" style="transition-delay:.65s">
         <div class="member-num">#14</div>
         <div class="member-avatar">ม</div>
@@ -1056,17 +969,12 @@
         <div class="member-name">นางสาวมนัสนันท์ สุขสบาย</div>
         <div class="member-class">ม.4/1</div>
       </div>
+    </div>
 
-    </div><!-- /members-grid -->
-
-    <!-- Footer -->
     <footer>
       <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
-        <div>
-          <div class="th">สภานักเรียน</div>
-          <div class="copy">© 2568 Student Council. All rights reserved.</div>
-        </div>
+        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">SC</span></div>
+        <div><div class="th">สภานักเรียน</div><div class="copy">© 2568 Student Council</div></div>
       </div>
       <div class="foot-nav">
         <button onclick="showPage('home')">หน้าแรก</button>
@@ -1075,47 +983,39 @@
         <button onclick="showPage('about')">เกี่ยวกับเรา</button>
       </div>
     </footer>
-  </div><!-- /page-members -->
+  </div><!-- /members -->
 
 
   <!-- ============================================================
-       ④ PAGE: ABOUT (เกี่ยวกับเรา + ติดต่อ)
+       ④ ABOUT PAGE
   ============================================================ -->
   <div id="page-about" class="page">
 
-    <!-- Page hero header -->
-    <div class="about-hero">
+    <div class="page-hero" data-wm="ABOUT">
       <span class="tag">เกี่ยวกับเรา</span>
       <h1 class="section-title">สภานักเรียน<br>คือเสียงของคุณ</h1>
-      <p class="section-lead" style="max-width:520px">
+      <p class="section-lead" style="max-width:500px">
         องค์กรนักเรียนที่ทำงานเพื่อนักเรียนทุกคน ด้วยความโปร่งใสและมุ่งมั่น
       </p>
     </div>
 
-    <!-- Vision / Mission -->
+    <!-- vision / mission -->
     <div class="vm-grid">
       <div class="vm-card reveal">
         <span class="tag">วิสัยทัศน์</span>
-        <h2 class="section-title" style="color:white">Vision</h2>
+        <h2 class="section-title" style="color:#fff">Vision</h2>
         <div class="divider"></div>
-        <p>
-          มุ่งสร้างโรงเรียนที่นักเรียนมีส่วนร่วมในการบริหารจัดการ
-          ด้วยความโปร่งใส สร้างสรรค์ และตอบสนองความต้องการของนักเรียนอย่างแท้จริง
-          เพื่อให้โรงเรียนเป็นสถานที่แห่งการเรียนรู้และเติบโตอย่างยั่งยืน
-        </p>
+        <p>มุ่งสร้างโรงเรียนที่นักเรียนมีส่วนร่วมในการบริหารจัดการ ด้วยความโปร่งใส สร้างสรรค์ และตอบสนองความต้องการของนักเรียนอย่างแท้จริง เพื่อให้โรงเรียนเป็นสถานที่แห่งการเรียนรู้และเติบโตอย่างยั่งยืน</p>
       </div>
       <div class="vm-card red-bg reveal">
         <span class="tag">พันธกิจ</span>
         <h2 class="section-title">Mission</h2>
         <div class="divider" style="background:rgba(255,255,255,0.5)"></div>
-        <p>
-          สร้างผู้นำรุ่นใหม่ที่มีคุณธรรมและจิตสาธารณะ รับฟังปัญหาและนำเสนอแนวทางแก้ไข
-          จัดกิจกรรมที่หลากหลายเพื่อพัฒนาทักษะชีวิตและเสริมสร้างความสามัคคี
-        </p>
+        <p>สร้างผู้นำรุ่นใหม่ที่มีคุณธรรมและจิตสาธารณะ รับฟังปัญหาและนำเสนอแนวทางแก้ไข จัดกิจกรรมที่หลากหลายเพื่อพัฒนาทักษะชีวิตและเสริมสร้างความสามัคคี</p>
       </div>
     </div>
 
-    <!-- Core Values -->
+    <!-- values -->
     <div class="values-row">
       <div class="value-card reveal">
         <div class="value-icon">🎯</div>
@@ -1139,109 +1039,65 @@
       </div>
     </div>
 
-    <!-- ── CONTACT SECTION ── -->
+    <!-- contact -->
     <div class="contact-section">
       <span class="tag reveal">ติดต่อเรา</span>
       <h2 class="section-title reveal">ส่งข้อความถึงสภา</h2>
-      <p class="section-lead reveal" style="max-width:480px">
+      <p class="section-lead reveal" style="max-width:460px">
         มีข้อเสนอแนะ ปัญหา หรืออยากเข้าร่วมกิจกรรม? สภานักเรียนพร้อมรับฟังเสมอ
       </p>
 
       <div class="contact-grid">
-
-        <!-- Left: Contact info -->
-        <div>
-          <div class="contact-items reveal">
-            <div class="ci">
-              <div class="ci-icon">📍</div>
-              <div>
-                <div class="ci-label">ที่ตั้ง</div>
-                <div class="ci-val">ห้องสภานักเรียน อาคาร 2 ชั้น 1 โรงเรียนตัวอย่าง</div>
-              </div>
-            </div>
-            <div class="ci">
-              <div class="ci-icon">⏰</div>
-              <div>
-                <div class="ci-label">เวลาทำการ</div>
-                <div class="ci-val">จันทร์–ศุกร์ เวลา 08.00–17.00 น.</div>
-              </div>
-            </div>
-            <div class="ci">
-              <div class="ci-icon">📞</div>
-              <div>
-                <div class="ci-label">โทรศัพท์</div>
-                <div class="ci-val">02-XXX-XXXX ต่อ 201</div>
-              </div>
-            </div>
-            <div class="ci">
-              <div class="ci-icon">📧</div>
-              <div>
-                <div class="ci-label">อีเมล</div>
-                <div class="ci-val">studentcouncil@school.ac.th</div>
-              </div>
-            </div>
-            <div class="ci">
-              <div class="ci-icon">📘</div>
-              <div>
-                <div class="ci-label">Facebook</div>
-                <div class="ci-val">fb.com/SC.Takua</div>
-              </div>
-            </div>
-            <div class="ci">
-              <div class="ci-icon">📸</div>
-              <div>
-                <div class="ci-label">Instagram / TikTok</div>
-                <div class="ci-val">@sc_school2568</div>
-              </div>
-            </div>
-            <div class="ci" style="border:none">
-              <div class="ci-icon">💬</div>
-              <div>
-                <div class="ci-label">LINE OA</div>
-                <div class="ci-val">@studentcouncil_school</div>
-              </div>
-            </div>
+        <!-- info -->
+        <div class="contact-items reveal">
+          <div class="ci">
+            <div class="ci-icon">📍</div>
+            <div><div class="ci-label">ที่ตั้ง</div><div class="ci-val">ห้องสภานักเรียน อาคาร 2 ชั้น 1 โรงเรียนตัวอย่าง</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-icon">⏰</div>
+            <div><div class="ci-label">เวลาทำการ</div><div class="ci-val">จันทร์–ศุกร์ เวลา 08.00–17.00 น.</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-icon">📞</div>
+            <div><div class="ci-label">โทรศัพท์</div><div class="ci-val">02-XXX-XXXX ต่อ 201</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-icon">📧</div>
+            <div><div class="ci-label">อีเมล</div><div class="ci-val">studentcouncil@school.ac.th</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-icon">📘</div>
+            <div><div class="ci-label">Facebook</div><div class="ci-val">fb.com/SC.Takua</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-icon">📸</div>
+            <div><div class="ci-label">Instagram / TikTok</div><div class="ci-val">@sc_school2568</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-icon">💬</div>
+            <div><div class="ci-label">LINE OA</div><div class="ci-val">@studentcouncil_school</div></div>
           </div>
         </div>
 
-        <!-- Right: Contact form -->
+        <!-- form -->
         <div class="contact-form reveal">
           <div class="form-row">
-            <div class="fg">
-              <label>ชื่อ-นามสกุล</label>
-              <input type="text" placeholder="กรอกชื่อของคุณ"/>
-            </div>
-            <div class="fg">
-              <label>ห้องเรียน</label>
-              <input type="text" placeholder="เช่น ม.4/2"/>
-            </div>
+            <div class="fg"><label>ชื่อ-นามสกุล</label><input type="text" placeholder="กรอกชื่อของคุณ"/></div>
+            <div class="fg"><label>ห้องเรียน</label><input type="text" placeholder="เช่น ม.4/2"/></div>
           </div>
-          <div class="fg">
-            <label>อีเมล (ถ้ามี)</label>
-            <input type="email" placeholder="your@email.com"/>
-          </div>
-          <div class="fg">
-            <label>หัวข้อ</label>
-            <input type="text" placeholder="เช่น ข้อเสนอแนะ / ปัญหา / ขอข้อมูล"/>
-          </div>
-          <div class="fg">
-            <label>ข้อความ</label>
-            <textarea placeholder="ระบุรายละเอียด..."></textarea>
-          </div>
+          <div class="fg"><label>อีเมล (ถ้ามี)</label><input type="email" placeholder="your@email.com"/></div>
+          <div class="fg"><label>หัวข้อ</label><input type="text" placeholder="เช่น ข้อเสนอแนะ / ปัญหา / ขอข้อมูล"/></div>
+          <div class="fg"><label>ข้อความ</label><textarea placeholder="ระบุรายละเอียด..."></textarea></div>
           <button class="btn-submit" id="submitBtn">ส่งข้อความ →</button>
         </div>
-
       </div>
-    </div><!-- /contact-section -->
+    </div>
 
-    <!-- Footer -->
     <footer>
       <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
-        <div>
-          <div class="th">สภานักเรียน</div>
-          <div class="copy">© 2568 Student Council. All rights reserved.</div>
-        </div>
+        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">SC</span></div>
+        <div><div class="th">สภานักเรียน</div><div class="copy">© 2568 Student Council</div></div>
       </div>
       <div class="foot-nav">
         <button onclick="showPage('home')">หน้าแรก</button>
@@ -1250,7 +1106,7 @@
         <button onclick="showPage('about')">เกี่ยวกับเรา</button>
       </div>
     </footer>
-  </div><!-- /page-about -->
+  </div><!-- /about -->
 
 
   <!-- ============================================================
@@ -1258,47 +1114,63 @@
   ============================================================ -->
   <script>
     /* ----------------------------------------------------------
-       PAGE ROUTING — show/hide pages without reload
+       PAGE ROUTING
+       showPage(name) — hides all pages, shows the target one,
+       updates active nav state, scrolls to top, re-runs reveals.
     ---------------------------------------------------------- */
     function showPage(name) {
-      // Hide all pages
+      // hide all pages
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      // Show target page
+      // show target
       document.getElementById('page-' + name).classList.add('active');
-      // Update active nav link
-      document.querySelectorAll('.nav-links li a').forEach(a => a.classList.remove('active'));
+      // update active state on dropdown links
+      document.querySelectorAll('.nav-dropdown a').forEach(a => a.classList.remove('active'));
       const link = document.getElementById('nav-' + name);
       if (link) link.classList.add('active');
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      // Re-run reveal for new page content
+      // scroll to very top
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      // re-initialise reveal observer for new page
       initReveal();
+      return false; // prevent default anchor jump
+    }
+
+    /* ----------------------------------------------------------
+       SINGLE MENU BUTTON + DROPDOWN
+    ---------------------------------------------------------- */
+    const menuBtn  = document.getElementById('menuBtn');
+    const dropdown = document.getElementById('dropdown');
+
+    // toggle dropdown open/close
+    menuBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      menuBtn.classList.toggle('open', isOpen);
+    });
+
+    // close when clicking anywhere outside
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target) && !menuBtn.contains(e.target)) {
+        dropdown.classList.remove('open');
+        menuBtn.classList.remove('open');
+      }
+    });
+
+    // navTo: navigate + close dropdown
+    function navTo(name) {
+      showPage(name);
+      dropdown.classList.remove('open');
+      menuBtn.classList.remove('open');
       return false;
     }
 
     /* ----------------------------------------------------------
-       MOBILE DRAWER TOGGLE
-    ---------------------------------------------------------- */
-    const burger = document.getElementById('burger');
-    const drawer = document.getElementById('drawer');
-
-    burger.addEventListener('click', () => {
-      burger.classList.toggle('open');
-      drawer.classList.toggle('open');
-    });
-
-    function closeDrawer() {
-      burger.classList.remove('open');
-      drawer.classList.remove('open');
-    }
-
-    /* ----------------------------------------------------------
-       SCROLL REVEAL — IntersectionObserver
+       SCROLL REVEAL
+       Uses IntersectionObserver so elements fade in as they
+       enter the viewport. Re-runs when switching pages.
     ---------------------------------------------------------- */
     let revealObserver;
 
     function initReveal() {
-      // Disconnect old observer if exists
       if (revealObserver) revealObserver.disconnect();
 
       revealObserver = new IntersectionObserver(entries => {
@@ -1308,9 +1180,9 @@
             revealObserver.unobserve(e.target);
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.08 });
 
-      // Observe all .reveal elements in the active page
+      // observe only elements inside the active page
       document.querySelectorAll('.page.active .reveal').forEach(el => {
         revealObserver.observe(el);
       });
@@ -1321,26 +1193,23 @@
     ---------------------------------------------------------- */
     window.addEventListener('scroll', () => {
       document.getElementById('mainNav').style.boxShadow =
-        window.scrollY > 50 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
+        window.scrollY > 40 ? '0 4px 28px rgba(0,0,0,0.5)' : 'none';
+    }, { passive: true });
+
+    /* ----------------------------------------------------------
+       CONTACT FORM feedback
+    ---------------------------------------------------------- */
+    document.getElementById('submitBtn').addEventListener('click', function () {
+      this.textContent = 'ส่งแล้ว ✓';
+      this.style.background = '#27AE60';
+      setTimeout(() => {
+        this.textContent = 'ส่งข้อความ →';
+        this.style.background = '';
+      }, 2800);
     });
 
     /* ----------------------------------------------------------
-       CONTACT FORM — submit feedback
-    ---------------------------------------------------------- */
-    const submitBtn = document.getElementById('submitBtn');
-    if (submitBtn) {
-      submitBtn.addEventListener('click', function () {
-        this.textContent = 'ส่งแล้ว ✓';
-        this.style.background = '#27AE60';
-        setTimeout(() => {
-          this.textContent = 'ส่งข้อความ →';
-          this.style.background = '';
-        }, 2800);
-      });
-    }
-
-    /* ----------------------------------------------------------
-       INIT on first load
+       INIT
     ---------------------------------------------------------- */
     initReveal();
   </script>
