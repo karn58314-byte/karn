@@ -1,1200 +1,1349 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <!-- viewport สำคัญมากสำหรับ responsive — บอก browser ให้ใช้ความกว้างจริงของอุปกรณ์ -->
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Connect ตธ.17</title>
-
-  <!-- ฟอนต์ Prompt สำหรับภาษาไทย -->
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <title>สภานักเรียน — Student Council 2568</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ══════════════════════════════════════════════
-       RESET & CSS VARIABLES
-    ══════════════════════════════════════════════ */
+    /* ============================================================
+       RESET & ROOT VARIABLES
+    ============================================================ */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --red:      #C0392B;
-      --red2:     #E74C3C;
-      --dark:     #1a1a1a;
-      --gray1:    #2c2c2c;
-      --gray2:    #4a4a4a;
-      --gray3:    #888;
-      --gray4:    #d0d0d0;
-      --white:    #ffffff;
-      --offwhite: #f5f4f0;
+      /* --- Color Palette (Red + Gray dominant) --- */
+      --red:        #ff0000;   /* primary red */
+      --red-deep:   #cc0000;   /* dark red for hover */
+      --red-mid:    #ff3333;   /* lighter red accent */
+      --red-glow:   rgba(255,0,0,0.15);
 
-      /* ── Fluid spacing ──
-         ใช้ clamp() ให้ padding ปรับตามขนาดจอ
-         clamp(ต่ำสุด, กลาง, สูงสุด) */
-      --pad-x:   clamp(16px, 5vw, 64px);
-      --pad-sec: clamp(60px, 10vw, 120px);
+      --gray-900:   #111111;   /* near-black */
+      --gray-800:   #1E1E1E;   /* dark bg */
+      --gray-700:   #2D2D2D;   /* dark card bg */
+      --gray-600:   #444444;
+      --gray-400:   #7A7A7A;
+      --gray-200:   #C8C8C8;
+      --gray-100:   #EBEBEB;
+      --gray-50:    #F5F5F5;
+      --white:      #FFFFFF;
+
+      /* --- Typography --- */
+      --font: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
+
+      /* --- Spacing --- */
+      --nav-h: 68px;
+      --section-px: clamp(20px, 5vw, 80px);
+      --section-py: clamp(60px, 8vw, 110px);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Prompt', sans-serif;
-      background: var(--offwhite);
-      color: var(--dark);
+      font-family: var(--font);
+      background: var(--gray-900);
+      color: var(--white);
       overflow-x: hidden;
-      /* ป้องกันตัวอักษรขยายบน iOS */
-      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ══════════════════════════════════════════════
-       NAVBAR — responsive: hamburger บนมือถือ
-    ══════════════════════════════════════════════ */
-    nav {
-      position: fixed; top: 0; left: 0; width: 100%; z-index: 200;
-      background: rgba(26,26,26,0.97);
-      backdrop-filter: blur(12px);
-      border-bottom: 2px solid var(--red);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--pad-x);
-      height: 60px;
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--gray-800); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+    /* ============================================================
+       UTILITY CLASSES
+    ============================================================ */
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--red-mid);
+      margin-bottom: 16px;
+    }
+    .tag::before {
+      content: ''; display: inline-block;
+      width: 18px; height: 2px; background: var(--red);
     }
 
-    /* โลโก้ */
-    .nav-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .nav-logo .emblem {
-      width: 34px; height: 34px; background: var(--red); flex-shrink: 0;
-      clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    .section-title {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
     }
-    .nav-logo span {
-      font-size: clamp(0.8rem, 2.5vw, 1rem);
-      font-weight: 700; color: var(--white); letter-spacing: 0.02em; line-height: 1.2;
-    }
-    .nav-logo span small {
-      display: block; font-size: 0.6rem; font-weight: 300;
-      color: var(--gray3); letter-spacing: 0.1em; text-transform: uppercase;
-    }
-
-    /* แท็บบนหน้าจอใหญ่ */
-    .nav-tabs { display: flex; gap: 0; }
-    .nav-tab {
-      position: relative; padding: 8px 20px;
-      font-family: 'Prompt', sans-serif;
-      font-size: clamp(0.78rem, 1.5vw, 0.9rem); font-weight: 600;
-      color: var(--gray4); background: transparent;
-      border: none; cursor: pointer; letter-spacing: 0.04em;
-      transition: color 0.25s; white-space: nowrap;
-    }
-    .nav-tab::after {
-      content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
-      background: var(--red2); transition: width 0.3s ease;
-    }
-    .nav-tab:hover { color: var(--white); }
-    .nav-tab:hover::after, .nav-tab.active::after { width: 100%; }
-    .nav-tab.active { color: var(--white); }
-
-    /* ── Hamburger button — ซ่อนบนจอใหญ่ ── */
-    .hamburger {
-      display: none; /* ซ่อนเป็นค่าเริ่มต้น */
-      flex-direction: column; gap: 5px;
-      background: none; border: none; cursor: pointer; padding: 4px;
-    }
-    .hamburger span {
-      display: block; width: 24px; height: 2px;
-      background: var(--white); border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-    /* animation hamburger → X */
-    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-    /* ── Mobile menu drawer ── */
-    .mobile-menu {
-      display: none; /* ซ่อนเริ่มต้น */
-      position: fixed; top: 60px; left: 0; right: 0;
-      background: rgba(20,20,20,0.98);
-      border-bottom: 2px solid var(--red);
-      z-index: 199; flex-direction: column;
-      padding: 8px 0 16px;
-      backdrop-filter: blur(16px);
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu .nav-tab {
-      padding: 14px var(--pad-x);
-      font-size: 1rem; text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .mobile-menu .nav-tab::after { bottom: 0; }
-
-
-    /* ══════════════════════════════════════════════
-       HERO SECTION
-    ══════════════════════════════════════════════ */
-    #home {
-      min-height: 100svh; /* svh = safe viewport height บน iOS */
-      background: var(--dark);
-      display: flex; align-items: center;
-      position: relative; overflow: hidden;
-      padding-top: 60px;
+    .section-lead {
+      font-size: clamp(14px, 1.5vw, 16px);
+      font-weight: 300;
+      color: var(--gray-400);
+      line-height: 1.8;
     }
 
-    .hero-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-bg .stripe { position: absolute; background: var(--red); opacity: 0.07; }
-    .hero-bg .stripe:nth-child(1) { width: 2px; height: 100%; left: 22%; animation: drift 8s ease-in-out infinite alternate; }
-    .hero-bg .stripe:nth-child(2) { width: 1px; height: 100%; left: 60%; opacity: 0.04; animation: drift 11s ease-in-out infinite alternate-reverse; }
-    .hero-bg .stripe:nth-child(3) { width: 100%; height: 1px; top: 38%; opacity: 0.05; }
-    .hero-bg .glow {
-      position: absolute; width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(192,57,43,0.18) 0%, transparent 70%);
-      top: -80px; right: -80px; animation: pulse 6s ease-in-out infinite;
-    }
-    @keyframes drift { from { transform: translateY(-20px); } to { transform: translateY(20px); } }
-    @keyframes pulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.1);opacity:0.7;} }
+    /* Red accent text */
+    .red { color: var(--red-mid); }
 
-    .hero-content {
-      position: relative; z-index: 1;
-      width: 100%; max-width: 1100px; margin: 0 auto;
-      padding: 40px var(--pad-x);
-      /* 2 คอลัมน์บน desktop → 1 คอลัมน์บน mobile */
-      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    /* Horizontal divider */
+    .divider {
+      width: 48px; height: 3px;
+      background: var(--red);
+      margin: 20px 0;
     }
 
-    .hero-text .overline {
-      font-size: clamp(0.65rem, 1.5vw, 0.75rem); font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--red2); margin-bottom: 16px;
-      display: flex; align-items: center; gap: 10px;
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
-    .hero-text .overline::before { content: ''; width: 28px; height: 2px; background: var(--red2); }
-
-    .hero-text h1 {
-      font-size: clamp(2rem, 6vw, 4.5rem);
-      font-weight: 900; line-height: 1.05;
-      color: var(--white); margin-bottom: 20px;
-    }
-    .hero-text h1 .accent { color: var(--red2); }
-
-    .hero-text p {
-      font-size: clamp(0.88rem, 1.8vw, 1rem); font-weight: 300;
-      color: var(--gray3); line-height: 1.8; margin-bottom: 32px;
-    }
-
-    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-
-    .btn-primary {
-      padding: clamp(10px,2vw,14px) clamp(20px,4vw,36px);
-      background: var(--red); color: var(--white); border: none; cursor: pointer;
-      font-family: 'Prompt', sans-serif;
-      font-size: clamp(0.82rem,1.5vw,0.9rem); font-weight: 700; letter-spacing: 0.06em;
-      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-primary:hover { background: var(--red2); transform: translateY(-2px); }
-
-    .btn-outline {
-      padding: clamp(10px,2vw,14px) clamp(20px,4vw,36px);
-      background: transparent; color: var(--gray4);
-      border: 1px solid var(--gray2); cursor: pointer;
-      font-family: 'Prompt', sans-serif;
-      font-size: clamp(0.82rem,1.5vw,0.9rem); font-weight: 600; letter-spacing: 0.06em;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .btn-outline:hover { border-color: var(--gray4); color: var(--white); }
-
-    /* สถิติ */
-    .hero-stats { display: flex; flex-direction: column; gap: 16px; align-self: flex-end; padding-bottom: 16px; }
-    .stat-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid var(--red);
-      padding: 16px 22px; backdrop-filter: blur(4px); transition: background 0.2s;
-    }
-    .stat-card:hover { background: rgba(255,255,255,0.06); }
-    .stat-card .num {
-      font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 700; color: var(--white); line-height: 1;
-    }
-    .stat-card .num span { color: var(--red2); }
-    .stat-card .label { font-size: 0.78rem; font-weight: 400; color: var(--gray3); margin-top: 4px; }
-
-    .scroll-hint {
-      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      color: var(--gray3); font-size: 0.65rem; letter-spacing: 0.15em;
-      text-transform: uppercase; z-index: 1;
-    }
-    .scroll-hint .line {
-      width: 1px; height: 36px;
-      background: linear-gradient(to bottom, var(--gray3), transparent);
-      animation: scrollLine 2s ease-in-out infinite;
-    }
-    @keyframes scrollLine { 0%,100%{transform:scaleY(1);opacity:1;} 50%{transform:scaleY(0.5);opacity:0.4;} }
-
-
-    /* ══════════════════════════════════════════════
-       SECTION COMMON STYLES
-    ══════════════════════════════════════════════ */
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-
-    .section-header {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: clamp(40px,6vw,72px);
-      border-bottom: 1px solid var(--gray4); padding-bottom: 28px;
-    }
-    .section-header .tag {
-      font-size: 0.68rem; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--red); margin-bottom: 10px;
-    }
-    .section-header h2 {
-      font-size: clamp(1.6rem, 4vw, 3rem);
-      font-weight: 700; color: var(--dark); line-height: 1.1;
-    }
-    .section-header .num-big {
-      font-size: clamp(3rem, 8vw, 7rem); font-weight: 900;
-      color: rgba(0,0,0,0.04); line-height: 1; user-select: none;
-      flex-shrink: 0;
-    }
-
-    /* reveal animation */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--section-px);
+      background: rgba(17,17,17,0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: box-shadow 0.3s;
+    }
 
-    /* ══════════════════════════════════════════════
-       ABOUT SECTION
-    ══════════════════════════════════════════════ */
-    #about { background: var(--offwhite); padding: var(--pad-sec) var(--pad-x); }
+    /* Logo area */
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 
-    /* พันธกิจ 3 ข้อ */
-    .mission-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 3 col desktop */
-      gap: 2px; margin-bottom: clamp(48px,8vw,80px);
-    }
-    .mission-card {
-      background: var(--white); padding: clamp(24px,4vw,40px) clamp(20px,3vw,32px);
-      border-top: 3px solid transparent;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-      position: relative; overflow: hidden;
-    }
-    .mission-card::before {
-      content: attr(data-num); position: absolute; top: -10px; right: 16px;
-      font-size: clamp(3rem,6vw,5rem); font-weight: 900; color: rgba(0,0,0,0.04);
-    }
-    .mission-card:hover { border-color: var(--red); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
-    .mission-card .icon { width: 40px; height: 40px; margin-bottom: 16px; background: #ffeaea; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-    .mission-card h3 { font-size: clamp(0.95rem,2vw,1.1rem); font-weight: 700; color: var(--dark); margin-bottom: 10px; }
-    .mission-card p { font-size: clamp(0.82rem,1.5vw,0.9rem); font-weight: 300; color: var(--gray2); line-height: 1.75; }
-
-    /* ทีม */
-    .team-label {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--red); margin-bottom: 24px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .team-label::after { content: ''; flex: 1; height: 1px; background: var(--gray4); }
-
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* auto-fill ปรับตามจอ */
-      gap: 20px;
-    }
-    .team-card { background: var(--white); overflow: hidden; transition: box-shadow 0.3s, transform 0.3s; }
-    .team-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-4px); }
-    .team-card .avatar {
-      aspect-ratio: 1; background: var(--gray1);
+    .logo-hex {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: var(--red);
+      clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
       display: flex; align-items: center; justify-content: center;
+      animation: spin 14s linear infinite;
+    }
+    .logo-hex span { font-size: 12px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .nav-brand {
+      display: flex; flex-direction: column; line-height: 1.1;
+    }
+    .nav-brand .th { font-size: 14px; font-weight: 700; color: var(--white); }
+    .nav-brand .en { font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-400); }
+
+    /* Desktop nav links */
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links li a {
+      display: block;
+      padding: 8px 18px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--gray-400);
+      text-decoration: none;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .nav-links li a::after {
+      content: '';
+      position: absolute; bottom: 4px; left: 18px; right: 18px;
+      height: 1.5px; background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .nav-links li a:hover { color: var(--white); }
+    .nav-links li a:hover::after { transform: scaleX(1); }
+    .nav-links li a.active { color: var(--red-mid); }
+
+    /* Hamburger button (mobile) */
+    .nav-burger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px;
+      background: none; border: none;
+    }
+    .nav-burger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed; top: var(--nav-h); left: 0; right: 0;
+      background: var(--gray-800);
+      border-bottom: 2px solid var(--red);
+      z-index: 199;
+      flex-direction: column;
+      transform: translateY(-100%);
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-drawer.open { transform: translateY(0); }
+    .nav-drawer a {
+      display: block; padding: 18px var(--section-px);
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--gray-200); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-drawer a:hover { color: var(--red-mid); padding-left: calc(var(--section-px) + 8px); }
+
+    /* ============================================================
+       PAGE SYSTEM — show/hide pages via JS
+    ============================================================ */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ============================================================
+       MARQUEE BANNER
+    ============================================================ */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--red);
+      padding: 12px 0;
+      border-top: 1px solid var(--red-deep);
+      border-bottom: 1px solid var(--red-deep);
+    }
+    .marquee-track {
+      display: flex; width: max-content;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-track span {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      padding: 0 32px; white-space: nowrap;
+    }
+    .marquee-track span::after { content: '◆'; margin-left: 32px; color: rgba(255,255,255,0.35); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ============================================================
+       ① PAGE: HOME (หน้าแรก)
+    ============================================================ */
+
+    /* --- Hero --- */
+    .hero {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(40px,6vw,90px) clamp(20px,4vw,60px) clamp(40px,6vw,90px) var(--section-px);
+      background: var(--gray-900);
+      position: relative;
+    }
+    /* Left red stripe */
+    .hero-left::before {
+      content: ''; position: absolute; left: 0; top: 25%; bottom: 25%;
+      width: 4px;
+      background: linear-gradient(to bottom, transparent, var(--red), transparent);
+    }
+
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--red-mid); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--red); }
+
+    .hero-title {
+      font-size: clamp(48px,6vw,88px);
+      font-weight: 800; line-height: 1.0;
+      letter-spacing: -0.04em; margin-bottom: 8px;
+    }
+    .hero-title .line2 {
+      display: block; color: var(--red-mid);
+      text-shadow: 0 0 40px rgba(255,0,0,0.35);
+    }
+
+    .hero-sub {
+      font-size: 13px; font-weight: 400;
+      color: var(--gray-400); letter-spacing: 0.15em;
+      text-transform: uppercase; margin-bottom: 28px;
+    }
+
+    .hero-desc {
+      font-size: clamp(14px,1.4vw,16px); font-weight: 300;
+      color: var(--gray-200); line-height: 1.8;
+      max-width: 420px; margin-bottom: 44px;
+    }
+
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-block; padding: 13px 30px;
+      font-family: var(--font); font-size: 12px;
+      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-red { background: var(--red); color: white; }
+    .btn-red:hover { background: var(--red-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,0,0,0.30); }
+    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid var(--gray-600); }
+    .btn-outline:hover { border-color: var(--red); color: var(--red-mid); transform: translateY(-2px); }
+
+    /* Hero right — dark visual panel */
+    .hero-right {
+      background: var(--gray-800);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
+    }
+    /* Red radial glow */
+    .hero-right::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 40% 50%, rgba(255,0,0,0.24) 0%, transparent 68%);
+    }
+    /* Decorative rotating squares */
+    .geo { position: absolute; border: 1px solid rgba(255,255,255,0.05); }
+    .geo-1 { width: 400px; height: 400px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(12deg); animation: geo-rot 20s linear infinite; }
+    .geo-2 { width: 280px; height: 280px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(35deg); animation: geo-rot 14s linear infinite reverse; }
+    .geo-3 { width: 160px; height: 160px; top:50%; left:50%; transform:translate(-50%,-50%); background: rgba(192,57,43,0.1); border-color: var(--red); animation: geo-rot 8s linear infinite; }
+    @keyframes geo-rot { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+    .hero-center-text { position: relative; z-index: 2; text-align: center; }
+    .hero-year { font-size: clamp(72px,8vw,120px); font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; letter-spacing: -0.05em; }
+    .hero-center-label {
+      position: absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      font-size: 13px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.8); white-space: nowrap;
+    }
+
+    /* Stats row inside hero right */
+    .hero-stats {
+      position: absolute; bottom: 40px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: clamp(30px,5vw,60px);
+    }
+    .stat { text-align: center; }
+    .stat-n { font-size: clamp(24px,3vw,36px); font-weight: 800; color: white; letter-spacing: -0.03em; }
+    .stat-n em { color: var(--red-mid); font-style: normal; }
+    .stat-l { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-400); margin-top: 4px; }
+
+    /* --- Home: News strip --- */
+    .news-strip {
+      background: var(--gray-800);
+      padding: clamp(40px,5vw,72px) var(--section-px);
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px; background: var(--gray-700);
+      border: 1px solid var(--gray-700);
+      margin-top: 44px;
+    }
+    .news-card {
+      background: var(--gray-800);
+      padding: 28px 24px;
+      transition: background 0.3s;
       position: relative; overflow: hidden;
     }
-    .team-card .avatar .initials { font-size: 2rem; font-weight: 700; color: rgba(255,255,255,0.15); }
-    .team-card .avatar .role-badge {
-      position: absolute; bottom: 0; left: 0; right: 0; background: var(--red);
-      padding: 6px 10px; font-size: 0.62rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); text-align: center;
+    .news-card::before {
+      content: ''; position: absolute; top:0; left:0; right:0;
+      height: 3px; background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.35s;
     }
-    .team-card .info { padding: 16px 18px; }
-    .team-card .info .name { font-size: 0.9rem; font-weight: 700; color: var(--dark); }
-    .team-card .info .dept { font-size: 0.76rem; color: var(--gray3); margin-top: 4px; }
+    .news-card:hover::before { transform: scaleX(1); }
+    .news-card:hover { background: var(--gray-700); }
+    .news-date { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 10px; }
+    .news-card h3 { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
+    .news-card p { font-size: 13px; font-weight: 300; color: var(--gray-400); line-height: 1.65; }
 
-
-    /* ══════════════════════════════════════════════
-       MEMBERS SECTION
-    ══════════════════════════════════════════════ */
-    #members { background: var(--white); padding: var(--pad-sec) var(--pad-x); }
-    #members .section-header h2 { color: var(--dark); }
-
-    .members-toolbar {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 36px; flex-wrap: wrap;
+    /* ============================================================
+       ② PAGE: POLICY (นโยบาย)
+    ============================================================ */
+    .policy-hero {
+      background: var(--gray-800);
+      padding: calc(var(--nav-h) + 60px) var(--section-px) 60px;
+      border-bottom: 1px solid var(--gray-700);
+      position: relative; overflow: hidden;
     }
-    .search-box {
-      flex: 1; min-width: 200px;
-      display: flex; align-items: center; gap: 8px;
-      background: var(--offwhite); border: 1px solid var(--gray4); padding: 10px 14px;
+    .policy-hero::after {
+      content: 'POLICY';
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      font-size: clamp(80px,10vw,160px); font-weight: 800;
+      color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
+      white-space: nowrap; pointer-events: none;
     }
-    .search-box input {
-      border: none; background: transparent;
-      font-family: 'Prompt', sans-serif; font-size: 0.88rem; color: var(--dark);
-      outline: none; width: 100%;
+
+    .policy-list {
+      padding: var(--section-py) var(--section-px);
+      display: flex; flex-direction: column; gap: 2px;
     }
-    .search-box .search-icon { color: var(--gray3); }
-
-    .filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-    .filter-btn {
-      padding: 7px 14px; border: 1px solid var(--gray4);
-      background: transparent; cursor: pointer;
-      font-family: 'Prompt', sans-serif; font-size: 0.78rem; font-weight: 600;
-      color: var(--gray2); transition: all 0.2s; white-space: nowrap;
+    .policy-item {
+      display: grid; grid-template-columns: 80px 1fr;
+      align-items: start; gap: 24px;
+      padding: 32px 28px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-700);
+      position: relative; overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
     }
-    .filter-btn:hover { border-color: var(--red); color: var(--red); }
-    .filter-btn.active { background: var(--red); border-color: var(--red); color: var(--white); }
+    .policy-item:hover { background: var(--gray-700); border-color: var(--red); }
+    /* Red left bar on hover */
+    .policy-item::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; background: var(--red);
+      transform: scaleY(0); transform-origin: top;
+      transition: transform 0.35s;
+    }
+    .policy-item:hover::before { transform: scaleY(1); }
 
-    .members-count { font-size: 0.78rem; color: var(--gray3); margin-bottom: 28px; }
-    .members-count span { color: var(--red); font-weight: 700; }
+    .policy-num {
+      font-size: 36px; font-weight: 800; color: var(--red);
+      line-height: 1; letter-spacing: -0.04em; opacity: 0.6;
+    }
+    .policy-content h3 { font-size: clamp(16px,2vw,20px); font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .policy-content p { font-size: 14px; font-weight: 300; color: var(--gray-400); line-height: 1.75; }
+    .policy-badge {
+      display: inline-block; margin-top: 12px;
+      padding: 4px 12px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      background: var(--red-glow); color: var(--red-mid);
+      border: 1px solid rgba(255,0,0,0.28);
+    }
 
-    /* grid สมาชิก: ปรับตามความกว้างจอด้วย auto-fill */
+    /* ============================================================
+       ③ PAGE: MEMBERS (สมาชิก)
+    ============================================================ */
+    .members-hero {
+      background: var(--gray-800);
+      padding: calc(var(--nav-h) + 60px) var(--section-px) 60px;
+      border-bottom: 1px solid var(--gray-700);
+      position: relative; overflow: hidden;
+    }
+    .members-hero::after {
+      content: 'MEMBERS';
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      font-size: clamp(70px,9vw,140px); font-weight: 800;
+      color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
+      white-space: nowrap; pointer-events: none;
+    }
+
     .members-grid {
+      padding: var(--section-py) var(--section-px);
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
+      gap: 2px; background: var(--gray-700);
     }
 
     .member-card {
-      background: var(--offwhite); border: 1px solid var(--gray4);
-      overflow: hidden; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-    }
-    .member-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(0,0,0,0.12); border-color: var(--red); }
-    .member-card.hidden { display: none; }
-
-    .member-card .mc-top {
-      position: relative; height: 150px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .member-card .mc-top img {
-      width: 80px; height: 80px;
-      border-radius: 50%; object-fit: cover;
-      border: 3px solid rgba(255,255,255,0.25);
-      position: relative; z-index: 1;
-    }
-    .member-card .mc-avatar {
-      width: 76px; height: 76px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; font-weight: 700;
-      color: rgba(255,255,255,0.9);
-      border: 3px solid rgba(255,255,255,0.15); position: relative; z-index: 1;
-    }
-    .member-card .mc-num {
-      position: absolute; top: 10px; right: 12px;
-      font-size: 0.7rem; font-weight: 700;
-      color: rgba(255,255,255,0.35); letter-spacing: 0.04em;
-    }
-    .member-card .mc-dept-tag {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.3); padding: 5px 10px;
-      font-size: 0.6rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: rgba(255,255,255,0.8); text-align: center;
-    }
-    .member-card .mc-body { padding: 14px 16px 18px; }
-    .member-card .mc-name { font-size: 0.92rem; font-weight: 700; color: var(--dark); margin-bottom: 3px; line-height: 1.3; }
-    .member-card .mc-role { font-size: 0.76rem; color: var(--red); font-weight: 600; margin-bottom: 5px; }
-    .member-card .mc-class { font-size: 0.72rem; color: var(--gray3); display: flex; align-items: center; gap: 5px; }
-    .member-card .mc-class::before { content: ''; width: 5px; height: 5px; background: var(--gray4); border-radius: 50%; }
-
-    .status-badge {
-      display: inline-block; margin-top: 8px; padding: 3px 9px;
-      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    .status-badge.active-badge { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.lead-badge   { background: #fff3e0; color: #e65100; }
-
-
-    /* ══════════════════════════════════════════════
-       POLICY SECTION
-    ══════════════════════════════════════════════ */
-    #policy { background: var(--dark); padding: var(--pad-sec) var(--pad-x); }
-    #policy .section-header { border-bottom-color: rgba(255,255,255,0.1); }
-    #policy .section-header .tag { color: var(--red2); }
-    #policy .section-header h2 { color: var(--white); }
-
-    .policy-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 2 col desktop */
-      gap: 2px; margin-bottom: 48px;
-    }
-    .policy-card {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
-      padding: clamp(24px,4vw,40px) clamp(20px,3vw,36px);
+      background: var(--gray-800);
+      padding: 32px 24px 24px;
       position: relative; overflow: hidden;
       transition: background 0.3s, transform 0.3s;
+      cursor: default;
     }
-    .policy-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); }
-    .policy-card::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; background: var(--red);
-    }
-    .policy-card::after {
-      content: attr(data-n); position: absolute; top: -8px; right: 16px;
-      font-size: clamp(3.5rem,7vw,6rem); font-weight: 900;
-      color: rgba(255,255,255,0.04); line-height: 1; pointer-events: none;
-    }
-    .policy-card .p-icon { font-size: 1.6rem; margin-bottom: 14px; }
-    .policy-card h3 { font-size: clamp(0.95rem,2vw,1.15rem); font-weight: 700; color: var(--white); margin-bottom: 12px; }
-    .policy-card p { font-size: clamp(0.8rem,1.5vw,0.88rem); font-weight: 300; color: var(--gray3); line-height: 1.85; }
-    .policy-card ul { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 7px; }
-    .policy-card ul li {
-      font-size: clamp(0.78rem,1.4vw,0.85rem); font-weight: 400;
-      color: var(--gray4); padding-left: 16px; position: relative; line-height: 1.6;
-    }
-    .policy-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--red2); font-weight: 700; }
+    .member-card:hover { background: var(--gray-700); transform: translateY(-4px); }
 
-    .policy-pledge {
-      border: 1px solid rgba(192,57,43,0.4); border-left: 4px solid var(--red);
-      background: rgba(192,57,43,0.07); padding: clamp(24px,4vw,36px) clamp(20px,4vw,40px);
-      display: flex; gap: 24px; align-items: flex-start;
-    }
-    .pledge-icon { font-size: 1.8rem; flex-shrink: 0; margin-top: 2px; }
-    .pledge-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 10px; letter-spacing: 0.05em; text-transform: uppercase; }
-    .pledge-text p { font-size: clamp(0.82rem,1.5vw,0.9rem); font-weight: 300; color: var(--gray3); line-height: 1.85; }
-    .pledge-text p strong { color: var(--red2); font-weight: 600; }
-
-
-    /* ══════════════════════════════════════════════
-       FOOTER
-    ══════════════════════════════════════════════ */
-    footer {
-      background: var(--dark); border-top: 2px solid var(--red);
-      padding: 32px var(--pad-x);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
-    }
-    footer .foot-logo { display: flex; align-items: center; gap: 10px; }
-    footer .foot-logo .emblem {
-      width: 26px; height: 26px; background: var(--red);
-      clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-    }
-    footer .foot-logo span { font-size: 0.82rem; font-weight: 600; color: var(--gray4); }
-    footer .copy { font-size: 0.72rem; color: var(--gray3); }
-    footer .socials { display: flex; gap: 12px; }
-    footer .socials a {
-      width: 32px; height: 32px; border: 1px solid var(--gray2);
+    /* Avatar circle */
+    .member-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gray-700), var(--red));
       display: flex; align-items: center; justify-content: center;
-      color: var(--gray3); text-decoration: none;
-      font-size: 0.72rem; font-weight: 700;
-      transition: border-color 0.2s, color 0.2s;
+      font-size: 22px; font-weight: 800; color: white;
+      margin-bottom: 16px;
+      border: 2px solid rgba(255,0,0,0.35);
     }
-    footer .socials a:hover { border-color: var(--red); color: var(--red2); }
+    /* President gets special gold ring */
+    .member-card.president .member-avatar {
+      background: linear-gradient(135deg, var(--red-deep), var(--red-mid));
+      border-color: var(--red-mid);
+      box-shadow: 0 0 20px rgba(255,0,0,0.35);
+    }
 
+    .member-pos {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--red-mid); margin-bottom: 6px;
+    }
+    .member-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .member-class { font-size: 12px; font-weight: 300; color: var(--gray-400); }
 
-    /* ══════════════════════════════════════════════
+    /* Red top border on hover */
+    .member-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--red); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.35s;
+    }
+    .member-card:hover::before { transform: scaleX(1); }
+
+    /* Member number badge */
+    .member-num {
+      position: absolute; top: 16px; right: 16px;
+      font-size: 10px; font-weight: 800;
+      color: var(--gray-600); letter-spacing: 0.1em;
+    }
+
+    /* ============================================================
+       ④ PAGE: ABOUT (เกี่ยวกับเรา)
+    ============================================================ */
+    .about-hero {
+      background: var(--gray-800);
+      padding: calc(var(--nav-h) + 60px) var(--section-px) 60px;
+      border-bottom: 1px solid var(--gray-700);
+      position: relative; overflow: hidden;
+    }
+    .about-hero::after {
+      content: 'ABOUT';
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      font-size: clamp(80px,10vw,160px); font-weight: 800;
+      color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
+      white-space: nowrap; pointer-events: none;
+    }
+
+    /* Vision / Mission block */
+    .vm-grid {
+      padding: var(--section-py) var(--section-px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+      background: var(--gray-700);
+    }
+    .vm-card {
+      background: var(--gray-800); padding: 44px 36px;
+      position: relative; overflow: hidden;
+    }
+    .vm-card.red-bg { background: var(--red); }
+    .vm-card.red-bg .section-title, .vm-card.red-bg p { color: white; }
+    .vm-card.red-bg .tag { color: rgba(255,255,255,0.7); }
+    .vm-card.red-bg .tag::before { background: rgba(255,255,255,0.5); }
+    .vm-card h2 { color: var(--white); }
+    .vm-card p { font-size: 15px; font-weight: 300; color: var(--gray-400); line-height: 1.8; }
+
+    /* Values row */
+    .values-row {
+      padding: 0 var(--section-px) var(--section-py);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px; background: var(--gray-700);
+    }
+    .value-card {
+      background: var(--gray-900); padding: 32px 24px;
+      border-top: 3px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .value-card:hover { border-color: var(--red); background: var(--gray-800); }
+    .value-icon { font-size: 28px; margin-bottom: 14px; }
+    .value-card h3 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .value-card p { font-size: 13px; font-weight: 300; color: var(--gray-400); line-height: 1.65; }
+
+    /* --- Contact Section (inside About page) --- */
+    .contact-section {
+      background: var(--gray-800);
+      padding: var(--section-py) var(--section-px);
+      border-top: 1px solid var(--gray-700);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; gap: 60px;
+      margin-top: 48px; align-items: start;
+    }
+
+    /* Contact info items */
+    .contact-items { display: flex; flex-direction: column; gap: 0; }
+    .ci {
+      display: flex; align-items: center; gap: 18px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--gray-700);
+    }
+    .ci-icon {
+      width: 46px; height: 46px; flex-shrink: 0;
+      background: var(--red-glow);
+      border: 1px solid rgba(255,0,0,0.28);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .ci-label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 4px; }
+    .ci-val { font-size: 14px; font-weight: 400; color: var(--gray-200); }
+
+    /* Contact form */
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    .fg label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray-400); }
+    .fg input, .fg textarea {
+      padding: 13px 16px;
+      background: var(--gray-900); border: 1.5px solid var(--gray-700);
+      font-family: var(--font); font-size: 14px; font-weight: 300;
+      color: var(--white); outline: none; resize: none;
+      transition: border-color 0.25s;
+    }
+    .fg input:focus, .fg textarea:focus { border-color: var(--red); }
+    .fg input::placeholder, .fg textarea::placeholder { color: var(--gray-600); }
+    .fg textarea { min-height: 110px; }
+    .btn-submit {
+      padding: 15px;
+      background: var(--red); color: white; border: none;
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.25s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--red-deep); transform: translateY(-2px); }
+
+    /* ============================================================
+       FOOTER (shared)
+    ============================================================ */
+    footer {
+      background: var(--gray-900);
+      padding: clamp(28px,4vw,44px) var(--section-px);
+      display: flex; flex-wrap: wrap;
+      align-items: center; justify-content: space-between; gap: 20px;
+      border-top: 1px solid var(--gray-700);
+    }
+    .foot-brand { display: flex; align-items: center; gap: 12px; }
+    .foot-brand .th { font-size: 13px; font-weight: 700; color: var(--white); }
+    .foot-brand .copy { font-size: 11px; font-weight: 300; color: var(--gray-600); }
+    .foot-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+    .foot-nav button {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gray-400); padding: 6px 12px;
+      transition: color 0.2s;
+    }
+    .foot-nav button:hover { color: var(--red-mid); }
+
+    /* ============================================================
        RESPONSIVE BREAKPOINTS
-       ──────────────────────────────────────────────
-       Desktop  : > 1024px  → ใช้ค่าเริ่มต้น
-       Tablet   : 768–1024px
-       Mobile L : 480–768px
-       Mobile S : < 480px
-    ══════════════════════════════════════════════ */
+    ============================================================ */
 
-    /* ── Tablet (iPad, iPad mini) ≤ 1024px ── */
-    @media (max-width: 1024px) {
-      /* hero: 2 คอลัมน์ยังใช้ได้ แต่ลด gap */
-      .hero-content { gap: 36px; }
-      /* สมาชิก: 3 คอลัมน์ */
-      .members-grid { grid-template-columns: repeat(3, 1fr); }
-      /* policy: คงไว้ 2 คอลัมน์ */
+    /* Tablet (≤ 900px) */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 300px; }
+      .vm-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .policy-item { grid-template-columns: 60px 1fr; gap: 16px; }
     }
 
-    /* ── Tablet portrait / มือถือขนาดใหญ่ ≤ 768px ── */
-    @media (max-width: 768px) {
-      /* ซ่อน nav-tabs บน desktop → แสดง hamburger */
-      .nav-tabs { display: none; }
-      .hamburger { display: flex; }
+    /* Mobile (≤ 640px) */
+    @media (max-width: 640px) {
+      .nav-links { display: none !important; }
+      .nav-burger { display: flex; }
+      .nav-drawer { display: flex; }
 
-      /* hero: สลับเป็น 1 คอลัมน์ */
-      .hero-content {
-        grid-template-columns: 1fr; gap: 36px;
-        text-align: center;
-      }
-      .hero-text .overline { justify-content: center; }
-      .hero-btns { justify-content: center; }
-      /* สถิติ: เรียงแถวแนวนอน */
-      .hero-stats {
-        flex-direction: row; flex-wrap: wrap;
-        justify-content: center; align-self: auto;
-        padding-bottom: 0; gap: 12px;
-      }
-      .stat-card { flex: 1; min-width: 140px; }
+      .hero-right { display: none; } /* hide decorative panel on small screens */
 
-      /* พันธกิจ: 1 คอลัมน์ */
-      .mission-grid { grid-template-columns: 1fr; }
-      /* ทีม: 2 คอลัมน์ */
-      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .members-grid { grid-template-columns: 1fr 1fr; }
 
-      /* สมาชิก: 2 คอลัมน์ */
-      .members-grid { grid-template-columns: repeat(2, 1fr); }
-      .members-toolbar { flex-direction: column; align-items: stretch; }
-      .search-box { width: 100%; }
+      .policy-item { grid-template-columns: 1fr; }
+      .policy-num { font-size: 24px; }
 
-      /* policy: 1 คอลัมน์ */
-      .policy-grid { grid-template-columns: 1fr; }
-      .policy-pledge { flex-direction: column; gap: 14px; }
+      footer { flex-direction: column; text-align: center; }
+      .foot-nav { justify-content: center; }
 
-      /* section header: ซ่อนเลขใหญ่ให้พอดีจอ */
-      .section-header .num-big { display: none; }
-
-      /* footer: จัดกลาง */
-      footer { flex-direction: column; align-items: center; text-align: center; }
-    }
-
-    /* ── มือถือขนาดกลาง ≤ 480px ── */
-    @media (max-width: 480px) {
-      /* สมาชิก: 1 คอลัมน์ */
-      .members-grid { grid-template-columns: 1fr; }
-      /* ทีม: 1 คอลัมน์ */
-      .team-grid { grid-template-columns: 1fr; }
-      /* ปุ่ม filter: เรียงเต็มแถว */
-      .filter-btns { width: 100%; }
-      .filter-btn { flex: 1; text-align: center; padding: 8px 8px; font-size: 0.72rem; }
-      /* hero buttons: เต็มความกว้าง */
       .hero-btns { flex-direction: column; }
-      .btn-primary, .btn-outline { width: 100%; text-align: center; clip-path: none; }
+      .btn { text-align: center; }
     }
 
-    /* ── มือถือจอเล็กมาก ≤ 360px (เช่น Galaxy A older) ── */
-    @media (max-width: 360px) {
-      nav { height: 54px; }
-      #home { padding-top: 54px; }
-      .mobile-menu { top: 54px; }
+    /* Very small mobile (≤ 380px) */
+    @media (max-width: 380px) {
+      .members-grid { grid-template-columns: 1fr; }
     }
 
-    /* ── iPad Pro / Landscape tablet ≥ 1024px ── */
-    @media (min-width: 1024px) and (max-width: 1280px) {
-      .members-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    /* ── Touch device: ปิด hover effect ที่ค้างบน touch ── */
-    @media (hover: none) {
-      .mission-card:hover,
-      .team-card:hover,
-      .member-card:hover,
-      .policy-card:hover { transform: none; box-shadow: none; }
+    /* Large screens (≥ 1400px) */
+    @media (min-width: 1400px) {
+      .members-grid { grid-template-columns: repeat(7, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- ════════════════════════════════════════
-       NAVBAR
-       - Desktop: แสดงแท็บแนวนอน
-       - Mobile: ซ่อนแท็บ แสดง hamburger + drawer
-  ════════════════════════════════════════ -->
-  <nav>
-    <!-- โลโก้ซ้าย -->
-    <div class="nav-logo">
-      <div class="emblem"></div>
-      <span>Connect ตธ.17<small>Student Council</small></span>
-    </div>
+  <!-- ============================================================
+       NAVIGATION BAR
+  ============================================================ -->
+  <nav id="mainNav">
+    <!-- Logo -->
+    <a class="nav-logo" href="#" onclick="showPage('home')">
+      <div class="logo-hex"><span>SC</span></div>
+      <div class="nav-brand">
+        <span class="th">สภานักเรียน</span>
+        <span class="en">Student Council 2568</span>
+      </div>
+    </a>
 
-    <!-- แท็บ Desktop (ซ่อนบนมือถือ) -->
-    <div class="nav-tabs" id="desktopTabs">
-      <button class="nav-tab active" onclick="scrollToSection('home', this)">หน้าแรก</button>
-      <button class="nav-tab" onclick="scrollToSection('members', this)">สมาชิก</button>
-      <button class="nav-tab" onclick="scrollToSection('policy', this)">นโยบาย</button>
-      <button class="nav-tab" onclick="scrollToSection('about', this)">เกี่ยวกับเรา</button>
-    </div>
+    <!-- Desktop nav links -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" onclick="showPage('home')"   id="nav-home">หน้าแรก</a></li>
+      <li><a href="#" onclick="showPage('policy')" id="nav-policy">นโยบาย</a></li>
+      <li><a href="#" onclick="showPage('members')" id="nav-members">สมาชิก</a></li>
+      <li><a href="#" onclick="showPage('about')"  id="nav-about">เกี่ยวกับเรา</a></li>
+    </ul>
 
-    <!-- Hamburger (แสดงบนมือถือเท่านั้น) -->
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="เมนู">
+    <!-- Hamburger (mobile) -->
+    <button class="nav-burger" id="burger" aria-label="เมนู">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- Mobile Drawer Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <button class="nav-tab active" onclick="scrollToSection('home', this); closeMenu()">หน้าแรก</button>
-    <button class="nav-tab" onclick="scrollToSection('members', this); closeMenu()">สมาชิก</button>
-    <button class="nav-tab" onclick="scrollToSection('policy', this); closeMenu()">นโยบาย</button>
-    <button class="nav-tab" onclick="scrollToSection('about', this); closeMenu()">เกี่ยวกับเรา</button>
-  </div>
+  <!-- Mobile Drawer -->
+  <nav class="nav-drawer" id="drawer">
+    <a href="#" onclick="showPage('home');closeDrawer()">หน้าแรก</a>
+    <a href="#" onclick="showPage('policy');closeDrawer()">นโยบาย</a>
+    <a href="#" onclick="showPage('members');closeDrawer()">สมาชิก</a>
+    <a href="#" onclick="showPage('about');closeDrawer()">เกี่ยวกับเรา</a>
+  </nav>
 
 
-  <!-- ════════════════════════════════════════
-       HERO SECTION
-  ════════════════════════════════════════ -->
-  <section id="home">
-    <div class="hero-bg">
-      <div class="stripe"></div>
-      <div class="stripe"></div>
-      <div class="stripe"></div>
-      <div class="glow"></div>
-    </div>
+  <!-- ============================================================
+       ① PAGE: HOME
+  ============================================================ -->
+  <div id="page-home" class="page active">
 
-    <div class="hero-content">
-      <div class="hero-text">
-        <div class="overline">Connect ตธ.17</div>
-        <h1>เสียงของ<br/><span class="accent">นักเรียน</span><br/>ทุกคน</h1>
-        <p>สภานักเรียนทำหน้าที่เป็นตัวแทนของนักเรียนทุกคน ขับเคลื่อนกิจกรรม พัฒนาโรงเรียน และสร้างสรรค์อนาคตไปด้วยกัน</p>
+    <!-- Hero Section -->
+    <section class="hero">
+
+      <!-- Left: Text content -->
+      <div class="hero-left">
+        <span class="hero-eyebrow">ปีการศึกษา 2568</span>
+        <h1 class="hero-title">
+          สภา<br>
+          <span class="line2">นักเรียน</span>
+        </h1>
+        <p class="hero-sub">Student Council — โรงเรียนตัวอย่าง</p>
+        <p class="hero-desc">
+          เป็นตัวแทนของนักเรียนทุกคน สร้างสรรค์กิจกรรม ส่งเสริมสิทธิ์
+          และพัฒนาโรงเรียนให้เป็นพื้นที่แห่งการเรียนรู้อย่างยั่งยืน
+        </p>
         <div class="hero-btns">
-          <button class="btn-primary" onclick="scrollToSection('about', null)">รู้จักเรา</button>
-          <button class="btn-outline" onclick="scrollToSection('members', null)">ดูสมาชิก →</button>
+          <a class="btn btn-red"     href="#" onclick="showPage('policy')">ดูนโยบาย</a>
+          <a class="btn btn-outline" href="#" onclick="showPage('members')">รู้จักทีม</a>
         </div>
       </div>
 
-      <div class="hero-stats">
-        <div class="stat-card">
-          <div class="num">24<span>+</span></div>
-          <div class="label">กิจกรรมในปีการศึกษานี้</div>
+      <!-- Right: Decorative panel -->
+      <div class="hero-right">
+        <div class="geo geo-1"></div>
+        <div class="geo geo-2"></div>
+        <div class="geo geo-3"></div>
+        <div class="hero-center-text">
+          <div class="hero-year">2568</div>
+          <div class="hero-center-label">Student Council</div>
         </div>
-        <div class="stat-card">
-          <div class="num">1,200<span>+</span></div>
-          <div class="label">นักเรียนที่เราเป็นตัวแทน</div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-n">14<em>+</em></div><div class="stat-l">สมาชิก</div></div>
+          <div class="stat"><div class="stat-n">8<em>+</em></div><div class="stat-l">นโยบาย</div></div>
+          <div class="stat"><div class="stat-n">30<em>+</em></div><div class="stat-l">กิจกรรม</div></div>
         </div>
-        <div class="stat-card">
-          <div class="num">14<span> คน</span></div>
-          <div class="label">สมาชิกพรรค Connect ตธ.17</div>
+      </div>
+    </section>
+
+    <!-- Marquee ticker -->
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span>ตัวแทนนักเรียน</span><span>Student Voice</span>
+        <span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span>
+        <span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span>
+        <span>Community</span><span>ปีการศึกษา 2568</span>
+        <!-- Duplicate for seamless loop -->
+        <span>ตัวแทนนักเรียน</span><span>Student Voice</span>
+        <span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span>
+        <span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span>
+        <span>Community</span><span>ปีการศึกษา 2568</span>
+      </div>
+    </div>
+
+    <!-- News / Announcements strip -->
+    <div class="news-strip">
+      <div class="tag reveal">ข่าวสาร & ประกาศ</div>
+      <h2 class="section-title reveal">ข่าวล่าสุด</h2>
+      <div class="news-grid">
+        <div class="news-card reveal">
+          <div class="news-date">15 พ.ค. 2568</div>
+          <h3>ประชุมสภานักเรียนครั้งที่ 1</h3>
+          <p>สภานักเรียนจัดประชุมเพื่อวางแผนกิจกรรมตลอดปีการศึกษา 2568</p>
+        </div>
+        <div class="news-card reveal" style="transition-delay:.08s">
+          <div class="news-date">20 พ.ค. 2568</div>
+          <h3>เปิดรับสมัครอาสาสมัคร</h3>
+          <p>เปิดรับนักเรียนที่สนใจเข้าร่วมเป็นอาสาสมัครในกิจกรรมต่าง ๆ</p>
+        </div>
+        <div class="news-card reveal" style="transition-delay:.16s">
+          <div class="news-date">25 พ.ค. 2568</div>
+          <h3>กิจกรรม Big Cleaning Day</h3>
+          <p>ร่วมกันทำความสะอาดโรงเรียนพร้อมกัน เพื่อสิ่งแวดล้อมที่ดีขึ้น</p>
+        </div>
+        <div class="news-card reveal" style="transition-delay:.24s">
+          <div class="news-date">1 มิ.ย. 2568</div>
+          <h3>ประกาศผลการเลือกตั้ง</h3>
+          <p>ประกาศผลการเลือกตั้งคณะกรรมการสภานักเรียนชุดใหม่อย่างเป็นทางการ</p>
         </div>
       </div>
     </div>
 
-    <div class="scroll-hint"><span>Scroll</span><div class="line"></div></div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════
-       MEMBERS SECTION — สมาชิก 14 คน
-  ════════════════════════════════════════ -->
-  <section id="members">
-    <div class="section-inner">
-
-      <div class="section-header reveal">
+    <!-- Footer -->
+    <footer>
+      <div class="foot-brand">
+        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
         <div>
-          <div class="tag">Members</div>
-          <h2>สมาชิก<br/>Connect ตธ.17</h2>
-        </div>
-        <div class="num-big">02</div>
-      </div>
-
-      <!-- แถบค้นหา + filter -->
-      <div class="members-toolbar reveal">
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="ค้นหาชื่อสมาชิก..." oninput="filterMembers()" />
-        </div>
-        <div class="filter-btns">
-          <button class="filter-btn active" onclick="setFilter('all', this)">ทั้งหมด</button>
-          <button class="filter-btn" onclick="setFilter('บริหาร', this)">ฝ่ายบริหาร</button>
-          <button class="filter-btn" onclick="setFilter('วิชาการ', this)">ฝ่ายวิชาการ</button>
-          <button class="filter-btn" onclick="setFilter('กิจกรรม', this)">ฝ่ายกิจกรรม</button>
-          <button class="filter-btn" onclick="setFilter('ประชาสัมพันธ์', this)">ประชาสัมพันธ์</button>
+          <div class="th">สภานักเรียน</div>
+          <div class="copy">© 2568 Student Council. All rights reserved.</div>
         </div>
       </div>
-
-      <div class="members-count reveal">
-        แสดง <span id="memberCount">14</span> จาก 14 สมาชิก
+      <div class="foot-nav">
+        <button onclick="showPage('home')">หน้าแรก</button>
+        <button onclick="showPage('policy')">นโยบาย</button>
+        <button onclick="showPage('members')">สมาชิก</button>
+        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
       </div>
+    </footer>
+  </div><!-- /page-home -->
 
-      <!-- กริดสมาชิก 14 คน -->
-      <div class="members-grid" id="membersGrid">
 
-        <!-- #01 ประธาน -->
-        <div class="member-card reveal" data-dept="บริหาร" data-name="เจ๊ด้า">
-          <div class="mc-top" style="background:linear-gradient(135deg,#7b1b12,#c0392b)">
-            <span class="mc-num">#01</span>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="เจ๊ด้า"/>
-            <div class="mc-dept-tag">ฝ่ายบริหาร</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">เจ๊ด้า</div>
-            <div class="mc-role">ประธานสภานักเรียน</div>
-            <div class="mc-class">ม.3/4</div>
-            <span class="status-badge lead-badge">ผู้นำ</span>
-          </div>
-        </div>
+  <!-- ============================================================
+       ② PAGE: POLICY (นโยบาย)
+  ============================================================ -->
+  <div id="page-policy" class="page">
 
-        <!-- #02 -->
-        <div class="member-card reveal" data-dept="บริหาร" data-name="ชนัญชิดา สุขสวาท">
-          <div class="mc-top" style="background:linear-gradient(135deg,#1a2a3a,#2c4a6e)">
-            <span class="mc-num">#02</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">ชช</div>
-            <div class="mc-dept-tag">ฝ่ายบริหาร</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">ชนัญชิดา สุขสวาท</div>
-            <div class="mc-role">รองประธานฝ่ายที่ 1</div>
-            <div class="mc-class">ม.5/4</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #03 -->
-        <div class="member-card reveal" data-dept="บริหาร" data-name="วรวิทย์ จันทรสุข">
-          <div class="mc-top" style="background:linear-gradient(135deg,#1b3a1b,#2e6b2e)">
-            <span class="mc-num">#03</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">วว</div>
-            <div class="mc-dept-tag">ฝ่ายบริหาร</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">วรวิทย์ จันทรสุข</div>
-            <div class="mc-role">รองประธานฝ่ายที่ 2</div>
-            <div class="mc-class">ม.5/3</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #04 -->
-        <div class="member-card reveal" data-dept="บริหาร" data-name="กัลยาณี พงษ์ประดิษฐ์">
-          <div class="mc-top" style="background:linear-gradient(135deg,#3a1a2a,#6e2c4a)">
-            <span class="mc-num">#04</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">กก</div>
-            <div class="mc-dept-tag">ฝ่ายบริหาร</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">กัลยาณี พงษ์ประดิษฐ์</div>
-            <div class="mc-role">เลขาธิการ</div>
-            <div class="mc-class">ม.5/1</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #05 -->
-        <div class="member-card reveal" data-dept="บริหาร" data-name="ธนกฤต อุดมสุข">
-          <div class="mc-top" style="background:linear-gradient(135deg,#2a1a0a,#6e4a1e)">
-            <span class="mc-num">#05</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">ธธ</div>
-            <div class="mc-dept-tag">ฝ่ายบริหาร</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">ธนกฤต อุดมสุข</div>
-            <div class="mc-role">เหรัญญิก</div>
-            <div class="mc-class">ม.5/3</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #06 -->
-        <div class="member-card reveal" data-dept="วิชาการ" data-name="สิริพร ทองแดง">
-          <div class="mc-top" style="background:linear-gradient(135deg,#1a1a3a,#2c2c7a)">
-            <span class="mc-num">#06</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">สส</div>
-            <div class="mc-dept-tag">ฝ่ายวิชาการ</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">สิริพร ทองแดง</div>
-            <div class="mc-role">หัวหน้าฝ่ายวิชาการ</div>
-            <div class="mc-class">ม.4/2</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #07 -->
-        <div class="member-card reveal" data-dept="วิชาการ" data-name="ณัฐพล วงษ์สุวรรณ">
-          <div class="mc-top" style="background:linear-gradient(135deg,#1e3a2a,#2e6a4e)">
-            <span class="mc-num">#07</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">ณณ</div>
-            <div class="mc-dept-tag">ฝ่ายวิชาการ</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">ณัฐพล วงษ์สุวรรณ</div>
-            <div class="mc-role">กรรมการฝ่ายวิชาการ</div>
-            <div class="mc-class">ม.4/4</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #08 -->
-        <div class="member-card reveal" data-dept="วิชาการ" data-name="พิชญา ศรีวิชัย">
-          <div class="mc-top" style="background:linear-gradient(135deg,#3a2a1a,#7a4e20)">
-            <span class="mc-num">#08</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">พพ</div>
-            <div class="mc-dept-tag">ฝ่ายวิชาการ</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">พิชญา ศรีวิชัย</div>
-            <div class="mc-role">กรรมการฝ่ายวิชาการ</div>
-            <div class="mc-class">ม.4/1</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #09 -->
-        <div class="member-card reveal" data-dept="กิจกรรม" data-name="ภูมิพัฒน์ เกษมสุข">
-          <div class="mc-top" style="background:linear-gradient(135deg,#2a0a2a,#6a1a6a)">
-            <span class="mc-num">#09</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">ภภ</div>
-            <div class="mc-dept-tag">ฝ่ายกิจกรรม</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">ภูมิพัฒน์ เกษมสุข</div>
-            <div class="mc-role">หัวหน้าฝ่ายกิจกรรม</div>
-            <div class="mc-class">ม.5/5</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #10 -->
-        <div class="member-card reveal" data-dept="กิจกรรม" data-name="อรนุช มานะกิจ">
-          <div class="mc-top" style="background:linear-gradient(135deg,#1a2a1a,#3a6a3a)">
-            <span class="mc-num">#10</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">อน</div>
-            <div class="mc-dept-tag">ฝ่ายกิจกรรม</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">อรนุช มานะกิจ</div>
-            <div class="mc-role">กรรมการฝ่ายกิจกรรม</div>
-            <div class="mc-class">ม.4/3</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #11 -->
-        <div class="member-card reveal" data-dept="กิจกรรม" data-name="ศุภชัย ดาราวงศ์">
-          <div class="mc-top" style="background:linear-gradient(135deg,#0a1a2a,#1a3a5a)">
-            <span class="mc-num">#11</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">ศศ</div>
-            <div class="mc-dept-tag">ฝ่ายกิจกรรม</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">ศุภชัย ดาราวงศ์</div>
-            <div class="mc-role">กรรมการฝ่ายกิจกรรม</div>
-            <div class="mc-class">ม.4/5</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #12 -->
-        <div class="member-card reveal" data-dept="ประชาสัมพันธ์" data-name="นภัสสร จิตรกร">
-          <div class="mc-top" style="background:linear-gradient(135deg,#2a1a0a,#5a3a1a)">
-            <span class="mc-num">#12</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">นน</div>
-            <div class="mc-dept-tag">ฝ่ายประชาสัมพันธ์</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">นภัสสร จิตรกร</div>
-            <div class="mc-role">หัวหน้าฝ่ายประชาสัมพันธ์</div>
-            <div class="mc-class">ม.5/1</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #13 -->
-        <div class="member-card reveal" data-dept="ประชาสัมพันธ์" data-name="ทัศนีย์ พรหมบุตร">
-          <div class="mc-top" style="background:linear-gradient(135deg,#1a0a2a,#4a1a6a)">
-            <span class="mc-num">#13</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">ทท</div>
-            <div class="mc-dept-tag">ฝ่ายประชาสัมพันธ์</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">ทัศนีย์ พรหมบุตร</div>
-            <div class="mc-role">กรรมการฝ่ายประชาสัมพันธ์</div>
-            <div class="mc-class">ม.4/2</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-        <!-- #14 -->
-        <div class="member-card reveal" data-dept="ประชาสัมพันธ์" data-name="กิตติภณ สายทอง">
-          <div class="mc-top" style="background:linear-gradient(135deg,#0a2a1a,#1a5a3a)">
-            <span class="mc-num">#14</span>
-            <div class="mc-avatar" style="background:rgba(0,0,0,0.3)">กต</div>
-            <div class="mc-dept-tag">ฝ่ายประชาสัมพันธ์</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">กิตติภณ สายทอง</div>
-            <div class="mc-role">กรรมการฝ่ายประชาสัมพันธ์</div>
-            <div class="mc-class">ม.4/4</div>
-            <span class="status-badge active-badge">กรรมการ</span>
-          </div>
-        </div>
-
-      </div><!-- /members-grid -->
+    <!-- Page hero header -->
+    <div class="policy-hero">
+      <span class="tag">นโยบาย 2568</span>
+      <h1 class="section-title">นโยบายสภานักเรียน</h1>
+      <p class="section-lead" style="max-width:520px">
+        นโยบายที่เราตั้งใจดำเนินการเพื่อพัฒนาโรงเรียนและยกระดับคุณภาพชีวิตนักเรียน
+      </p>
     </div>
-  </section>
 
+    <!-- Policy list -->
+    <div class="policy-list">
 
-  <!-- ════════════════════════════════════════
-       POLICY SECTION — นโยบาย 6 ด้าน
-  ════════════════════════════════════════ -->
-  <section id="policy">
-    <div class="section-inner">
+      <div class="policy-item reveal">
+        <div class="policy-num">01</div>
+        <div class="policy-content">
+          <h3>ส่งเสริมการเรียนรู้เชิงรุก</h3>
+          <p>จัดกิจกรรมส่งเสริมทักษะการคิดวิเคราะห์ ติวเข้มวิชาหลัก และสร้างบรรยากาศการเรียนรู้ที่มีความสุข</p>
+          <span class="policy-badge">วิชาการ</span>
+        </div>
+      </div>
 
-      <div class="section-header reveal">
+      <div class="policy-item reveal">
+        <div class="policy-num">02</div>
+        <div class="policy-content">
+          <h3>พัฒนาสุขอนามัยและสิ่งแวดล้อม</h3>
+          <p>รณรงค์ลดขยะ แยกขยะรีไซเคิล ดูแลพื้นที่สีเขียว และสร้างโรงเรียนสะอาดน่าอยู่</p>
+          <span class="policy-badge">สิ่งแวดล้อม</span>
+        </div>
+      </div>
+
+      <div class="policy-item reveal">
+        <div class="policy-num">03</div>
+        <div class="policy-content">
+          <h3>สนับสนุนสิทธิ์และเสรีภาพนักเรียน</h3>
+          <p>เป็นปากเสียงให้กับนักเรียนในการเสนอปัญหาและข้อเรียกร้องต่อผู้บริหารโรงเรียน</p>
+          <span class="policy-badge">สิทธิ์นักเรียน</span>
+        </div>
+      </div>
+
+      <div class="policy-item reveal">
+        <div class="policy-num">04</div>
+        <div class="policy-content">
+          <h3>พัฒนาทักษะความเป็นผู้นำ</h3>
+          <p>เปิดพื้นที่ให้นักเรียนได้ฝึกฝนทักษะการเป็นผู้นำ การทำงานเป็นทีม และการแก้ปัญหาเชิงสร้างสรรค์</p>
+          <span class="policy-badge">ความเป็นผู้นำ</span>
+        </div>
+      </div>
+
+      <div class="policy-item reveal">
+        <div class="policy-num">05</div>
+        <div class="policy-content">
+          <h3>ส่งเสริมวัฒนธรรมและอัตลักษณ์โรงเรียน</h3>
+          <p>จัดกิจกรรมอนุรักษ์วัฒนธรรมไทย เสริมสร้างความภาคภูมิใจในสถาบัน</p>
+          <span class="policy-badge">วัฒนธรรม</span>
+        </div>
+      </div>
+
+      <div class="policy-item reveal">
+        <div class="policy-num">06</div>
+        <div class="policy-content">
+          <h3>สร้างความสัมพันธ์ระหว่างรุ่น</h3>
+          <p>จัดกิจกรรมสานสัมพันธ์รุ่นพี่รุ่นน้อง เพื่อสร้างสังคมโรงเรียนที่อบอุ่นและเอื้อเฟื้อ</p>
+          <span class="policy-badge">สัมพันธ์</span>
+        </div>
+      </div>
+
+      <div class="policy-item reveal">
+        <div class="policy-num">07</div>
+        <div class="policy-content">
+          <h3>ดิจิทัลและนวัตกรรม</h3>
+          <p>ส่งเสริมการใช้เทคโนโลยีอย่างสร้างสรรค์ จัดกิจกรรมด้าน coding และ digital literacy</p>
+          <span class="policy-badge">เทคโนโลยี</span>
+        </div>
+      </div>
+
+      <div class="policy-item reveal">
+        <div class="policy-num">08</div>
+        <div class="policy-content">
+          <h3>สวัสดิการและความปลอดภัย</h3>
+          <p>ดูแลสวัสดิการนักเรียน เฝ้าระวังการกลั่นแกล้ง และสร้างโรงเรียนที่ปลอดภัยสำหรับทุกคน</p>
+          <span class="policy-badge">สวัสดิการ</span>
+        </div>
+      </div>
+
+    </div><!-- /policy-list -->
+
+    <!-- Footer -->
+    <footer>
+      <div class="foot-brand">
+        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
         <div>
-          <div class="tag">Policy</div>
-          <h2>นโยบาย<br/>สภานักเรียน</h2>
-        </div>
-        <div class="num-big" style="color:rgba(255,255,255,0.04)">03</div>
-      </div>
-
-      <div class="policy-grid">
-        <div class="policy-card reveal" data-n="01" style="transition-delay:0s">
-          <div class="p-icon">📚</div>
-          <h3>ด้านการศึกษา</h3>
-          <p>ส่งเสริมสภาพแวดล้อมการเรียนรู้ที่มีคุณภาพ เพิ่มโอกาสให้นักเรียนแสดงศักยภาพ</p>
-          <ul>
-            <li>จัดติวเข้มก่อนสอบปลายภาคทุกวิชาหลัก</li>
-            <li>ตั้งชมรมติวเพื่อน (Peer Tutoring)</li>
-            <li>เพิ่มแหล่งเรียนรู้ออนไลน์ในระบบโรงเรียน</li>
-          </ul>
-        </div>
-        <div class="policy-card reveal" data-n="02" style="transition-delay:0.08s">
-          <div class="p-icon">🛡️</div>
-          <h3>ด้านสวัสดิภาพนักเรียน</h3>
-          <p>ดูแลความปลอดภัยและสุขภาวะของนักเรียนทุกคน ทั้งร่างกายและจิตใจ</p>
-          <ul>
-            <li>ติดตั้งกล่องรับเรื่องร้องเรียนนิรนาม</li>
-            <li>ประสานงานนักจิตวิทยาโรงเรียน</li>
-            <li>ลดการรับน้องที่ไม่เหมาะสม</li>
-          </ul>
-        </div>
-        <div class="policy-card reveal" data-n="03" style="transition-delay:0.16s">
-          <div class="p-icon">🎉</div>
-          <h3>ด้านกิจกรรมโรงเรียน</h3>
-          <p>จัดกิจกรรมที่หลากหลาย ครอบคลุมทุกกลุ่ม เปิดพื้นที่สร้างสรรค์</p>
-          <ul>
-            <li>จัดงานวันวิชาการ &amp; นิทรรศการประจำปี</li>
-            <li>เพิ่มกิจกรรมชมรมให้หลากหลาย</li>
-            <li>กีฬาสี + การแข่งขันกีฬาสัมพันธ์</li>
-          </ul>
-        </div>
-        <div class="policy-card reveal" data-n="04" style="transition-delay:0.24s">
-          <div class="p-icon">🌿</div>
-          <h3>ด้านสิ่งแวดล้อม</h3>
-          <p>สร้างโรงเรียนสีเขียว ลดขยะ ส่งเสริมพฤติกรรมรักษ์โลก</p>
-          <ul>
-            <li>โครงการแยกขยะครบวงจร</li>
-            <li>เพิ่มพื้นที่สีเขียวในโรงเรียน</li>
-            <li>ลดการใช้พลาสติกในโรงอาหาร</li>
-          </ul>
-        </div>
-        <div class="policy-card reveal" data-n="05" style="transition-delay:0.32s">
-          <div class="p-icon">💻</div>
-          <h3>ด้านเทคโนโลยี</h3>
-          <p>เพิ่มการเข้าถึงเทคโนโลยี พัฒนาทักษะดิจิทัลเพื่ออนาคต</p>
-          <ul>
-            <li>ขยายโซน Wi-Fi ให้ครอบคลุมทุกอาคาร</li>
-            <li>อบรม Coding และ AI สำหรับนักเรียน ม.ต้น</li>
-            <li>พัฒนาแอปฯ สภานักเรียน</li>
-          </ul>
-        </div>
-        <div class="policy-card reveal" data-n="06" style="transition-delay:0.40s">
-          <div class="p-icon">🗳️</div>
-          <h3>ด้านประชาธิปไตย</h3>
-          <p>ส่งเสริมการมีส่วนร่วม สร้างกระบวนการที่โปร่งใสตรวจสอบได้</p>
-          <ul>
-            <li>เปิดเวทีรับฟังความคิดเห็นรายเดือน</li>
-            <li>เผยแพร่รายงานการประชุมสภาทุกครั้ง</li>
-            <li>จัดโหวตออนไลน์สำหรับนโยบายใหม่</li>
-          </ul>
+          <div class="th">สภานักเรียน</div>
+          <div class="copy">© 2568 Student Council. All rights reserved.</div>
         </div>
       </div>
-
-      <div class="policy-pledge reveal">
-        <div class="pledge-icon">✊</div>
-        <div class="pledge-text">
-          <h4>คำมั่นสัญญาของสภานักเรียน</h4>
-          <p>เราสัญญาว่าจะทำงานด้วย<strong>ความซื่อสัตย์</strong>และ<strong>ความโปร่งใส</strong>เพื่อนักเรียนทุกคน เสียงของคุณจะถูกรับฟังและนำไปสู่การปฏิบัติจริงเสมอ สภานักเรียนจะเป็นสะพานเชื่อมระหว่างนักเรียนกับผู้บริหารเพื่อสร้างโรงเรียนที่ดีขึ้นไปด้วยกัน</p>
-        </div>
+      <div class="foot-nav">
+        <button onclick="showPage('home')">หน้าแรก</button>
+        <button onclick="showPage('policy')">นโยบาย</button>
+        <button onclick="showPage('members')">สมาชิก</button>
+        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
       </div>
+    </footer>
+  </div><!-- /page-policy -->
 
+
+  <!-- ============================================================
+       ③ PAGE: MEMBERS (สมาชิก 14 คน)
+  ============================================================ -->
+  <div id="page-members" class="page">
+
+    <!-- Page hero header -->
+    <div class="members-hero">
+      <span class="tag">สมาชิก 14 คน</span>
+      <h1 class="section-title">คณะกรรมการ<br>สภานักเรียน</h1>
+      <p class="section-lead" style="max-width:480px">
+        ทีมงานที่ทุ่มเทและมีความมุ่งมั่น พร้อมทำงานเพื่อนักเรียนทุกคน
+      </p>
     </div>
-  </section>
 
+    <!-- Members grid (14 cards) -->
+    <div class="members-grid">
 
-  <!-- ════════════════════════════════════════
-       ABOUT SECTION — เกี่ยวกับเรา
-  ════════════════════════════════════════ -->
-  <section id="about">
-    <div class="section-inner">
+      <!-- 1. ประธาน -->
+      <div class="member-card president reveal">
+        <div class="member-num">#01</div>
+        <div class="member-avatar">ป</div>
+        <div class="member-pos">ประธานสภานักเรียน</div>
+        <div class="member-name">นายปัณณวิชญ์ สมใจ</div>
+        <div class="member-class">ม.6/1</div>
+      </div>
 
-      <div class="section-header reveal">
+      <!-- 2. รองประธาน 1 -->
+      <div class="member-card reveal" style="transition-delay:.05s">
+        <div class="member-num">#02</div>
+        <div class="member-avatar">ร</div>
+        <div class="member-pos">รองประธาน คนที่ 1</div>
+        <div class="member-name">นางสาวรัชนีกร วงศ์ดี</div>
+        <div class="member-class">ม.6/2</div>
+      </div>
+
+      <!-- 3. รองประธาน 2 -->
+      <div class="member-card reveal" style="transition-delay:.10s">
+        <div class="member-num">#03</div>
+        <div class="member-avatar">ว</div>
+        <div class="member-pos">รองประธาน คนที่ 2</div>
+        <div class="member-name">นายวรภัทร จันทร์เพ็ญ</div>
+        <div class="member-class">ม.5/3</div>
+      </div>
+
+      <!-- 4. เลขานุการ -->
+      <div class="member-card reveal" style="transition-delay:.15s">
+        <div class="member-num">#04</div>
+        <div class="member-avatar">ณ</div>
+        <div class="member-pos">เลขานุการ</div>
+        <div class="member-name">นางสาวณัฐธิดา ทองคำ</div>
+        <div class="member-class">ม.5/1</div>
+      </div>
+
+      <!-- 5. เหรัญญิก -->
+      <div class="member-card reveal" style="transition-delay:.20s">
+        <div class="member-num">#05</div>
+        <div class="member-avatar">ก</div>
+        <div class="member-pos">เหรัญญิก</div>
+        <div class="member-name">นายกิตติภูมิ แสงทอง</div>
+        <div class="member-class">ม.5/2</div>
+      </div>
+
+      <!-- 6. ฝ่ายวิชาการ -->
+      <div class="member-card reveal" style="transition-delay:.25s">
+        <div class="member-num">#06</div>
+        <div class="member-avatar">ส</div>
+        <div class="member-pos">หัวหน้าฝ่ายวิชาการ</div>
+        <div class="member-name">นางสาวสิริกาญจน์ พรมมา</div>
+        <div class="member-class">ม.5/4</div>
+      </div>
+
+      <!-- 7. ฝ่ายกิจกรรม -->
+      <div class="member-card reveal" style="transition-delay:.30s">
+        <div class="member-num">#07</div>
+        <div class="member-avatar">ธ</div>
+        <div class="member-pos">หัวหน้าฝ่ายกิจกรรม</div>
+        <div class="member-name">นายธนากร รุ่งเรือง</div>
+        <div class="member-class">ม.5/1</div>
+      </div>
+
+      <!-- 8. ฝ่ายประชาสัมพันธ์ -->
+      <div class="member-card reveal" style="transition-delay:.35s">
+        <div class="member-num">#08</div>
+        <div class="member-avatar">พ</div>
+        <div class="member-pos">หัวหน้าฝ่ายประชาสัมพันธ์</div>
+        <div class="member-name">นางสาวพิมพ์ชนก อินทร์สุข</div>
+        <div class="member-class">ม.4/3</div>
+      </div>
+
+      <!-- 9. ฝ่ายสิ่งแวดล้อม -->
+      <div class="member-card reveal" style="transition-delay:.40s">
+        <div class="member-num">#09</div>
+        <div class="member-avatar">ภ</div>
+        <div class="member-pos">หัวหน้าฝ่ายสิ่งแวดล้อม</div>
+        <div class="member-name">นายภูวนาท ศรีวิชัย</div>
+        <div class="member-class">ม.4/2</div>
+      </div>
+
+      <!-- 10. ฝ่ายปฏิคม -->
+      <div class="member-card reveal" style="transition-delay:.45s">
+        <div class="member-num">#10</div>
+        <div class="member-avatar">อ</div>
+        <div class="member-pos">หัวหน้าฝ่ายปฏิคม</div>
+        <div class="member-name">นางสาวอรทัย บุญมี</div>
+        <div class="member-class">ม.4/1</div>
+      </div>
+
+      <!-- 11. ฝ่ายกีฬา -->
+      <div class="member-card reveal" style="transition-delay:.50s">
+        <div class="member-num">#11</div>
+        <div class="member-avatar">ช</div>
+        <div class="member-pos">หัวหน้าฝ่ายกีฬา</div>
+        <div class="member-name">นายชินวัตร มั่นคง</div>
+        <div class="member-class">ม.4/4</div>
+      </div>
+
+      <!-- 12. ฝ่ายสุขภาพ -->
+      <div class="member-card reveal" style="transition-delay:.55s">
+        <div class="member-num">#12</div>
+        <div class="member-avatar">น</div>
+        <div class="member-pos">หัวหน้าฝ่ายสุขภาพ</div>
+        <div class="member-name">นางสาวนภัสสร เพชรรัตน์</div>
+        <div class="member-class">ม.4/2</div>
+      </div>
+
+      <!-- 13. กรรมการ -->
+      <div class="member-card reveal" style="transition-delay:.60s">
+        <div class="member-num">#13</div>
+        <div class="member-avatar">ต</div>
+        <div class="member-pos">กรรมการ</div>
+        <div class="member-name">นายตะวัน ใจดี</div>
+        <div class="member-class">ม.4/3</div>
+      </div>
+
+      <!-- 14. กรรมการ -->
+      <div class="member-card reveal" style="transition-delay:.65s">
+        <div class="member-num">#14</div>
+        <div class="member-avatar">ม</div>
+        <div class="member-pos">กรรมการ</div>
+        <div class="member-name">นางสาวมนัสนันท์ สุขสบาย</div>
+        <div class="member-class">ม.4/1</div>
+      </div>
+
+    </div><!-- /members-grid -->
+
+    <!-- Footer -->
+    <footer>
+      <div class="foot-brand">
+        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
         <div>
-          <div class="tag">About Us</div>
-          <h2>เกี่ยวกับ<br/>สภานักเรียน</h2>
-        </div>
-        <div class="num-big">04</div>
-      </div>
-
-      <div class="mission-grid">
-        <div class="mission-card reveal" data-num="01" style="transition-delay:0s">
-          <div class="icon">🎯</div>
-          <h3>พันธกิจของเรา</h3>
-          <p>เป็นสื่อกลางระหว่างนักเรียนและคณะครูอาจารย์ รับฟังปัญหา นำเสนอแนวทางแก้ไข และพัฒนาคุณภาพชีวิตในโรงเรียน</p>
-        </div>
-        <div class="mission-card reveal" data-num="02" style="transition-delay:0.1s">
-          <div class="icon">🏆</div>
-          <h3>ความสำเร็จที่ผ่านมา</h3>
-          <p>จัดกิจกรรมวันกีฬาสี ค่ายวิชาการ โครงการจิตอาสา และงานเปิดบ้านโรงเรียน รวมถึงโครงการสิ่งแวดล้อมสีเขียว</p>
-        </div>
-        <div class="mission-card reveal" data-num="03" style="transition-delay:0.2s">
-          <div class="icon">💡</div>
-          <h3>แผนในอนาคต</h3>
-          <p>ขยายช่องทางการรับฟังความคิดเห็น พัฒนาแอปพลิเคชันสำหรับนักเรียน และสร้างเครือข่ายสภานักเรียนระดับเขต</p>
+          <div class="th">สภานักเรียน</div>
+          <div class="copy">© 2568 Student Council. All rights reserved.</div>
         </div>
       </div>
+      <div class="foot-nav">
+        <button onclick="showPage('home')">หน้าแรก</button>
+        <button onclick="showPage('policy')">นโยบาย</button>
+        <button onclick="showPage('members')">สมาชิก</button>
+        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
+      </div>
+    </footer>
+  </div><!-- /page-members -->
 
-      <div class="team-label reveal">คณะกรรมการหลัก</div>
 
-      <div class="team-grid">
-        <div class="team-card reveal" style="transition-delay:0s">
-          <div class="avatar" style="background:#2a2020">
-            <span class="initials">ปป</span>
-            <div class="role-badge">ประธาน</div>
-          </div>
-          <div class="info">
-            <div class="name">ด้า</div>
-            <div class="dept">ม.3/4 · ประธานสภานักเรียน</div>
+  <!-- ============================================================
+       ④ PAGE: ABOUT (เกี่ยวกับเรา + ติดต่อ)
+  ============================================================ -->
+  <div id="page-about" class="page">
+
+    <!-- Page hero header -->
+    <div class="about-hero">
+      <span class="tag">เกี่ยวกับเรา</span>
+      <h1 class="section-title">สภานักเรียน<br>คือเสียงของคุณ</h1>
+      <p class="section-lead" style="max-width:520px">
+        องค์กรนักเรียนที่ทำงานเพื่อนักเรียนทุกคน ด้วยความโปร่งใสและมุ่งมั่น
+      </p>
+    </div>
+
+    <!-- Vision / Mission -->
+    <div class="vm-grid">
+      <div class="vm-card reveal">
+        <span class="tag">วิสัยทัศน์</span>
+        <h2 class="section-title" style="color:white">Vision</h2>
+        <div class="divider"></div>
+        <p>
+          มุ่งสร้างโรงเรียนที่นักเรียนมีส่วนร่วมในการบริหารจัดการ
+          ด้วยความโปร่งใส สร้างสรรค์ และตอบสนองความต้องการของนักเรียนอย่างแท้จริง
+          เพื่อให้โรงเรียนเป็นสถานที่แห่งการเรียนรู้และเติบโตอย่างยั่งยืน
+        </p>
+      </div>
+      <div class="vm-card red-bg reveal">
+        <span class="tag">พันธกิจ</span>
+        <h2 class="section-title">Mission</h2>
+        <div class="divider" style="background:rgba(255,255,255,0.5)"></div>
+        <p>
+          สร้างผู้นำรุ่นใหม่ที่มีคุณธรรมและจิตสาธารณะ รับฟังปัญหาและนำเสนอแนวทางแก้ไข
+          จัดกิจกรรมที่หลากหลายเพื่อพัฒนาทักษะชีวิตและเสริมสร้างความสามัคคี
+        </p>
+      </div>
+    </div>
+
+    <!-- Core Values -->
+    <div class="values-row">
+      <div class="value-card reveal">
+        <div class="value-icon">🎯</div>
+        <h3>มุ่งมั่น</h3>
+        <p>ทำงานด้วยความตั้งใจและรับผิดชอบต่อหน้าที่ที่ได้รับมอบหมาย</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:.08s">
+        <div class="value-icon">🤝</div>
+        <h3>ร่วมมือ</h3>
+        <p>ทำงานเป็นทีม เคารพความคิดเห็น และสร้างความสามัคคี</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:.16s">
+        <div class="value-icon">💡</div>
+        <h3>สร้างสรรค์</h3>
+        <p>คิดนอกกรอบและนำเสนอแนวทางแก้ปัญหาที่แปลกใหม่</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:.24s">
+        <div class="value-icon">🔍</div>
+        <h3>โปร่งใส</h3>
+        <p>ดำเนินงานอย่างเปิดเผย ตรวจสอบได้ และซื่อสัตย์ต่อทุกคน</p>
+      </div>
+    </div>
+
+    <!-- ── CONTACT SECTION ── -->
+    <div class="contact-section">
+      <span class="tag reveal">ติดต่อเรา</span>
+      <h2 class="section-title reveal">ส่งข้อความถึงสภา</h2>
+      <p class="section-lead reveal" style="max-width:480px">
+        มีข้อเสนอแนะ ปัญหา หรืออยากเข้าร่วมกิจกรรม? สภานักเรียนพร้อมรับฟังเสมอ
+      </p>
+
+      <div class="contact-grid">
+
+        <!-- Left: Contact info -->
+        <div>
+          <div class="contact-items reveal">
+            <div class="ci">
+              <div class="ci-icon">📍</div>
+              <div>
+                <div class="ci-label">ที่ตั้ง</div>
+                <div class="ci-val">ห้องสภานักเรียน อาคาร 2 ชั้น 1 โรงเรียนตัวอย่าง</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">⏰</div>
+              <div>
+                <div class="ci-label">เวลาทำการ</div>
+                <div class="ci-val">จันทร์–ศุกร์ เวลา 08.00–17.00 น.</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">📞</div>
+              <div>
+                <div class="ci-label">โทรศัพท์</div>
+                <div class="ci-val">02-XXX-XXXX ต่อ 201</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">📧</div>
+              <div>
+                <div class="ci-label">อีเมล</div>
+                <div class="ci-val">studentcouncil@school.ac.th</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">📘</div>
+              <div>
+                <div class="ci-label">Facebook</div>
+                <div class="ci-val">fb.com/SC.Takua</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">📸</div>
+              <div>
+                <div class="ci-label">Instagram / TikTok</div>
+                <div class="ci-val">@sc_school2568</div>
+              </div>
+            </div>
+            <div class="ci" style="border:none">
+              <div class="ci-icon">💬</div>
+              <div>
+                <div class="ci-label">LINE OA</div>
+                <div class="ci-val">@studentcouncil_school</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="team-card reveal" style="transition-delay:0.08s">
-          <div class="avatar" style="background:#1e2028">
-            <span class="initials">ชช</span>
-            <div class="role-badge">รองประธาน</div>
+
+        <!-- Right: Contact form -->
+        <div class="contact-form reveal">
+          <div class="form-row">
+            <div class="fg">
+              <label>ชื่อ-นามสกุล</label>
+              <input type="text" placeholder="กรอกชื่อของคุณ"/>
+            </div>
+            <div class="fg">
+              <label>ห้องเรียน</label>
+              <input type="text" placeholder="เช่น ม.4/2"/>
+            </div>
           </div>
-          <div class="info">
-            <div class="name">ชนัญชิดา สุขสวาท</div>
-            <div class="dept">ม.5/4 · รองประธานฝ่ายที่ 1</div>
+          <div class="fg">
+            <label>อีเมล (ถ้ามี)</label>
+            <input type="email" placeholder="your@email.com"/>
           </div>
+          <div class="fg">
+            <label>หัวข้อ</label>
+            <input type="text" placeholder="เช่น ข้อเสนอแนะ / ปัญหา / ขอข้อมูล"/>
+          </div>
+          <div class="fg">
+            <label>ข้อความ</label>
+            <textarea placeholder="ระบุรายละเอียด..."></textarea>
+          </div>
+          <button class="btn-submit" id="submitBtn">ส่งข้อความ →</button>
         </div>
-        <div class="team-card reveal" style="transition-delay:0.16s">
-          <div class="avatar" style="background:#202820">
-            <span class="initials">กก</span>
-            <div class="role-badge">เลขาธิการ</div>
-          </div>
-          <div class="info">
-            <div class="name">กัลยาณี พงษ์ประดิษฐ์</div>
-            <div class="dept">ม.5/1 · เลขาธิการ</div>
-          </div>
+
+      </div>
+    </div><!-- /contact-section -->
+
+    <!-- Footer -->
+    <footer>
+      <div class="foot-brand">
+        <div class="logo-hex" style="animation:none;width:32px;height:32px"><span style="font-size:10px">SC</span></div>
+        <div>
+          <div class="th">สภานักเรียน</div>
+          <div class="copy">© 2568 Student Council. All rights reserved.</div>
         </div>
       </div>
-
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════
-       FOOTER
-  ════════════════════════════════════════ -->
-  <footer>
-    <div class="foot-logo">
-      <div class="emblem"></div>
-      <span>Connect ตธ.17</span>
-    </div>
-    <div class="copy">© 2569 สภานักเรียน — ทุกเสียงมีความหมาย</div>
-    <div class="socials">
-      <a href="https://www.instagram.com/euro301255?igsh=cGV5b2ZiZzY0eGll" target="_blank" rel="noopener">IG</a>
-    </div>
-  </footer>
+      <div class="foot-nav">
+        <button onclick="showPage('home')">หน้าแรก</button>
+        <button onclick="showPage('policy')">นโยบาย</button>
+        <button onclick="showPage('members')">สมาชิก</button>
+        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
+      </div>
+    </footer>
+  </div><!-- /page-about -->
 
 
-  <!-- ════════════════════════════════════════
+  <!-- ============================================================
        JAVASCRIPT
-  ════════════════════════════════════════ -->
+  ============================================================ -->
   <script>
-    /* ── scrollToSection ──────────────────────────────
-       เลื่อนหน้าไปยัง section และ set tab active
-       offset 60px เผื่อ navbar ปิดทับ
-    ─────────────────────────────────────────────────── */
-    function scrollToSection(id, btn) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      /* คำนวณ offset ให้พอดีกับ navbar */
-      const navH = document.querySelector('nav').offsetHeight;
-      const top  = el.getBoundingClientRect().top + window.pageYOffset - navH;
-      window.scrollTo({ top, behavior: 'smooth' });
-
-      /* set active ทั้ง desktop และ mobile tabs */
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      if (btn) btn.classList.add('active');
+    /* ----------------------------------------------------------
+       PAGE ROUTING — show/hide pages without reload
+    ---------------------------------------------------------- */
+    function showPage(name) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // Show target page
+      document.getElementById('page-' + name).classList.add('active');
+      // Update active nav link
+      document.querySelectorAll('.nav-links li a').forEach(a => a.classList.remove('active'));
+      const link = document.getElementById('nav-' + name);
+      if (link) link.classList.add('active');
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Re-run reveal for new page content
+      initReveal();
+      return false;
     }
 
-    /* ── toggleMenu / closeMenu ───────────────────────
-       เปิด-ปิด mobile drawer menu
-    ─────────────────────────────────────────────────── */
-    function toggleMenu() {
-      const menu = document.getElementById('mobileMenu');
-      const btn  = document.getElementById('hamburger');
-      menu.classList.toggle('open');
-      btn.classList.toggle('open');
-    }
-    function closeMenu() {
-      document.getElementById('mobileMenu').classList.remove('open');
-      document.getElementById('hamburger').classList.remove('open');
+    /* ----------------------------------------------------------
+       MOBILE DRAWER TOGGLE
+    ---------------------------------------------------------- */
+    const burger = document.getElementById('burger');
+    const drawer = document.getElementById('drawer');
+
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      drawer.classList.toggle('open');
+    });
+
+    function closeDrawer() {
+      burger.classList.remove('open');
+      drawer.classList.remove('open');
     }
 
-    /* ── setFilter ────────────────────────────────────
-       กรองการ์ดสมาชิกตามฝ่าย
-    ─────────────────────────────────────────────────── */
-    function setFilter(dept, btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      let count = 0;
-      document.querySelectorAll('.member-card').forEach(card => {
-        const match = dept === 'all' || card.dataset.dept === dept;
-        card.classList.toggle('hidden', !match);
-        if (match) count++;
+    /* ----------------------------------------------------------
+       SCROLL REVEAL — IntersectionObserver
+    ---------------------------------------------------------- */
+    let revealObserver;
+
+    function initReveal() {
+      // Disconnect old observer if exists
+      if (revealObserver) revealObserver.disconnect();
+
+      revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObserver.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      // Observe all .reveal elements in the active page
+      document.querySelectorAll('.page.active .reveal').forEach(el => {
+        revealObserver.observe(el);
       });
-      document.getElementById('memberCount').textContent = count;
     }
 
-    /* ── filterMembers ────────────────────────────────
-       ค้นหาชื่อสมาชิก real-time
-    ─────────────────────────────────────────────────── */
-    function filterMembers() {
-      const q    = document.getElementById('searchInput').value.toLowerCase().trim();
-      const active = document.querySelector('.filter-btn.active').textContent.trim();
-      const dept = active === 'ทั้งหมด' ? 'all' : active.replace('ฝ่าย','');
-      let count = 0;
-      document.querySelectorAll('.member-card').forEach(card => {
-        const nameOk = card.dataset.name.toLowerCase().includes(q);
-        const deptOk = dept === 'all' || card.dataset.dept === dept;
-        const show   = nameOk && deptOk;
-        card.classList.toggle('hidden', !show);
-        if (show) count++;
-      });
-      document.getElementById('memberCount').textContent = count;
-    }
-
-    /* ── Scroll listener ──────────────────────────────
-       1) อัปเดต active tab ตาม section ที่ scroll ถึง
-       2) trigger reveal animation
-       3) ปิด mobile menu เมื่อ scroll
-    ─────────────────────────────────────────────────── */
-    const SECTIONS = ['home', 'members', 'policy', 'about'];
-
+    /* ----------------------------------------------------------
+       NAV SHADOW ON SCROLL
+    ---------------------------------------------------------- */
     window.addEventListener('scroll', () => {
-      /* ปิด menu เมื่อ scroll */
-      closeMenu();
-
-      /* หา section ปัจจุบัน */
-      const navH = document.querySelector('nav').offsetHeight;
-      let current = SECTIONS[0];
-      SECTIONS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - navH - 20) current = id;
-      });
-
-      /* sync active tab ทั้ง desktop + mobile */
-      document.querySelectorAll('.nav-tab').forEach((t, i) => {
-        t.classList.toggle('active', SECTIONS[i] === current);
-      });
-
-      /* reveal animation */
-      document.querySelectorAll('.reveal').forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 60)
-          el.classList.add('visible');
-      });
-    }, { passive: true }); /* passive: true → scroll เร็วขึ้นบน mobile */
-
-    /* ── Initial reveal check ── */
-    document.querySelectorAll('.reveal').forEach(el => {
-      if (el.getBoundingClientRect().top < window.innerHeight - 60)
-        el.classList.add('visible');
+      document.getElementById('mainNav').style.boxShadow =
+        window.scrollY > 50 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
     });
 
-    /* ── ปิด menu เมื่อคลิกนอก ── */
-    document.addEventListener('click', e => {
-      const menu = document.getElementById('mobileMenu');
-      const btn  = document.getElementById('hamburger');
-      if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target))
-        closeMenu();
-    });
+    /* ----------------------------------------------------------
+       CONTACT FORM — submit feedback
+    ---------------------------------------------------------- */
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function () {
+        this.textContent = 'ส่งแล้ว ✓';
+        this.style.background = '#27AE60';
+        setTimeout(() => {
+          this.textContent = 'ส่งข้อความ →';
+          this.style.background = '';
+        }, 2800);
+      });
+    }
+
+    /* ----------------------------------------------------------
+       INIT on first load
+    ---------------------------------------------------------- */
+    initReveal();
   </script>
+
 </body>
 </html>
