@@ -7,9 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ============================================================
-       RESET & CSS VARIABLES
-    ============================================================ */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -17,7 +14,6 @@
       --red-deep:  #cc0000;
       --red-mid:   #ff3333;
       --red-glow:  rgba(255,0,0,0.13);
-
       --g900: #111111;
       --g800: #1e1e1e;
       --g700: #2d2d2d;
@@ -25,19 +21,13 @@
       --g400: #7a7a7a;
       --g200: #c8c8c8;
       --white: #ffffff;
-
       --font: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
-
-      /* nav height — used as offset everywhere */
       --nav-h: 60px;
-
-      /* responsive padding: 16px on phone → 80px on desktop */
       --px: clamp(16px, 5vw, 80px);
       --py: clamp(48px, 7vw, 100px);
     }
 
     html { scroll-behavior: smooth; }
-
     body {
       font-family: var(--font);
       background: var(--g900);
@@ -46,52 +36,36 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── scrollbar ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--g800); }
     ::-webkit-scrollbar-thumb { background: var(--red); }
 
-    /* ============================================================
-       SHARED UTILITIES
-    ============================================================ */
-
-    /* small label above section titles */
     .tag {
       display: inline-flex; align-items: center; gap: 8px;
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.22em; text-transform: uppercase;
       color: var(--red-mid); margin-bottom: 14px;
     }
-    .tag::before {
-      content: ''; width: 16px; height: 2px; background: var(--red);
-    }
+    .tag::before { content: ''; width: 16px; height: 2px; background: var(--red); }
 
-    /* main section heading */
     .section-title {
       font-size: clamp(24px, 4vw, 50px);
       font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
       margin-bottom: 14px;
     }
-
-    /* sub-paragraph under title */
     .section-lead {
       font-size: clamp(13px, 1.5vw, 15px);
       font-weight: 300; color: var(--g400); line-height: 1.8;
     }
-
-    /* red horizontal bar accent */
     .divider { width: 40px; height: 3px; background: var(--red); margin: 18px 0; }
 
-    /* scroll-reveal base state */
     .reveal {
       opacity: 0; transform: translateY(24px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .reveal.visible { opacity: 1; transform: none; }
 
-    /* ============================================================
-       NAVIGATION
-    ============================================================ */
+    /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 300;
       height: var(--nav-h);
@@ -102,10 +76,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.07);
       transition: box-shadow 0.3s;
     }
-
-    /* logo */
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-
     .logo-hex {
       width: 34px; height: 34px; flex-shrink: 0;
       background: var(--red);
@@ -115,15 +86,11 @@
     }
     .logo-hex span { font-size: 11px; font-weight: 800; color: #fff; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .nav-brand { display: flex; flex-direction: column; line-height: 1.2; }
     .nav-brand .th { font-size: 13px; font-weight: 700; color: var(--white); }
     .nav-brand .en { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
-
-    /* ── hide old desktop link list (replaced by single menu btn) ── */
     .nav-links { display: none !important; }
 
-    /* ── single menu button — always visible ── */
     .menu-btn {
       display: flex; align-items: center; gap: 8px;
       background: none; border: 1.5px solid var(--g600);
@@ -136,25 +103,18 @@
     }
     .menu-btn:hover { border-color: var(--red); color: var(--white); }
     .menu-btn.open  { border-color: var(--red); color: var(--white); background: rgba(255,0,0,0.08); }
-
-    /* three-line icon inside button */
-    .menu-btn-icon {
-      display: flex; flex-direction: column; gap: 4px; width: 16px;
-    }
+    .menu-btn-icon { display: flex; flex-direction: column; gap: 4px; width: 16px; }
     .menu-btn-icon span {
       display: block; height: 1.5px; background: currentColor;
       transition: transform 0.3s, opacity 0.3s, width 0.3s;
     }
-    .menu-btn-icon span:nth-child(3) { width: 60%; } /* short bottom line */
-    /* morph to X when open */
+    .menu-btn-icon span:nth-child(3) { width: 60%; }
     .menu-btn.open .menu-btn-icon span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
     .menu-btn.open .menu-btn-icon span:nth-child(2) { opacity: 0; }
     .menu-btn.open .menu-btn-icon span:nth-child(3) { width: 100%; transform: translateY(-5.5px) rotate(-45deg); }
 
-    /* ── dropdown panel ── */
     .nav-dropdown {
       position: fixed;
-      /* align to right edge of nav */
       top: var(--nav-h); right: var(--px);
       width: 220px;
       background: var(--g800);
@@ -162,18 +122,12 @@
       border-top: 3px solid var(--red);
       box-shadow: 0 16px 48px rgba(0,0,0,0.6);
       z-index: 299;
-      /* hidden by default — scale + fade */
       opacity: 0; pointer-events: none;
       transform: translateY(-8px) scaleY(0.95);
       transform-origin: top right;
       transition: opacity 0.25s ease, transform 0.25s ease;
     }
-    .nav-dropdown.open {
-      opacity: 1; pointer-events: auto;
-      transform: translateY(0) scaleY(1);
-    }
-
-    /* each menu item */
+    .nav-dropdown.open { opacity: 1; pointer-events: auto; transform: translateY(0) scaleY(1); }
     .nav-dropdown a {
       display: flex; align-items: center; gap: 12px;
       padding: 14px 20px;
@@ -191,7 +145,6 @@
       content: ''; position: absolute; left: 0; top: 0; bottom: 0;
       width: 3px; background: var(--red);
     }
-    /* icon dot next to each item */
     .nav-dropdown a .di {
       width: 6px; height: 6px; border-radius: 50%;
       background: var(--g600); flex-shrink: 0;
@@ -200,15 +153,11 @@
     .nav-dropdown a:hover .di,
     .nav-dropdown a.active .di { background: var(--red); }
 
-    /* ============================================================
-       PAGE SWITCHING SYSTEM
-    ============================================================ */
+    /* PAGE SYSTEM */
     .page { display: none; }
     .page.active { display: block; }
 
-    /* ============================================================
-       MARQUEE TICKER
-    ============================================================ */
+    /* MARQUEE */
     .marquee-wrap {
       overflow: hidden; background: var(--red);
       padding: 10px 0;
@@ -228,9 +177,7 @@
     .marquee-track span::after { content: '◆'; margin-left: 28px; color: rgba(255,255,255,0.3); }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ============================================================
-       BUTTONS
-    ============================================================ */
+    /* BUTTONS */
     .btn {
       display: inline-block; padding: 12px 28px;
       font-family: var(--font); font-size: 11px;
@@ -243,30 +190,20 @@
     .btn-outline { background: transparent; color: var(--white); border: 1.5px solid var(--g600); }
     .btn-outline:hover { border-color: var(--red); color: var(--red-mid); transform: translateY(-2px); }
 
-    /* ============================================================
-       ① HOME PAGE
-    ============================================================ */
-
-    /* --- Hero: 2-col on desktop, stacked on mobile --- */
+    /* HOME */
     .hero {
-      min-height: 100vh;
-      padding-top: var(--nav-h);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      min-height: 100vh; padding-top: var(--nav-h);
+      display: grid; grid-template-columns: 1fr 1fr;
     }
-
-    /* left text panel */
     .hero-left {
       display: flex; flex-direction: column; justify-content: center;
       padding: clamp(40px,6vw,90px) clamp(16px,4vw,60px) clamp(40px,6vw,90px) var(--px);
       background: var(--g900); position: relative;
     }
-    /* red left stripe */
     .hero-left::before {
       content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
       width: 4px; background: linear-gradient(to bottom, transparent, var(--red), transparent);
     }
-
     .hero-eyebrow {
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.22em; text-transform: uppercase;
@@ -274,99 +211,57 @@
       display: flex; align-items: center; gap: 10px;
     }
     .hero-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--red); }
-
     .hero-title {
       font-size: clamp(42px, 6vw, 86px);
       font-weight: 800; line-height: 1.0;
       letter-spacing: -0.04em; margin-bottom: 8px;
     }
-    .hero-title .line2 {
-      display: block; color: var(--red-mid);
-      text-shadow: 0 0 40px rgba(255,0,0,0.3);
-    }
-
-    .hero-sub {
-      font-size: 12px; font-weight: 400;
-      color: var(--g400); letter-spacing: 0.15em;
-      text-transform: uppercase; margin-bottom: 20px;
-    }
-
-    .hero-desc {
-      font-size: clamp(13px, 1.4vw, 15px); font-weight: 300;
-      color: var(--g200); line-height: 1.8;
-      max-width: 400px; margin-bottom: 36px;
-    }
-
+    .hero-title .line2 { display: block; color: var(--red-mid); text-shadow: 0 0 40px rgba(255,0,0,0.3); }
+    .hero-sub { font-size: 12px; font-weight: 400; color: var(--g400); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; }
+    .hero-desc { font-size: clamp(13px, 1.4vw, 15px); font-weight: 300; color: var(--g200); line-height: 1.8; max-width: 400px; margin-bottom: 36px; }
     .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
-
-    /* right decorative panel */
     .hero-right {
       background: var(--g800); position: relative; overflow: hidden;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
     .hero-right::before {
       content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse at 40% 50%, rgba(255,0,0,0.22) 0%, transparent 68%);
     }
-    /* rotating geo shapes */
     .geo { position: absolute; border: 1px solid rgba(255,255,255,0.05); }
     .geo-1 { width: 360px; height: 360px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(12deg); animation: g-rot 20s linear infinite; }
     .geo-2 { width: 240px; height: 240px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(35deg); animation: g-rot 14s linear infinite reverse; }
     .geo-3 { width: 140px; height: 140px; top:50%; left:50%; transform:translate(-50%,-50%); background: rgba(255,0,0,0.08); border-color: var(--red); animation: g-rot 8s linear infinite; }
     @keyframes g-rot { to { transform: translate(-50%,-50%) rotate(360deg); } }
-
     .hero-center-text { position: relative; z-index: 2; text-align: center; }
     .hero-year { font-size: clamp(60px,8vw,110px); font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; letter-spacing: -0.05em; }
-    .hero-center-label {
-      position: absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      font-size: 12px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(255,255,255,0.8); white-space: nowrap;
-    }
-
-    /* stats row */
-    .hero-stats {
-      position: absolute; bottom: 32px; left: 0; right: 0;
-      display: flex; justify-content: center; gap: clamp(20px,5vw,56px);
-    }
+    .hero-center-label { position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size: 12px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.8); white-space: nowrap; }
+    .hero-stats { position: absolute; bottom: 32px; left: 0; right: 0; display: flex; justify-content: center; gap: clamp(20px,5vw,56px); }
     .stat { text-align: center; }
     .stat-n { font-size: clamp(22px,3vw,34px); font-weight: 800; color: #fff; letter-spacing: -0.03em; }
     .stat-n em { color: var(--red-mid); font-style: normal; }
     .stat-l { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--g400); margin-top: 4px; }
 
-    /* news section */
     .news-strip { background: var(--g800); padding: var(--py) var(--px); }
     .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px; background: var(--g700);
-      border: 1px solid var(--g700);
-      margin-top: 36px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px; background: var(--g700); border: 1px solid var(--g700); margin-top: 36px;
     }
-    .news-card {
-      background: var(--g800); padding: 24px 20px;
-      transition: background 0.3s; position: relative; overflow: hidden;
-    }
-    .news-card::before {
-      content: ''; position: absolute; top:0; left:0; right:0; height: 3px;
-      background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
-    }
+    .news-card { background: var(--g800); padding: 24px 20px; transition: background 0.3s; position: relative; overflow: hidden; }
+    .news-card::before { content: ''; position: absolute; top:0; left:0; right:0; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.35s; }
     .news-card:hover::before { transform: scaleX(1); }
     .news-card:hover { background: var(--g700); }
     .news-date { font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 8px; }
     .news-card h3 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
     .news-card p  { font-size: 12px; font-weight: 300; color: var(--g400); line-height: 1.6; }
 
-    /* ============================================================
-       ② POLICY PAGE
-    ============================================================ */
+    /* PAGE HERO */
     .page-hero {
       background: var(--g800);
       padding: calc(var(--nav-h) + 48px) var(--px) 48px;
       border-bottom: 1px solid var(--g700);
       position: relative; overflow: hidden;
     }
-    /* large watermark text */
     .page-hero::after {
       content: attr(data-wm);
       position: absolute; right: var(--px); top: 50%; transform: translateY(-50%);
@@ -375,46 +270,145 @@
       white-space: nowrap; pointer-events: none; line-height: 1;
     }
 
+    /* POLICY */
     .policy-list { padding: var(--py) var(--px); display: flex; flex-direction: column; gap: 2px; }
-
     .policy-item {
       display: grid; grid-template-columns: 64px 1fr;
-      align-items: start; gap: 20px;
-      padding: 28px 24px;
+      align-items: start; gap: 20px; padding: 28px 24px;
       background: var(--g800); border: 1px solid var(--g700);
-      position: relative; overflow: hidden;
-      transition: background 0.3s, border-color 0.3s;
+      position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s;
     }
     .policy-item:hover { background: var(--g700); border-color: var(--red); }
-    /* animated left red bar */
-    .policy-item::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 4px; background: var(--red);
-      transform: scaleY(0); transform-origin: top; transition: transform 0.35s;
-    }
+    .policy-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--red); transform: scaleY(0); transform-origin: top; transition: transform 0.35s; }
     .policy-item:hover::before { transform: scaleY(1); }
-
-    .policy-num {
-      font-size: clamp(24px,3vw,34px); font-weight: 800; color: var(--red);
-      line-height: 1; letter-spacing: -0.04em; opacity: 0.55;
-    }
+    .policy-num { font-size: clamp(24px,3vw,34px); font-weight: 800; color: var(--red); line-height: 1; letter-spacing: -0.04em; opacity: 0.55; }
     .policy-content h3 { font-size: clamp(14px,2vw,18px); font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
     .policy-content p  { font-size: 13px; font-weight: 300; color: var(--g400); line-height: 1.75; }
-    .policy-badge {
-      display: inline-block; margin-top: 10px;
-      padding: 3px 10px;
-      font-size: 8px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
-      background: var(--red-glow); color: var(--red-mid);
-      border: 1px solid rgba(255,0,0,0.25);
-    }
+    .policy-badge { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 8px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; background: var(--red-glow); color: var(--red-mid); border: 1px solid rgba(255,0,0,0.25); }
 
     /* ============================================================
-       ③ MEMBERS PAGE
+       MEMBERS PAGE — NEW DESIGN
     ============================================================ */
-    .members-grid {
+
+    /* Group photo section */
+    .members-overview {
       padding: var(--py) var(--px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .group-photo-wrap {
+      width: 100%;
+      max-width: 900px;
+      position: relative;
+    }
+
+    .group-photo-frame {
+      position: relative;
+      border: 3px solid var(--red);
+      box-shadow: 0 0 48px rgba(255,0,0,0.2), 0 0 0 1px rgba(255,0,0,0.1);
+      overflow: hidden;
+    }
+    /* corner accents */
+    .group-photo-frame::before,
+    .group-photo-frame::after {
+      content: ''; position: absolute; width: 28px; height: 28px;
+      border-color: #fff; border-style: solid; z-index: 2; pointer-events: none;
+    }
+    .group-photo-frame::before { top: 0; left: 0; border-width: 4px 0 0 4px; }
+    .group-photo-frame::after  { bottom: 0; right: 0; border-width: 0 4px 4px 0; }
+
+    .group-photo-frame img {
+      display: block; width: 100%; height: auto;
+      object-fit: cover;
+      filter: grayscale(15%);
+      transition: filter 0.5s;
+    }
+    .group-photo-frame:hover img { filter: grayscale(0%); }
+
+    /* overlay badge on photo */
+    .group-photo-badge {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(17,17,17,0.92) 0%, transparent 100%);
+      padding: 32px 24px 20px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      z-index: 1;
+    }
+    .gpb-left h3 { font-size: clamp(16px,2.5vw,24px); font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .gpb-left p  { font-size: 11px; font-weight: 300; color: var(--g400); margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .gpb-right { display: flex; gap: 24px; }
+    .gpb-stat { text-align: right; }
+    .gpb-stat .n { font-size: 22px; font-weight: 800; color: var(--red-mid); }
+    .gpb-stat .l { font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
+
+    /* Department filter buttons */
+    .dept-filter {
+      display: flex; gap: 0;
+      border: 1px solid var(--g700);
+      overflow: hidden;
+      width: 100%;
+      max-width: 900px;
+    }
+    .dept-btn {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px;
+      padding: 20px 12px;
+      background: var(--g800); border: none;
+      font-family: var(--font); cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+      border-right: 1px solid var(--g700);
+      position: relative; overflow: hidden;
+    }
+    .dept-btn:last-child { border-right: none; }
+    .dept-btn::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--red); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .dept-btn:hover::before,
+    .dept-btn.active::before { transform: scaleX(1); }
+    .dept-btn.active { background: var(--g700); }
+    .dept-btn:hover  { background: var(--g700); }
+    .dept-btn .di-icon { font-size: 20px; }
+    .dept-btn .di-name {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--g200);
+      transition: color 0.25s;
+    }
+    .dept-btn.active .di-name,
+    .dept-btn:hover  .di-name { color: var(--white); }
+    .dept-btn .di-count {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+      color: var(--g600); transition: color 0.25s;
+    }
+    .dept-btn.active .di-count { color: var(--red-mid); }
+
+    /* Department view */
+    .dept-view {
+      width: 100%; max-width: 900px;
+      display: none;
+    }
+    .dept-view.active { display: block; animation: fadeSlide 0.4s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+    /* dept header */
+    .dept-header {
+      display: flex; align-items: center; gap: 20px;
+      padding: 28px 0 20px;
+      border-bottom: 1px solid var(--g700);
+      margin-bottom: 24px;
+    }
+    .dept-header .dh-icon { font-size: 32px; }
+    .dept-header .dh-title { font-size: clamp(20px,3vw,32px); font-weight: 800; color: var(--white); letter-spacing: -0.03em; }
+    .dept-header .dh-sub { font-size: 11px; font-weight: 300; color: var(--g400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+    .dept-header .dh-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--red), transparent); }
+
+    /* member cards in dept view */
+    .dept-members-grid {
       display: grid;
-      /* fills columns naturally; min 160px so small phones get 2 cols */
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 2px; background: var(--g700);
     }
@@ -430,8 +424,6 @@
       background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
     }
     .member-card:hover::before { transform: scaleX(1); }
-
-    /* avatar circle */
     .member-avatar {
       width: 56px; height: 56px; border-radius: 50%;
       background: linear-gradient(135deg, var(--g700), var(--red));
@@ -440,250 +432,110 @@
       margin-bottom: 14px;
       border: 2px solid rgba(255,0,0,0.3);
     }
-    /* president: glowing red ring */
     .member-card.president .member-avatar {
       background: linear-gradient(135deg, var(--red-deep), var(--red-mid));
       border-color: var(--red-mid);
       box-shadow: 0 0 18px rgba(255,0,0,0.4);
     }
-
     .member-pos  { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 5px; }
     .member-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; line-height: 1.3; }
     .member-class{ font-size: 11px; font-weight: 300; color: var(--g400); }
     .member-num  { position: absolute; top: 12px; right: 14px; font-size: 9px; font-weight: 800; color: var(--g600); }
 
-    /* ============================================================
-       ④ ABOUT PAGE
-    ============================================================ */
-
-    /* vision / mission 2-col grid */
-    .vm-grid {
-      padding: var(--py) var(--px);
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-      background: var(--g700);
+    /* back button */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: none; border: 1.5px solid var(--g600);
+      cursor: pointer; padding: 10px 18px;
+      font-family: var(--font); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--g400); margin-top: 28px;
+      transition: border-color 0.2s, color 0.2s;
     }
+    .back-btn:hover { border-color: var(--red); color: var(--red-mid); }
+
+    /* ABOUT */
+    .vm-grid { padding: var(--py) var(--px); display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--g700); }
     .vm-card { background: var(--g800); padding: 40px 32px; }
     .vm-card.red-bg { background: var(--red); }
-    .vm-card.red-bg .section-title,
-    .vm-card.red-bg p { color: #fff; }
+    .vm-card.red-bg .section-title, .vm-card.red-bg p { color: #fff; }
     .vm-card.red-bg .tag { color: rgba(255,255,255,0.7); }
     .vm-card.red-bg .tag::before { background: rgba(255,255,255,0.5); }
     .vm-card p { font-size: 14px; font-weight: 300; color: var(--g400); line-height: 1.8; }
-
-    /* core values */
-    .values-row {
-      padding: 0 var(--px) var(--py);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 2px; background: var(--g700);
-    }
-    .value-card {
-      background: var(--g900); padding: 28px 20px;
-      border-top: 3px solid transparent;
-      transition: border-color 0.3s, background 0.3s;
-    }
+    .values-row { padding: 0 var(--px) var(--py); display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 2px; background: var(--g700); }
+    .value-card { background: var(--g900); padding: 28px 20px; border-top: 3px solid transparent; transition: border-color 0.3s, background 0.3s; }
     .value-card:hover { border-color: var(--red); background: var(--g800); }
     .value-icon { font-size: 26px; margin-bottom: 12px; }
     .value-card h3 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
     .value-card p  { font-size: 12px; font-weight: 300; color: var(--g400); line-height: 1.65; }
 
-    /* ── contact section ── */
-    .contact-section {
-      background: var(--g800);
-      padding: var(--py) var(--px);
-      border-top: 1px solid var(--g700);
-    }
-    .contact-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; margin-top: 40px; align-items: start;
-    }
-
-    /* ── contact info list (ซ้าย) ── */
+    .contact-section { background: var(--g800); padding: var(--py) var(--px); border-top: 1px solid var(--g700); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 40px; align-items: start; }
     .contact-items { display: flex; flex-direction: column; }
-    .ci {
-      display: flex; align-items: center; gap: 16px;
-      padding: 16px 0; border-bottom: 1px solid var(--g700);
-    }
+    .ci { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--g700); }
     .ci:last-child { border: none; }
-    .ci-icon {
-      width: 42px; height: 42px; flex-shrink: 0;
-      background: var(--red-glow); border: 1px solid rgba(255,0,0,0.22);
-      display: flex; align-items: center; justify-content: center; font-size: 16px;
-    }
+    .ci-icon { width: 42px; height: 42px; flex-shrink: 0; background: var(--red-glow); border: 1px solid rgba(255,0,0,0.22); display: flex; align-items: center; justify-content: center; font-size: 16px; }
     .ci-label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 3px; }
     .ci-val   { font-size: 13px; font-weight: 400; color: var(--g200); }
-
-    /* ── QR panel (ขวาของ contact) ── */
-    .qr-panel {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 24px;
-      padding: 40px 32px;
-      background: var(--g900);
-      border: 1px solid var(--g700);
-      text-align: center;
-    }
-
-    /* กรอบ QR — รูปเต็มกรอบ ไม่มี padding */
-    .qr-frame {
-      padding: 0;
-      background: var(--white);
-      border: 3px solid var(--red);
-      box-shadow: 0 0 32px rgba(255,0,0,0.3), 0 0 0 1px rgba(255,0,0,0.15);
-      position: relative;
-      overflow: hidden;
-      width: 600px height: auto;
-      max-width: 100%;
-    }
-
-    /* มุมตกแต่ง */
-    .qr-frame::before, .qr-frame::after {
-      content: '';
-      position: absolute; width: 22px; height: 22px;
-      border-color: var(--red-deep); border-style: solid;
-      z-index: 2;
-    }
+    .qr-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px 32px; background: var(--g900); border: 1px solid var(--g700); text-align: center; }
+    .qr-frame { padding: 0; background: var(--white); border: 3px solid var(--red); box-shadow: 0 0 32px rgba(255,0,0,0.3), 0 0 0 1px rgba(255,0,0,0.15); position: relative; overflow: hidden; width: 600px; height: auto; max-width: 100%; }
+    .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 22px; height: 22px; border-color: var(--red-deep); border-style: solid; z-index: 2; }
     .qr-frame::before { top: 0; left: 0; border-width: 4px 0 0 4px; }
     .qr-frame::after  { bottom: 0; right: 0; border-width: 0 4px 4px 0; }
-
-    .qr-frame img {
-      display: block;
-      width: 100%; height: auto;
-      object-fit: contain;
-    }
-
-    /* IG handle */
-    .qr-handle {
-      font-size: 16px; font-weight: 700; color: var(--white);
-      letter-spacing: 0.04em;
-    }
+    .qr-frame img { display: block; width: 100%; height: auto; object-fit: contain; }
+    .qr-handle { font-size: 16px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
     .qr-handle span { color: var(--red-mid); }
+    .qr-sub { font-size: 11px; font-weight: 400; color: var(--g400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: -16px; }
+    .qr-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border: 1px solid rgba(255,0,0,0.3); background: var(--red-glow); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); }
 
-    .qr-sub {
-      font-size: 11px; font-weight: 400;
-      color: var(--g400); letter-spacing: 0.1em;
-      text-transform: uppercase; margin-top: -16px;
-    }
-
-    /* scan badge */
-    .qr-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 18px;
-      border: 1px solid rgba(255,0,0,0.3);
-      background: var(--red-glow);
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--red-mid);
-    }
-
-    /* contact form */
-    .contact-form { display: flex; flex-direction: column; gap: 12px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .fg { display: flex; flex-direction: column; gap: 5px; }
-    .fg label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
-    .fg input, .fg textarea {
-      padding: 12px 14px; background: var(--g900);
-      border: 1.5px solid var(--g700);
-      font-family: var(--font); font-size: 13px; font-weight: 300;
-      color: var(--white); outline: none; resize: none; transition: border-color 0.25s;
-    }
-    .fg input:focus, .fg textarea:focus { border-color: var(--red); }
-    .fg input::placeholder, .fg textarea::placeholder { color: var(--g600); }
-    .fg textarea { min-height: 100px; }
-    .btn-submit {
-      padding: 14px; background: var(--red); color: #fff; border: none;
-      font-family: var(--font); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      cursor: pointer; transition: background 0.25s, transform 0.2s;
-    }
-    .btn-submit:hover { background: var(--red-deep); transform: translateY(-2px); }
-
-    /* ============================================================
-       FOOTER
-    ============================================================ */
+    /* FOOTER */
     footer {
       background: var(--g900); padding: clamp(24px,4vw,40px) var(--px);
-      display: flex; flex-wrap: wrap;
-      align-items: center; justify-content: space-between; gap: 16px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
       border-top: 1px solid var(--g700);
     }
     .foot-brand { display: flex; align-items: center; gap: 10px; }
     .foot-brand .th   { font-size: 12px; font-weight: 700; color: var(--white); }
     .foot-brand .copy { font-size: 10px; font-weight: 300; color: var(--g600); }
     .foot-nav { display: flex; flex-wrap: wrap; gap: 4px; }
-    .foot-nav button {
-      background: none; border: none; cursor: pointer;
-      font-family: var(--font); font-size: 10px; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--g400); padding: 6px 10px; transition: color 0.2s;
-    }
+    .foot-nav button { background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g400); padding: 6px 10px; transition: color 0.2s; }
     .foot-nav button:hover { color: var(--red-mid); }
 
-    /* ============================================================
-       RESPONSIVE — TABLET  ≤ 900px
-    ============================================================ */
+    /* RESPONSIVE */
     @media (max-width: 900px) {
-      /* hero: stack vertically */
       .hero { grid-template-columns: 1fr; }
-      /* show a shorter decorative panel instead of hiding it */
       .hero-right { min-height: 220px; }
-
-      /* vision/mission: stack */
       .vm-grid { grid-template-columns: 1fr; }
-
-      /* contact: stack */
       .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-      .form-row { grid-template-columns: 1fr; }
+      .dept-filter { flex-wrap: wrap; }
+      .dept-btn { flex: 1 1 45%; min-width: 120px; border-right: 1px solid var(--g700); border-bottom: 1px solid var(--g700); }
+      .group-photo-badge { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .gpb-right { align-self: flex-start; }
     }
-
-    /* ============================================================
-       RESPONSIVE — MOBILE  ≤ 640px
-    ============================================================ */
     @media (max-width: 640px) {
-      /* single menu btn already works on all sizes — nothing extra needed */
-
-      /* hide the right panel on very small screens to save space */
       .hero-right { display: none; }
-
-      /* buttons full-width on mobile */
       .hero-btns { flex-direction: column; }
       .btn { width: 100%; text-align: center; }
-
-      /* policy: hide number column — show number inline instead */
       .policy-item { grid-template-columns: 48px 1fr; gap: 12px; padding: 20px 16px; }
       .policy-num  { font-size: 20px; }
-
-      /* members: 2 columns */
-      .members-grid { grid-template-columns: 1fr 1fr; }
-
-      /* footer: center everything */
+      .dept-filter { flex-direction: column; }
+      .dept-btn { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 16px; border-right: none; }
       footer { flex-direction: column; text-align: center; }
       .foot-nav { justify-content: center; }
     }
-
-    /* ============================================================
-       RESPONSIVE — TINY PHONE  ≤ 380px
-    ============================================================ */
     @media (max-width: 380px) {
-      /* single column for members */
-      .members-grid { grid-template-columns: 1fr; }
-      /* hide policy number col */
+      .dept-members-grid { grid-template-columns: 1fr 1fr; }
       .policy-item { grid-template-columns: 1fr; }
       .policy-num  { font-size: 16px; margin-bottom: 4px; }
     }
-
-    /* ============================================================
-       RESPONSIVE — LARGE DESKTOP  ≥ 1400px
-    ============================================================ */
     @media (min-width: 1400px) {
-      .members-grid { grid-template-columns: repeat(7, 1fr); }
+      .dept-members-grid { grid-template-columns: repeat(5, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- ============================================================
-       NAV BAR
-  ============================================================ -->
+  <!-- NAV -->
   <nav id="mainNav">
     <a class="nav-logo" href="#" onclick="return showPage('home')">
       <div class="logo-hex"><span>ตธ</span></div>
@@ -692,17 +544,12 @@
         <span class="en">Student Council 2569</span>
       </div>
     </a>
-
-    <!-- single menu button (works on all screen sizes) -->
     <button class="menu-btn" id="menuBtn" aria-label="เมนู">
-      <div class="menu-btn-icon">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="menu-btn-icon"><span></span><span></span><span></span></div>
       เมนู
     </button>
   </nav>
 
-  <!-- dropdown panel -->
   <div class="nav-dropdown" id="dropdown">
     <a href="#" onclick="return navTo('home')"    id="nav-home">   <span class="di"></span>หน้าแรก</a>
     <a href="#" onclick="return navTo('policy')"  id="nav-policy"> <span class="di"></span>นโยบาย</a>
@@ -711,440 +558,350 @@
   </div>
 
 
-  <!-- ============================================================
-       ① HOME PAGE
-  ============================================================ -->
+  <!-- ① HOME PAGE -->
   <div id="page-home" class="page active">
-
-    <!-- hero -->
     <section class="hero">
       <div class="hero-left">
         <span class="hero-eyebrow">ปีการศึกษา 2569</span>
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt=""  style= height="auto" width="80%">
+        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="" style="height:auto;width:80%">
         <p class="hero-sub">Student Council — โรงเรียนตั้งพิรุฬห์ธรรม</p>
-        <p class="hero-desc">
-          เป็นตัวแทนของนักเรียนทุกคน สร้างสรรค์กิจกรรม ส่งเสริมสิทธิ์
-          และพัฒนาโรงเรียนให้เป็นพื้นที่แห่งการเรียนรู้อย่างยั่งยืน
-        </p>
+        <p class="hero-desc">เป็นตัวแทนของนักเรียนทุกคน สร้างสรรค์กิจกรรม ส่งเสริมสิทธิ์ และพัฒนาโรงเรียนให้เป็นพื้นที่แห่งการเรียนรู้อย่างยั่งยืน</p>
         <div class="hero-btns">
           <a class="btn btn-red"     href="#" onclick="return showPage('policy')">ดูนโยบาย</a>
           <a class="btn btn-outline" href="#" onclick="return showPage('members')">รู้จักทีม</a>
         </div>
       </div>
-
-      <!-- decorative right panel (hidden on small mobile) -->
       <div class="hero-right">
-        <div class="geo geo-1"></div>
-        <div class="geo geo-2"></div>
-        <div class="geo geo-3"></div>
+        <div class="geo geo-1"></div><div class="geo geo-2"></div><div class="geo geo-3"></div>
         <div class="hero-center-text">
           <div class="hero-year">2569</div>
           <div class="hero-center-label">Student Council</div>
         </div>
         <div class="hero-stats">
-          <div class="stat"><div class="stat-n">14<em>+</em></div><div class="stat-l">สมาชิก</div></div>
+          <div class="stat"><div class="stat-n">16<em>+</em></div><div class="stat-l">สมาชิก</div></div>
           <div class="stat"><div class="stat-n">8<em>+</em></div><div class="stat-l">นโยบาย</div></div>
           <div class="stat"><div class="stat-n">30<em>+</em></div><div class="stat-l">กิจกรรม</div></div>
         </div>
       </div>
     </section>
-
-    <!-- marquee -->
     <div class="marquee-wrap">
       <div class="marquee-track">
-        <span>ตัวแทนนักเรียน</span><span>Student Voice</span>
-        <span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span>
-        <span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span>
-        <span>Community</span><span>ปีการศึกษา 2569</span>
-        <!-- dup for seamless loop -->
-        <span>ตัวแทนนักเรียน</span><span>Student Voice</span>
-        <span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span>
-        <span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span>
-        <span>Community</span><span>ปีการศึกษา 2569</span>
+        <span>ตัวแทนนักเรียน</span><span>Student Voice</span><span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span><span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span><span>Community</span><span>ปีการศึกษา 2569</span>
+        <span>ตัวแทนนักเรียน</span><span>Student Voice</span><span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span><span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span><span>Community</span><span>ปีการศึกษา 2569</span>
       </div>
     </div>
-
-    <!-- news -->
     <div class="news-strip">
       <div class="tag reveal">ข่าวสาร & ประกาศ</div>
       <h2 class="section-title reveal">ข่าวล่าสุด</h2>
       <div class="news-grid">
-        <div class="news-card reveal">
-          <div class="news-date">เปิดรับตลอดปีการศึกษา </div>
-          <h3>รับสมัครเข้าชรมจิตอาสสา</h3>
-          <p>พบพี่ๆจิตอาสาได้ที่โรงอาหารมัธยมรับผชและผญตั้งแต่ม.1-ม.3 </p>
-        </div>
-        <div class="news-card reveal" style="transition-delay:.08s">
-          <div class="news-date">20 พ.ค. 2568</div>
-          <h3>เปิดรับสมัครอาสาสมัคร</h3>
-          <p>เปิดรับนักเรียนที่สนใจเข้าร่วมเป็นอาสาสมัครในกิจกรรมต่าง ๆ</p>
-        </div>
-        <div class="news-card reveal" style="transition-delay:.14s">
-          <div class="news-date">25 พ.ค. 2568</div>
-          <h3>กิจกรรม Big Cleaning Day</h3>
-          <p>ร่วมกันทำความสะอาดโรงเรียนพร้อมกัน เพื่อสิ่งแวดล้อมที่ดีขึ้น</p>
-        </div>
-        <div class="news-card reveal" style="transition-delay:.20s">
-          <div class="news-date">1 มิ.ย. 2568</div>
-          <h3>ประกาศผลการเลือกตั้ง</h3>
-          <p>ประกาศผลการเลือกตั้งคณะกรรมการสภานักเรียนชุดใหม่อย่างเป็นทางการ</p>
-        </div>
+        <div class="news-card reveal"><div class="news-date">เปิดรับตลอดปีการศึกษา</div><h3>รับสมัครเข้าชมรมจิตอาสา</h3><p>พบพี่ๆจิตอาสาได้ที่โรงอาหารมัธยม รับผชและผญตั้งแต่ม.1-ม.3</p></div>
+        <div class="news-card reveal" style="transition-delay:.08s"><div class="news-date">20 พ.ค. 2568</div><h3>เปิดรับสมัครอาสาสมัคร</h3><p>เปิดรับนักเรียนที่สนใจเข้าร่วมเป็นอาสาสมัครในกิจกรรมต่าง ๆ</p></div>
+        <div class="news-card reveal" style="transition-delay:.14s"><div class="news-date">25 พ.ค. 2568</div><h3>กิจกรรม Big Cleaning Day</h3><p>ร่วมกันทำความสะอาดโรงเรียนพร้อมกัน เพื่อสิ่งแวดล้อมที่ดีขึ้น</p></div>
+        <div class="news-card reveal" style="transition-delay:.20s"><div class="news-date">1 มิ.ย. 2568</div><h3>ประกาศผลการเลือกตั้ง</h3><p>ประกาศผลการเลือกตั้งคณะกรรมการสภานักเรียนชุดใหม่อย่างเป็นทางการ</p></div>
       </div>
     </div>
-
     <footer>
-      <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav">
-        <button onclick="showPage('home')">หน้าแรก</button>
-        <button onclick="showPage('policy')">นโยบาย</button>
-        <button onclick="showPage('members')">สมาชิก</button>
-        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
-      </div>
+      <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
+      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
     </footer>
-  </div><!-- /home -->
+  </div>
 
 
-  <!-- ============================================================
-       ② POLICY PAGE
-  ============================================================ -->
+  <!-- ② POLICY PAGE -->
   <div id="page-policy" class="page">
-
     <div class="page-hero" data-wm="POLICY">
       <span class="tag">นโยบาย 2569</span>
       <h1 class="section-title">นโยบายสภานักเรียน</h1>
-      <p class="section-lead" style="max-width:500px">
-        นโยบายที่เราตั้งใจดำเนินการเพื่อพัฒนาโรงเรียนและยกระดับคุณภาพชีวิตนักเรียน
-      </p>
+      <p class="section-lead" style="max-width:500px">นโยบายที่เราตั้งใจดำเนินการเพื่อพัฒนาโรงเรียนและยกระดับคุณภาพชีวิตนักเรียน</p>
     </div>
-
     <div class="policy-list">
-      <div class="policy-item reveal">
-        <div class="policy-num">01</div>
-        <div class="policy-content">
-          <h3>ส่งเสริมการเรียนรู้เชิงรุก</h3>
-          <p>จัดกิจกรรมส่งเสริมทักษะการคิดวิเคราะห์ ติวเข้มวิชาหลัก และสร้างบรรยากาศการเรียนรู้ที่มีความสุข</p>
-          <span class="policy-badge">วิชาการ</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">02</div>
-        <div class="policy-content">
-          <h3>พัฒนาสุขอนามัยและสิ่งแวดล้อม</h3>
-          <p>รณรงค์ลดขยะ แยกขยะรีไซเคิล ดูแลพื้นที่สีเขียว และสร้างโรงเรียนสะอาดน่าอยู่</p>
-          <span class="policy-badge">สิ่งแวดล้อม</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">03</div>
-        <div class="policy-content">
-          <h3>สนับสนุนสิทธิ์และเสรีภาพนักเรียน</h3>
-          <p>เป็นปากเสียงให้กับนักเรียนในการเสนอปัญหาและข้อเรียกร้องต่อผู้บริหารโรงเรียน</p>
-          <span class="policy-badge">สิทธิ์นักเรียน</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">04</div>
-        <div class="policy-content">
-          <h3>พัฒนาทักษะความเป็นผู้นำ</h3>
-          <p>เปิดพื้นที่ให้นักเรียนได้ฝึกฝนทักษะการเป็นผู้นำ การทำงานเป็นทีม และการแก้ปัญหาเชิงสร้างสรรค์</p>
-          <span class="policy-badge">ความเป็นผู้นำ</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">05</div>
-        <div class="policy-content">
-          <h3>ส่งเสริมวัฒนธรรมและอัตลักษณ์โรงเรียน</h3>
-          <p>จัดกิจกรรมอนุรักษ์วัฒนธรรมไทย เสริมสร้างความภาคภูมิใจในสถาบัน</p>
-          <span class="policy-badge">วัฒนธรรม</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">06</div>
-        <div class="policy-content">
-          <h3>สร้างความสัมพันธ์ระหว่างรุ่น</h3>
-          <p>จัดกิจกรรมสานสัมพันธ์รุ่นพี่รุ่นน้อง เพื่อสร้างสังคมโรงเรียนที่อบอุ่นและเอื้อเฟื้อ</p>
-          <span class="policy-badge">สัมพันธ์</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">07</div>
-        <div class="policy-content">
-          <h3>ดิจิทัลและนวัตกรรม</h3>
-          <p>ส่งเสริมการใช้เทคโนโลยีอย่างสร้างสรรค์ จัดกิจกรรมด้าน coding และ digital literacy</p>
-          <span class="policy-badge">เทคโนโลยี</span>
-        </div>
-      </div>
-      <div class="policy-item reveal">
-        <div class="policy-num">08</div>
-        <div class="policy-content">
-          <h3>สวัสดิการและความปลอดภัย</h3>
-          <p>ดูแลสวัสดิการนักเรียน เฝ้าระวังการกลั่นแกล้ง และสร้างโรงเรียนที่ปลอดภัยสำหรับทุกคน</p>
-          <span class="policy-badge">สวัสดิการ</span>
-        </div>
-      </div>
+      <div class="policy-item reveal"><div class="policy-num">01</div><div class="policy-content"><h3>ส่งเสริมการเรียนรู้เชิงรุก</h3><p>จัดกิจกรรมส่งเสริมทักษะการคิดวิเคราะห์ ติวเข้มวิชาหลัก และสร้างบรรยากาศการเรียนรู้ที่มีความสุข</p><span class="policy-badge">วิชาการ</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">02</div><div class="policy-content"><h3>พัฒนาสุขอนามัยและสิ่งแวดล้อม</h3><p>รณรงค์ลดขยะ แยกขยะรีไซเคิล ดูแลพื้นที่สีเขียว และสร้างโรงเรียนสะอาดน่าอยู่</p><span class="policy-badge">สิ่งแวดล้อม</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">03</div><div class="policy-content"><h3>สนับสนุนสิทธิ์และเสรีภาพนักเรียน</h3><p>เป็นปากเสียงให้กับนักเรียนในการเสนอปัญหาและข้อเรียกร้องต่อผู้บริหารโรงเรียน</p><span class="policy-badge">สิทธิ์นักเรียน</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">04</div><div class="policy-content"><h3>พัฒนาทักษะความเป็นผู้นำ</h3><p>เปิดพื้นที่ให้นักเรียนได้ฝึกฝนทักษะการเป็นผู้นำ การทำงานเป็นทีม และการแก้ปัญหาเชิงสร้างสรรค์</p><span class="policy-badge">ความเป็นผู้นำ</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">05</div><div class="policy-content"><h3>ส่งเสริมวัฒนธรรมและอัตลักษณ์โรงเรียน</h3><p>จัดกิจกรรมอนุรักษ์วัฒนธรรมไทย เสริมสร้างความภาคภูมิใจในสถาบัน</p><span class="policy-badge">วัฒนธรรม</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">06</div><div class="policy-content"><h3>สร้างความสัมพันธ์ระหว่างรุ่น</h3><p>จัดกิจกรรมสานสัมพันธ์รุ่นพี่รุ่นน้อง เพื่อสร้างสังคมโรงเรียนที่อบอุ่นและเอื้อเฟื้อ</p><span class="policy-badge">สัมพันธ์</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">07</div><div class="policy-content"><h3>ดิจิทัลและนวัตกรรม</h3><p>ส่งเสริมการใช้เทคโนโลยีอย่างสร้างสรรค์ จัดกิจกรรมด้าน coding และ digital literacy</p><span class="policy-badge">เทคโนโลยี</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">08</div><div class="policy-content"><h3>สวัสดิการและความปลอดภัย</h3><p>ดูแลสวัสดิการนักเรียน เฝ้าระวังการกลั่นแกล้ง และสร้างโรงเรียนที่ปลอดภัยสำหรับทุกคน</p><span class="policy-badge">สวัสดิการ</span></div></div>
     </div>
-
     <footer>
-      <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav">
-        <button onclick="showPage('home')">หน้าแรก</button>
-        <button onclick="showPage('policy')">นโยบาย</button>
-        <button onclick="showPage('members')">สมาชิก</button>
-        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
-      </div>
+      <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
+      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
     </footer>
-  </div><!-- /policy -->
+  </div>
 
 
-  <!-- ============================================================
-       ③ MEMBERS PAGE (16)
-  ============================================================ -->
+  <!-- ③ MEMBERS PAGE — NEW DESIGN -->
   <div id="page-members" class="page">
 
     <div class="page-hero" data-wm="MEMBERS">
       <span class="tag">สมาชิก 16 คน</span>
       <h1 class="section-title">คณะกรรมการ<br>สภานักเรียน</h1>
-      <p class="section-lead" style="max-width:460px">
-        ทีมงานที่ทุ่มเทและมีความมุ่งมั่น พร้อมทำงานเพื่อนักเรียนทุกคน
-      </p>
+      <p class="section-lead" style="max-width:460px">ทีมงานที่ทุ่มเทและมีความมุ่งมั่น พร้อมทำงานเพื่อนักเรียนทุกคน</p>
     </div>
 
-    <div class="members-grid">
-      <!-- 01 ประธาน -->
-      <div class="member-card president reveal">
-        <div class="member-num">#01</div>
-        <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="" style= height="700px" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ประธานสภานักเรียน</div>
-        <div class="member-name">กัญญาพัชร อาจสามารถ</div>
-        <div class="member-class">ม.3/4</div>
+    <div class="members-overview">
+
+      <!-- GROUP PHOTO -->
+      <div class="group-photo-wrap reveal">
+        <div class="group-photo-frame">
+          <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png"
+               alt="คณะกรรมการสภานักเรียน 2569"/>
+          <div class="group-photo-badge">
+            <div class="gpb-left">
+              <h3>คณะกรรมการสภานักเรียน 2569</h3>
+              <p>Student Council — โรงเรียนตั้งพิรุฬห์ธรรม</p>
+            </div>
+            <div class="gpb-right">
+              <div class="gpb-stat"><div class="n">16</div><div class="l">สมาชิก</div></div>
+              <div class="gpb-stat"><div class="n">4</div><div class="l">ฝ่าย</div></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <!-- 02 -->
-      <div class="member-card reveal" style="transition-delay:.05s">
-        <div class="member-num">#02</div>
-       <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >รองประธาน </div>
-        <div class="member-name">ณกมล เชาว์ปรีชา</div>
-        <div class="member-class">ม.3/3</div>
+
+      <!-- DEPARTMENT FILTER BUTTONS -->
+      <div class="dept-filter reveal">
+        <button class="dept-btn" id="btn-exec" onclick="showDept('exec')">
+          <span class="di-icon">👑</span>
+          <span class="di-name">คณะผู้บริหาร</span>
+          <span class="di-count">2 คน</span>
+        </button>
+        <button class="dept-btn" id="btn-academic" onclick="showDept('academic')">
+          <span class="di-icon">📚</span>
+          <span class="di-name">ฝ่ายวิชาการ</span>
+          <span class="di-count">4 คน</span>
+        </button>
+        <button class="dept-btn" id="btn-activity" onclick="showDept('activity')">
+          <span class="di-icon">🎉</span>
+          <span class="di-name">ฝ่ายกิจกรรม</span>
+          <span class="di-count">4 คน</span>
+        </button>
+        <button class="dept-btn" id="btn-pr" onclick="showDept('pr')">
+          <span class="di-icon">📢</span>
+          <span class="di-name">ฝ่ายประชาสัมพันธ์</span>
+          <span class="di-count">3 คน</span>
+        </button>
+        <button class="dept-btn" id="btn-sport" onclick="showDept('sport')">
+          <span class="di-icon">⚽</span>
+          <span class="di-name">ฝ่ายกีฬา</span>
+          <span class="di-count">3 คน</span>
+        </button>
       </div>
-      <!-- 03 -->
-      <div class="member-card reveal" style="transition-delay:.10s">
-        <div class="member-num">#03</div>
-        <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >เลขานุการ</div>
-        <div class="member-name">วณิชชากร<br> สีนวลจันทร์</div>
-        <div class="member-class">ม.3/4</div>
+
+      <!-- DEPT VIEWS -->
+
+      <!-- ผู้บริหาร -->
+      <div class="dept-view" id="dept-exec">
+        <div class="dept-header">
+          <span class="dh-icon">👑</span>
+          <div><div class="dh-title">คณะผู้บริหาร</div><div class="dh-sub">Executive Committee · 2 คน</div></div>
+          <div class="dh-line"></div>
+        </div>
+        <div class="dept-members-grid">
+          <div class="member-card president">
+            <div class="member-num">#01</div>
+            <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ประธานสภานักเรียน</div>
+            <div class="member-name">กัญญาพัชร อาจสามารถ</div>
+            <div class="member-class">ม.3/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#02</div>
+            <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">รองประธาน</div>
+            <div class="member-name">ณกมล เชาว์ปรีชา</div>
+            <div class="member-class">ม.3/3</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#03</div>
+            <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">เลขานุการ</div>
+            <div class="member-name">วณิชชากร สีนวลจันทร์</div>
+            <div class="member-class">ม.3/4</div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
       </div>
-      <!-- 04 -->
-      <div class="member-card reveal" style="transition-delay:.15s">
-        <div class="member-num">#04</div>
-        <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >หัวหน้าฝ่ายวิชาการ</div>
-        <div class="member-name">กิตติภัค สุขเกิด</div>
-        <div class="member-class">ม.3/1</div>
+
+      <!-- ฝ่ายวิชาการ -->
+      <div class="dept-view" id="dept-academic">
+        <div class="dept-header">
+          <span class="dh-icon">📚</span>
+          <div><div class="dh-title">ฝ่ายวิชาการ</div><div class="dh-sub">Academic Department · 4 คน</div></div>
+          <div class="dh-line"></div>
+        </div>
+        <div class="dept-members-grid">
+          <div class="member-card">
+            <div class="member-num">#04</div>
+            <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายวิชาการ</div>
+            <div class="member-name">กิตติภัค สุขเกิด</div>
+            <div class="member-class">ม.3/1</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#05</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">วิชาการ</div>
+            <div class="member-name">อริสา วัฒโน</div>
+            <div class="member-class">ม.2/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#06</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">วิชาการ</div>
+            <div class="member-name">ฉัตรเพชร บุญญภูษิต</div>
+            <div class="member-class">ม.2/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#07</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">วิชาการ</div>
+            <div class="member-name">พัทธนันท์ ฤทธิมะหันต์</div>
+            <div class="member-class">ม.2/4</div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
       </div>
-      <!-- 05 -->
-      <div class="member-card reveal" style="transition-delay:.20s">
-        <div class="member-num">#05</div>
-       <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >วิชาการ</div>
-        <div class="member-name"> อริสา วัฒโน </div>
-        <div class="member-class">ม.2/4</div>
+
+      <!-- ฝ่ายกิจกรรม -->
+      <div class="dept-view" id="dept-activity">
+        <div class="dept-header">
+          <span class="dh-icon">🎉</span>
+          <div><div class="dh-title">ฝ่ายกิจกรรม</div><div class="dh-sub">Activity Department · 4 คน</div></div>
+          <div class="dh-line"></div>
+        </div>
+        <div class="dept-members-grid">
+          <div class="member-card">
+            <div class="member-num">#08</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายกิจกรรม</div>
+            <div class="member-name">รีอา ยาดาฟต์</div>
+            <div class="member-class">ม.3/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#09</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ฝ่ายกิจกรรม</div>
+            <div class="member-name">กัญญารัตน์ จันทะเรื่อง</div>
+            <div class="member-class">ม.3/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#10</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ฝ่ายกิจกรรม</div>
+            <div class="member-name">ฐิตาภา แซ่เตียว</div>
+            <div class="member-class">ม.2/3</div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
       </div>
-      <!-- 06 -->
-      <div class="member-card reveal" style="transition-delay:.25s">
-        <div class="member-num">#06</div>
-       <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >วิชาการ</div>
-        <div class="member-name">ฉัตรเพชร บุญญภูษิต</div>
-        <div class="member-class">ม.2/4</div>
+
+      <!-- ฝ่ายประชาสัมพันธ์ -->
+      <div class="dept-view" id="dept-pr">
+        <div class="dept-header">
+          <span class="dh-icon">📢</span>
+          <div><div class="dh-title">ฝ่ายประชาสัมพันธ์</div><div class="dh-sub">PR Department · 3 คน</div></div>
+          <div class="dh-line"></div>
+        </div>
+        <div class="dept-members-grid">
+          <div class="member-card">
+            <div class="member-num">#11</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายประชาสัมพันธ์</div>
+            <div class="member-name">กาณฑ์ สุวรรณกูฎ</div>
+            <div class="member-class">ม.2/1</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#12</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ฝ่ายประชาสัมพันธ์</div>
+            <div class="member-name">อภิชาติ มั่งมี</div>
+            <div class="member-class">ม.2/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#13</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ฝ่ายประชาสัมพันธ์</div>
+            <div class="member-name">กัณญาพร รอดเจริญ</div>
+            <div class="member-class">ม.2/4</div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
       </div>
-      <!-- 07 -->
-      <div class="member-card reveal" style="transition-delay:.30s">
-        <div class="member-num">#07</div>
-        <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >วิชาการ</div>
-        <div class="member-name">พัทธนันท์ ฤทธิมะหันต์</div>
-        <div class="member-class">ม.2/4</div>
+
+      <!-- ฝ่ายกีฬา -->
+      <div class="dept-view" id="dept-sport">
+        <div class="dept-header">
+          <span class="dh-icon">⚽</span>
+          <div><div class="dh-title">ฝ่ายกีฬา</div><div class="dh-sub">Sports Department · 3 คน</div></div>
+          <div class="dh-line"></div>
+        </div>
+        <div class="dept-members-grid">
+          <div class="member-card">
+            <div class="member-num">#14</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายกีฬา</div>
+            <div class="member-name">ไมกาห์ เชเมย์ การ์เซีย</div>
+            <div class="member-class">ม.3/4</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#15</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ฝ่ายกีฬา</div>
+            <div class="member-name">ธีรยา ศุภรธนากุล</div>
+            <div class="member-class">ม.2/3</div>
+          </div>
+          <div class="member-card">
+            <div class="member-num">#16</div>
+            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
+            <div class="member-pos" style="margin-top:14px">ฝ่ายกีฬา</div>
+            <div class="member-name">ชุตินันท์ นกแส</div>
+            <div class="member-class">ม.2/3</div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
       </div>
-      <!-- 08 -->
-      <div class="member-card reveal" style="transition-delay:.35s">
-        <div class="member-num">#08</div>
-        <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >หัวหน้าฝ่ายกิจกรรม</div>
-        <div class="member-name">รีอา ยาดาฟต์</div>
-        <div class="member-class">ม.3/4</div>
-      </div>
-      <!-- 09 -->
-      <div class="member-card reveal" style="transition-delay:.40s">
-        <div class="member-num">#09</div>
-       <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ฝ่ายกิจกรรม</div>
-        <div class="member-name">กัญญารัตน์<br> จันทะเรื่อง</div>
-        <div class="member-class">ม.3/4</div>
-      </div>
-      <!-- 10 -->
-      <div class="member-card reveal" style="transition-delay:.45s">
-        <div class="member-num">#10</div>
-      <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ฝ่ายกิจกรรม</div>
-        <div class="member-name">ฐิตาภา แซ่เตียว</div>
-        <div class="member-class">ม.2/3</div>
-      </div>
-      <!-- 11 -->
-      <div class="member-card reveal" style="transition-delay:.50s">
-        <div class="member-num">#11</div>
-        <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >หัวหน้าฝ่ายประชาสัมพันธ์</div>
-        <div class="member-name">กาณฑ์ สุวรรณกูฎ</div>
-        <div class="member-class">ม.2/1</div>
-      </div>
-      <!-- 12 -->
-      <div class="member-card reveal" style="transition-delay:.55s">
-        <div class="member-num">#12</div>
-        <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ฝ่ายประชาสัมพันธ์</div>
-        <div class="member-name">อภิชาติ มั่งมี</div>
-        <div class="member-class">ม.2/4</div>
-      </div>
-      <!-- 13 -->
-      <div class="member-card reveal" style="transition-delay:.60s">
-        <div class="member-num">#13</div>
-        <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ฝ่ายประชามพันธ์</div>
-        <div class="member-name">กัณญาพร รอดเจริญ</div>
-        <div class="member-class">ม.2/4</div>
-      </div>
-      <!-- 14 -->
-      <div class="member-card reveal" style="transition-delay:.65s">
-        <div class="member-num">#14</div>
-       <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >หัวหน้าฝ่ายกีฬา</div>
-        <div class="member-name">ไมกาห์ เชเมย์ การ์เซีย</div>
-        <div class="member-class">ม.3/4</div>
-      </div>
-      <!-- 15 -->
-      <div class="member-card reveal" style="transition-delay:.05s">
-        <div class="member-num">#15</div>
-       <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ฝ่ายกีฬา</div>
-        <div class="member-name">ธีรยา ศุภรธนากุล</div>
-        <div class="member-class">ม.2/3</div>
-      </div>
-      <!-- 16 -->
-      <div class="member-card reveal" style="transition-delay:.05s">
-        <div class="member-num">#16</div>
-       <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style= height="auto" width="80%">
-        <div class="member-pos" style="margin-top:30px" >ฝ่ายกีฬา</div>
-        <div class="member-name">ชุตินันท์ นกแส</div>
-        <div class="member-class">ม.2/3</div>
-      </div>
-    </div>
+
+    </div><!-- /members-overview -->
 
     <footer>
-      <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav">
-        <button onclick="showPage('home')">หน้าแรก</button>
-        <button onclick="showPage('policy')">นโยบาย</button>
-        <button onclick="showPage('members')">สมาชิก</button>
-        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
-      </div>
+      <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
+      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
     </footer>
   </div><!-- /members -->
 
 
-  <!-- ============================================================
-       ④ ABOUT PAGE
-  ============================================================ -->
+  <!-- ④ ABOUT PAGE -->
   <div id="page-about" class="page">
-
     <div class="page-hero" data-wm="ABOUT">
       <span class="tag">เกี่ยวกับเรา</span>
       <h1 class="section-title">สภานักเรียน<br>คือเสียงของคุณ</h1>
-      <p class="section-lead" style="max-width:500px">
-        องค์กรนักเรียนที่ทำงานเพื่อนักเรียนทุกคน ด้วยความโปร่งใสและมุ่งมั่น
-      </p>
+      <p class="section-lead" style="max-width:500px">องค์กรนักเรียนที่ทำงานเพื่อนักเรียนทุกคน ด้วยความโปร่งใสและมุ่งมั่น</p>
     </div>
-
-    <!-- vision / mission -->
     <div class="vm-grid">
-      <div class="vm-card reveal">
-        <span class="tag">วิสัยทัศน์</span>
-        <h2 class="section-title" style="color:#fff">Vision</h2>
-        <div class="divider"></div>
-        <p>มุ่งสร้างโรงเรียนที่นักเรียนมีส่วนร่วมในการบริหารจัดการ ด้วยความโปร่งใส สร้างสรรค์ และตอบสนองความต้องการของนักเรียนอย่างแท้จริง เพื่อให้โรงเรียนเป็นสถานที่แห่งการเรียนรู้และเติบโตอย่างยั่งยืน</p>
-      </div>
-      <div class="vm-card red-bg reveal">
-        <span class="tag">พันธกิจ</span>
-        <h2 class="section-title">Mission</h2>
-        <div class="divider" style="background:rgba(255,255,255,0.5)"></div>
-        <p>สร้างผู้นำรุ่นใหม่ที่มีคุณธรรมและจิตสาธารณะ รับฟังปัญหาและนำเสนอแนวทางแก้ไข จัดกิจกรรมที่หลากหลายเพื่อพัฒนาทักษะชีวิตและเสริมสร้างความสามัคคี</p>
-      </div>
+      <div class="vm-card reveal"><span class="tag">วิสัยทัศน์</span><h2 class="section-title" style="color:#fff">Vision</h2><div class="divider"></div><p>มุ่งสร้างโรงเรียนที่นักเรียนมีส่วนร่วมในการบริหารจัดการ ด้วยความโปร่งใส สร้างสรรค์ และตอบสนองความต้องการของนักเรียนอย่างแท้จริง เพื่อให้โรงเรียนเป็นสถานที่แห่งการเรียนรู้และเติบโตอย่างยั่งยืน</p></div>
+      <div class="vm-card red-bg reveal"><span class="tag">พันธกิจ</span><h2 class="section-title">Mission</h2><div class="divider" style="background:rgba(255,255,255,0.5)"></div><p>สร้างผู้นำรุ่นใหม่ที่มีคุณธรรมและจิตสาธารณะ รับฟังปัญหาและนำเสนอแนวทางแก้ไข จัดกิจกรรมที่หลากหลายเพื่อพัฒนาทักษะชีวิตและเสริมสร้างความสามัคคี</p></div>
     </div>
-
-    <!-- values -->
     <div class="values-row">
-      <div class="value-card reveal">
-        <div class="value-icon">🎯</div>
-        <h3>มุ่งมั่น</h3>
-        <p>ทำงานด้วยความตั้งใจและรับผิดชอบต่อหน้าที่ที่ได้รับมอบหมาย</p>
-      </div>
-      <div class="value-card reveal" style="transition-delay:.08s">
-        <div class="value-icon">🤝</div>
-        <h3>ร่วมมือ</h3>
-        <p>ทำงานเป็นทีม เคารพความคิดเห็น และสร้างความสามัคคี</p>
-      </div>
-      <div class="value-card reveal" style="transition-delay:.16s">
-        <div class="value-icon">💡</div>
-        <h3>สร้างสรรค์</h3>
-        <p>คิดนอกกรอบและนำเสนอแนวทางแก้ปัญหาที่แปลกใหม่</p>
-      </div>
-      <div class="value-card reveal" style="transition-delay:.24s">
-        <div class="value-icon">🔍</div>
-        <h3>โปร่งใส</h3>
-        <p>ดำเนินงานอย่างเปิดเผย ตรวจสอบได้ และซื่อสัตย์ต่อทุกคน</p>
-      </div>
+      <div class="value-card reveal"><div class="value-icon">🎯</div><h3>มุ่งมั่น</h3><p>ทำงานด้วยความตั้งใจและรับผิดชอบต่อหน้าที่ที่ได้รับมอบหมาย</p></div>
+      <div class="value-card reveal" style="transition-delay:.08s"><div class="value-icon">🤝</div><h3>ร่วมมือ</h3><p>ทำงานเป็นทีม เคารพความคิดเห็น และสร้างความสามัคคี</p></div>
+      <div class="value-card reveal" style="transition-delay:.16s"><div class="value-icon">💡</div><h3>สร้างสรรค์</h3><p>คิดนอกกรอบและนำเสนอแนวทางแก้ปัญหาที่แปลกใหม่</p></div>
+      <div class="value-card reveal" style="transition-delay:.24s"><div class="value-icon">🔍</div><h3>โปร่งใส</h3><p>ดำเนินงานอย่างเปิดเผย ตรวจสอบได้ และซื่อสัตย์ต่อทุกคน</p></div>
     </div>
-
-    <!-- contact -->
     <div class="contact-section">
       <span class="tag reveal">ติดต่อเรา</span>
       <h2 class="section-title reveal">ส่งข้อความถึงสภา</h2>
-      <p class="section-lead reveal" style="max-width:460px">
-        มีข้อเสนอแนะ ปัญหา หรืออยากเข้าร่วมกิจกรรม? สภานักเรียนพร้อมรับฟังเสมอ
-      </p>
-
+      <p class="section-lead reveal" style="max-width:460px">มีข้อเสนอแนะ ปัญหา หรืออยากเข้าร่วมกิจกรรม? สภานักเรียนพร้อมรับฟังเสมอ</p>
       <div class="contact-grid">
-
-        <!-- ซ้าย: รายการช่องทางติดต่อ -->
         <div class="contact-items reveal">
-          <div class="ci">
-            <div class="ci-icon">⏰</div>
-            <div><div class="ci-label">เวลาทำการ</div><div class="ci-val">จันทร์–ศุกร์ เวลา 08.00–16.00 น.</div></div>
-          </div>
-          <div class="ci">
-            <div class="ci-icon">📘</div>
-            <div><div class="ci-label">Facebook</div><div class="ci-val">โรงเรียนตั้งพิรุฬห์ธรรม</div></div>
-          </div>
-          <div class="ci">
-            <div class="ci-icon">📸</div>
-            <div><div class="ci-label">Instagram</div><div class="ci-val">@EURO__DEV</div></div>
-          </div>
-           <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt=""  style= height="auto" width="80%">
+          <div class="ci"><div class="ci-icon">⏰</div><div><div class="ci-label">เวลาทำการ</div><div class="ci-val">จันทร์–ศุกร์ เวลา 08.00–16.00 น.</div></div></div>
+          <div class="ci"><div class="ci-icon">📘</div><div><div class="ci-label">Facebook</div><div class="ci-val">โรงเรียนตั้งพิรุฬห์ธรรม</div></div></div>
+          <div class="ci"><div class="ci-icon">📸</div><div><div class="ci-label">Instagram</div><div class="ci-val">@EURO__DEV</div></div></div>
+          <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="" style="height:auto;width:80%">
         </div>
-
-        <!-- ขวา: QR Code Instagram -->
         <div class="qr-panel reveal">
           <span class="qr-badge">📸 ติดตามเราได้ที่ Instagram</span>
-          <!-- QR Code รูปจริง -->
           <div class="qr-frame">
             <img src="https://cdn.phototourl.com/free/2026-06-03-f14558ef-8df4-4bb8-a311-4c4d7fe4c74b.png" alt="QR Code Instagram"/>
           </div>
@@ -1154,98 +911,103 @@
       </div>
     </div>
     <footer>
-      <div class="foot-brand">
-        <div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2568 Student Council</div></div>
-      </div>
-      <div class="foot-nav">
-        <button onclick="showPage('home')">หน้าแรก</button>
-        <button onclick="showPage('policy')">นโยบาย</button>
-        <button onclick="showPage('members')">สมาชิก</button>
-        <button onclick="showPage('about')">เกี่ยวกับเรา</button>
-      </div>
+      <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
+      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
     </footer>
-  </div><!-- /about -->
-  <!-- ============================================================
-       JAVASCRIPT
-  ============================================================ -->
+  </div>
+
+
   <script>
-    /* ----------------------------------------------------------
-       PAGE ROUTING
-       showPage(name) — hides all pages, shows the target one,
-       updates active nav state, scrolls to top, re-runs reveals.
-    ---------------------------------------------------------- */
+    /* PAGE ROUTING */
     function showPage(name) {
-      // hide all pages
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      // show target
       document.getElementById('page-' + name).classList.add('active');
-      // update active state on dropdown links
       document.querySelectorAll('.nav-dropdown a').forEach(a => a.classList.remove('active'));
       const link = document.getElementById('nav-' + name);
       if (link) link.classList.add('active');
-      // scroll to very top
       window.scrollTo({ top: 0, behavior: 'instant' });
-      // re-initialise reveal observer for new page
+      // reset dept view when leaving members
+      if (name !== 'members') closeDept(true);
       initReveal();
-      return false; // prevent default anchor jump
+      return false;
     }
-    /* ----------------------------------------------------------
-       SINGLE MENU BUTTON + DROPDOWN
-    ---------------------------------------------------------- */
+
+    /* MENU */
     const menuBtn  = document.getElementById('menuBtn');
     const dropdown = document.getElementById('dropdown');
-    // toggle dropdown open/close
     menuBtn.addEventListener('click', e => {
       e.stopPropagation();
       const isOpen = dropdown.classList.toggle('open');
       menuBtn.classList.toggle('open', isOpen);
     });
-    // close when clicking anywhere outside
     document.addEventListener('click', e => {
       if (!dropdown.contains(e.target) && !menuBtn.contains(e.target)) {
         dropdown.classList.remove('open');
         menuBtn.classList.remove('open');
       }
     });
-    // navTo: navigate + close dropdown
     function navTo(name) {
       showPage(name);
       dropdown.classList.remove('open');
       menuBtn.classList.remove('open');
       return false;
     }
-    /* ----------------------------------------------------------
-       SCROLL REVEAL
-       Uses IntersectionObserver so elements fade in as they
-       enter the viewport. Re-runs when switching pages.
-    ---------------------------------------------------------- */
+
+    /* DEPARTMENT SWITCHER */
+    let activeDept = null;
+
+    function showDept(name) {
+      // hide all dept views
+      document.querySelectorAll('.dept-view').forEach(d => d.classList.remove('active'));
+      // deactivate all buttons
+      document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
+
+      if (activeDept === name) {
+        // clicking same button again = close
+        activeDept = null;
+        return;
+      }
+
+      activeDept = name;
+      document.getElementById('dept-' + name).classList.add('active');
+      document.getElementById('btn-' + name).classList.add('active');
+
+      // smooth scroll to dept view
+      setTimeout(() => {
+        const el = document.getElementById('dept-' + name);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 60);
+    }
+
+    function closeDept(silent) {
+      document.querySelectorAll('.dept-view').forEach(d => d.classList.remove('active'));
+      document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
+      activeDept = null;
+      if (!silent) {
+        // scroll back to group photo
+        const gp = document.querySelector('.group-photo-wrap');
+        if (gp) gp.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    /* SCROLL REVEAL */
     let revealObserver;
     function initReveal() {
       if (revealObserver) revealObserver.disconnect();
       revealObserver = new IntersectionObserver(entries => {
         entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            revealObserver.unobserve(e.target);
-          }
+          if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
         });
       }, { threshold: 0.08 });
-      // observe only elements inside the active page
-      document.querySelectorAll('.page.active .reveal').forEach(el => {
-        revealObserver.observe(el);
-      });
+      document.querySelectorAll('.page.active .reveal').forEach(el => revealObserver.observe(el));
     }
-    /* ----------------------------------------------------------
-       NAV SHADOW ON SCROLL
-    ---------------------------------------------------------- */
+
+    /* NAV SHADOW */
     window.addEventListener('scroll', () => {
       document.getElementById('mainNav').style.boxShadow =
         window.scrollY > 40 ? '0 4px 28px rgba(0,0,0,0.5)' : 'none';
     }, { passive: true });
-    /* ----------------------------------------------------------
-       INIT
-    ---------------------------------------------------------- */
+
     initReveal();
   </script>
 </body>
