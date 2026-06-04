@@ -287,10 +287,8 @@
     .policy-badge { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 8px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; background: var(--red-glow); color: var(--red-mid); border: 1px solid rgba(255,0,0,0.25); }
 
     /* ============================================================
-       MEMBERS PAGE — NEW DESIGN
+       MEMBERS PAGE — NEW UPDATED FILTER SYSTEM
     ============================================================ */
-
-    /* Group photo section */
     .members-overview {
       padding: var(--py) var(--px);
       display: flex;
@@ -299,63 +297,20 @@
       gap: 48px;
     }
 
-    .group-photo-wrap {
-      width: 100%;
-      max-width: 900px;
-      position: relative;
-    }
-
-    .group-photo-frame {
-      position: relative;
-      border: 1px solid var(--red);
-      box-shadow: 0 0 20px rgba(255,0,0,0.1);
-      overflow: hidden;
-    }
-    /* corner accents */
-    .group-photo-frame::before,
-    .group-photo-frame::after {
-      content: ''; position: absolute; width: 14px; height: 14px;
-      border-color: #fff; border-style: solid; z-index: 2; pointer-events: none;
-    }
-    .group-photo-frame::before { top: 0; left: 0; border-width: 2px 0 0 2px; }
-    .group-photo-frame::after  { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
-
-    .group-photo-frame img {
-      display: block; width: 100%; height: auto;
-      object-fit: cover;
-      filter: grayscale(15%);
-      transition: filter 0.5s;
-    }
-    .group-photo-frame:hover img { filter: grayscale(0%); }
-
-    /* overlay badge on photo */
-    .group-photo-badge {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(17,17,17,0.92) 0%, transparent 100%);
-      padding: 32px 24px 20px;
-      display: flex; align-items: flex-end; justify-content: space-between;
-      z-index: 1;
-    }
-    .gpb-left h3 { font-size: clamp(16px,2.5vw,24px); font-weight: 800; color: #fff; letter-spacing: -0.02em; }
-    .gpb-left p  { font-size: 11px; font-weight: 300; color: var(--g400); margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase; }
-    .gpb-right { display: flex; gap: 24px; }
-    .gpb-stat { text-align: right; }
-    .gpb-stat .n { font-size: 22px; font-weight: 800; color: var(--red-mid); }
-    .gpb-stat .l { font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
-
     /* Department filter buttons */
     .dept-filter {
-      display: flex; gap: 0;
+      display: flex; flex-wrap: wrap; gap: 0;
       border: 1px solid var(--g700);
       overflow: hidden;
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px;
     }
     .dept-btn {
       flex: 1;
+      min-width: 120px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 6px;
-      padding: 20px 12px;
+      padding: 18px 10px;
       background: var(--g800); border: none;
       font-family: var(--font); cursor: pointer;
       transition: background 0.25s, color 0.25s;
@@ -372,91 +327,64 @@
     .dept-btn.active::before { transform: scaleX(1); }
     .dept-btn.active { background: var(--g700); }
     .dept-btn:hover  { background: var(--g700); }
-    .dept-btn .di-icon { font-size: 20px; }
+    .dept-btn .di-icon { font-size: 18px; }
     .dept-btn .di-name {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
       text-transform: uppercase; color: var(--g200);
       transition: color 0.25s;
     }
     .dept-btn.active .di-name,
     .dept-btn:hover  .di-name { color: var(--white); }
     .dept-btn .di-count {
-      font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
-      color: var(--g600); transition: color 0.25s;
+      font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
+      color: var(--g400); transition: color 0.25s;
     }
     .dept-btn.active .di-count { color: var(--red-mid); }
 
-    /* Department view */
-    .dept-view {
-      width: 100%; max-width: 900px;
-      display: none;
-    }
-    .dept-view.active { display: block; animation: fadeSlide 0.4s ease; }
-    @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-
-    /* dept header */
-    .dept-header {
-      display: flex; align-items: center; gap: 20px;
-      padding: 28px 0 20px;
-      border-bottom: 1px solid var(--g700);
-      margin-bottom: 24px;
-    }
-    .dept-header .dh-icon { font-size: 32px; }
-    .dept-header .dh-title { font-size: clamp(20px,3vw,32px); font-weight: 800; color: var(--white); letter-spacing: -0.03em; }
-    .dept-header .dh-sub { font-size: 11px; font-weight: 300; color: var(--g400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
-    .dept-header .dh-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--red), transparent); }
-
-    /* member cards in dept view */
+    /* unified dynamic grid */
     .dept-members-grid {
+      width: 100%;
+      max-width: 1000px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 2px; background: var(--g700);
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      transition: all 0.4s ease;
     }
 
     .member-card {
       background: var(--g800); padding: 28px 20px 20px;
       position: relative; overflow: hidden;
-      transition: background 0.3s, transform 0.3s;
+      border: 1px solid var(--g700);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s, border-color 0.3s;
     }
-    .member-card:hover { background: var(--g700); transform: translateY(-4px); }
+    /* Hidden state for filter animation */
+    .member-card.hidden {
+      display: none !important;
+      opacity: 0;
+      transform: scale(0.9) translateY(10px);
+    }
+    .member-card:hover { background: var(--g700); border-color: var(--red); transform: translateY(-4px); }
     .member-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: auto;
-      width: auto; height: 3px;
-      background: var(--red); border: none;
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--red);
       transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
     }
-    .member-card::after { content: none !important; display: none !important; }
     .member-card:hover::before { transform: scaleX(1); }
-    .member-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--g700), var(--red));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; font-weight: 800; color: #fff;
-      margin-bottom: 14px;
-      border: 2px solid rgba(255,0,0,0.3);
-    }
+    
     .member-card.president .member-avatar {
       background: linear-gradient(135deg, var(--red-deep), var(--red-mid));
       border-color: var(--red-mid);
       box-shadow: 0 0 18px rgba(255,0,0,0.4);
     }
-    .member-pos  { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 5px; }
-    .member-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; line-height: 1.3; }
-    .member-class{ font-size: 11px; font-weight: 300; color: var(--g400); }
+    .member-pos  { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 5px; text-align: center; }
+    .member-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; line-height: 1.3; text-align: center; }
+    .member-class{ font-size: 11px; font-weight: 300; color: var(--g400); text-align: center; }
     .member-num  { position: absolute; top: 12px; right: 14px; font-size: 9px; font-weight: 800; color: var(--g600); }
-    .member-card img { width: 80% !important; height: auto !important; }
-
-    /* back button */
-    .back-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: none; border: 1.5px solid var(--g600);
-      cursor: pointer; padding: 10px 18px;
-      font-family: var(--font); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--g400); margin-top: 28px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .back-btn:hover { border-color: var(--red); color: var(--red-mid); }
+    .member-card img { width: 85% !important; height: auto !important; max-width: 140px; margin-bottom: 12px; display: block; border-radius: 6px; }
 
     /* ABOUT */
     .vm-grid { padding: var(--py) var(--px); display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--g700); }
@@ -497,6 +425,7 @@
       background: var(--g900); padding: clamp(24px,4vw,40px) var(--px);
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
       border-top: 1px solid var(--g700);
+      width: 100%;
     }
     .foot-brand { display: flex; align-items: center; gap: 10px; }
     .foot-brand .th   { font-size: 12px; font-weight: 700; color: var(--white); }
@@ -508,47 +437,31 @@
     /* RESPONSIVE */
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; }
-      .hero-right { min-height: 220px; }
+      .hero-right { display: none; }
       .vm-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-      .dept-filter { flex-wrap: wrap; }
-      .dept-btn { flex: 1 1 45%; min-width: 120px; border-right: 1px solid var(--g700); border-bottom: 1px solid var(--g700); }
-      .group-photo-badge { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .gpb-right { align-self: flex-start; }
-
-      /* โลโก้เล็กลงบน tablet */
+      .dept-filter { display: grid; grid-template-columns: 1fr 1fr; }
+      .dept-btn { border-right: 1px solid var(--g700); border-bottom: 1px solid var(--g700); }
+      .dept-btn:nth-child(even) { border-right: none; }
       .logo-hex { width: 22px; height: 22px; }
       .logo-hex span { font-size: 8px; }
       .nav-brand .th { font-size: 10px; }
       .nav-brand .en { font-size: 6.5px; }
-
-      /* รูปในการ์ดสมาชิก */
-      .member-card img { width: 80% !important; height: 80% !important; }
     }
     @media (max-width: 640px) {
-      .hero-right { display: none; }
       .hero-btns { flex-direction: column; }
       .btn { width: 100%; text-align: center; }
       .policy-item { grid-template-columns: 48px 1fr; gap: 12px; padding: 20px 16px; }
       .policy-num  { font-size: 20px; }
-      .dept-filter { flex-direction: column; }
-      .dept-btn { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 16px; border-right: none; }
+      .dept-filter { grid-template-columns: 1fr; }
+      .dept-btn { border-right: none !important; flex-direction: row; justify-content: flex-start; gap: 16px; padding: 14px 20px; }
       footer { flex-direction: column; text-align: center; }
       .foot-nav { justify-content: center; }
-    }
-    @media (max-width: 380px) {
-      .dept-members-grid { grid-template-columns: 1fr 1fr; }
-      .policy-item { grid-template-columns: 1fr; }
-      .policy-num  { font-size: 16px; margin-bottom: 4px; }
-    }
-    @media (min-width: 1400px) {
-      .dept-members-grid { grid-template-columns: repeat(5, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav id="mainNav">
     <a class="nav-logo" href="#" onclick="return showPage('home')">
       <div class="logo-hex"><span>ตธ</span></div>
@@ -571,7 +484,6 @@
   </div>
 
 
-  <!-- ① HOME PAGE -->
   <div id="page-home" class="page active">
     <section class="hero">
       <div class="hero-left">
@@ -620,7 +532,6 @@
   </div>
 
 
-  <!-- ② POLICY PAGE -->
   <div id="page-policy" class="page">
     <div class="page-hero" data-wm="POLICY">
       <span class="tag">นโยบาย 2569</span>
@@ -644,248 +555,178 @@
   </div>
 
 
-  <!-- ③ MEMBERS PAGE — NEW DESIGN -->
   <div id="page-members" class="page">
 
     <div class="page-hero" data-wm="MEMBERS">
-      <span class="tag">สมาชิก 16 คน</span>
+      <span class="tag">รวมคณะกรรมการ</span>
       <h1 class="section-title">คณะกรรมการ<br>สภานักเรียน</h1>
-      <p class="section-lead" style="max-width:460px">ทีมงานที่ทุ่มเทและมีความมุ่งมั่น พร้อมทำงานเพื่อนักเรียนทุกคน</p>
+      <p class="section-lead" style="max-width:460px">ทีมงานทั้งหมด 16 คนที่ทุ่มเทและพร้อมทำงานเพื่อนักเรียนทุกคน เลือกดูตามฝ่ายเพื่อทำความรู้จักได้ทันที</p>
     </div>
 
     <div class="members-overview">
 
-      <!-- GROUP PHOTO -->
-      <div class="group-photo-wrap reveal">
-        <div class="group-photo-frame">
-          <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png"
-               alt="คณะกรรมการสภานักเรียน 2569"/>
-          <div class="group-photo-badge">
-            <div class="gpb-left">
-              <h3>คณะกรรมการสภานักเรียน 2569</h3>
-              <p>Student Council — โรงเรียนตั้งพิรุฬห์ธรรม</p>
-            </div>
-            <div class="gpb-right">
-              <div class="gpb-stat"><div class="n">16</div><div class="l">สมาชิก</div></div>
-              <div class="gpb-stat"><div class="n">4</div><div class="l">ฝ่าย</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DEPARTMENT FILTER BUTTONS -->
       <div class="dept-filter reveal">
-        <button class="dept-btn" id="btn-exec" onclick="showDept('exec')">
+        <button class="dept-btn active" id="btn-all" onclick="filterDept('all')">
+          <span class="di-icon">👥</span>
+          <span class="di-name">แสดงทั้งหมด</span>
+          <span class="di-count">16 คน</span>
+        </button>
+        <button class="dept-btn" id="btn-exec" onclick="filterDept('exec')">
           <span class="di-icon">👑</span>
           <span class="di-name">คณะผู้บริหาร</span>
           <span class="di-count">3 คน</span>
         </button>
-        <button class="dept-btn" id="btn-academic" onclick="showDept('academic')">
+        <button class="dept-btn" id="btn-academic" onclick="filterDept('academic')">
           <span class="di-icon">📚</span>
           <span class="di-name">ฝ่ายวิชาการ</span>
           <span class="di-count">4 คน</span>
         </button>
-        <button class="dept-btn" id="btn-activity" onclick="showDept('activity')">
+        <button class="dept-btn" id="btn-activity" onclick="filterDept('activity')">
           <span class="di-icon">🎉</span>
           <span class="di-name">ฝ่ายกิจกรรม</span>
           <span class="di-count">3 คน</span>
         </button>
-        <button class="dept-btn" id="btn-pr" onclick="showDept('pr')">
+        <button class="dept-btn" id="btn-pr" onclick="filterDept('pr')">
           <span class="di-icon">📢</span>
           <span class="di-name">ฝ่ายประชาสัมพันธ์</span>
           <span class="di-count">3 คน</span>
         </button>
-        <button class="dept-btn" id="btn-sport" onclick="showDept('sport')">
+        <button class="dept-btn" id="btn-sport" onclick="filterDept('sport')">
           <span class="di-icon">⚽</span>
           <span class="di-name">ฝ่ายกีฬา</span>
           <span class="di-count">3 คน</span>
         </button>
       </div>
 
-      <!-- DEPT VIEWS -->
+      <div class="dept-members-grid reveal">
+        
+        <div class="member-card president" data-dept="exec">
+          <div class="member-num">#01</div>
+          <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="กัญญาพัชร อาจสามารถ">
+          <div class="member-pos">ประธานสภานักเรียน</div>
+          <div class="member-name">กัญญาพัชร อาจสามารถ</div>
+          <div class="member-class">ม.3/4</div>
+        </div>
+        <div class="member-card" data-dept="exec">
+          <div class="member-num">#02</div>
+          <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="ณกมล เชาว์ปรีชา">
+          <div class="member-pos">รองประธาน</div>
+          <div class="member-name">ณกมล เชาว์ปรีชา</div>
+          <div class="member-class">ม.3/3</div>
+        </div>
+        <div class="member-card" data-dept="exec">
+          <div class="member-num">#03</div>
+          <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="วณิชชากร สีนวลจันทร์">
+          <div class="member-pos">เลขานุการ</div>
+          <div class="member-name">วณิชชากร สีนวลจันทร์</div>
+          <div class="member-class">ม.3/4</div>
+        </div>
 
-      <!-- ผู้บริหาร -->
-      <div class="dept-view" id="dept-exec">
-        <div class="dept-header">
-          <span class="dh-icon">👑</span>
-          <div><div class="dh-title">คณะผู้บริหาร</div><div class="dh-sub">Executive Committee · 2 คน</div></div>
-          <div class="dh-line"></div>
+        <div class="member-card" data-dept="academic">
+          <div class="member-num">#04</div>
+          <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="กิตติภัค สุขเกิด">
+          <div class="member-pos">หัวหน้าฝ่ายวิชาการ</div>
+          <div class="member-name">กิตติภัค สุขเกิด</div>
+          <div class="member-class">ม.3/1</div>
         </div>
-        <div class="dept-members-grid">
-          <div class="member-card president">
-            <div class="member-num">#01</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ประธานสภานักเรียน</div>
-            <div class="member-name">กัญญาพัชร อาจสามารถ</div>
-            <div class="member-class">ม.3/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#02</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">รองประธาน</div>
-            <div class="member-name">ณกมล เชาว์ปรีชา</div>
-            <div class="member-class">ม.3/3</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#03</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">เลขานุการ</div>
-            <div class="member-name">วณิชชากร สีนวลจันทร์</div>
-            <div class="member-class">ม.3/4</div>
-          </div>
+        <div class="member-card" data-dept="academic">
+          <div class="member-num">#05</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="อริสา วัฒโน">
+          <div class="member-pos">วิชาการ</div>
+          <div class="member-name">อริสา วัฒโน</div>
+          <div class="member-class">ม.2/4</div>
         </div>
-        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
+        <div class="member-card" data-dept="academic">
+          <div class="member-num">#06</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="ฉัตรเพชร บุญญภูษิต">
+          <div class="member-pos">วิชาการ</div>
+          <div class="member-name">ฉัตรเพชร บุญญภูษิต</div>
+          <div class="member-class">ม.2/4</div>
+        </div>
+        <div class="member-card" data-dept="academic">
+          <div class="member-num">#07</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="พัทธนันท์ ฤทธิมะหันต์">
+          <div class="member-pos">วิชาการ</div>
+          <div class="member-name">พัทธนันท์ ฤทธิมะหันต์</div>
+          <div class="member-class">ม.2/4</div>
+        </div>
+
+        <div class="member-card" data-dept="activity">
+          <div class="member-num">#08</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="รีอา ยาดาฟต์">
+          <div class="member-pos">หัวหน้าฝ่ายกิจกรรม</div>
+          <div class="member-name">รีอา ยาดาฟต์</div>
+          <div class="member-class">ม.3/4</div>
+        </div>
+        <div class="member-card" data-dept="activity">
+          <div class="member-num">#09</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="กัญญารัตน์ จันทะเรื่อง">
+          <div class="member-pos">ฝ่ายกิจกรรม</div>
+          <div class="member-name">กัญญารัตน์ จันทะเรื่อง</div>
+          <div class="member-class">ม.3/4</div>
+        </div>
+        <div class="member-card" data-dept="activity">
+          <div class="member-num">#10</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="ฐิตาภา แซ่เตียว">
+          <div class="member-pos">ฝ่ายกิจกรรม</div>
+          <div class="member-name">ฐิตาภา แซ่เตียว</div>
+          <div class="member-class">ม.2/3</div>
+        </div>
+
+        <div class="member-card" data-dept="pr">
+          <div class="member-num">#11</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="กาณฑ์ สุวรรณกูฎ">
+          <div class="member-pos">หัวหน้าฝ่ายประชาสัมพันธ์</div>
+          <div class="member-name">กาณฑ์ สุวรรณกูฎ</div>
+          <div class="member-class">ม.2/1</div>
+        </div>
+        <div class="member-card" data-dept="pr">
+          <div class="member-num">#12</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="อภิชาติ มั่งมี">
+          <div class="member-pos">ฝ่ายประชาสัมพันธ์</div>
+          <div class="member-name">อภิชาติ มั่งมี</div>
+          <div class="member-class">ม.2/4</div>
+        </div>
+        <div class="member-card" data-dept="pr">
+          <div class="member-num">#13</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="กัณญาพร รอดเจริญ">
+          <div class="member-pos">ฝ่ายประชาสัมพันธ์</div>
+          <div class="member-name">กัณญาพร รอดเจริญ</div>
+          <div class="member-class">ม.2/4</div>
+        </div>
+
+        <div class="member-card" data-dept="sport">
+          <div class="member-num">#14</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="ไมกาห์ เชเมย์ การ์เซีย">
+          <div class="member-pos">หัวหน้าฝ่ายกีฬา</div>
+          <div class="member-name">ไมกาห์ เชเมย์ การ์เซีย</div>
+          <div class="member-class">ม.3/4</div>
+        </div>
+        <div class="member-card" data-dept="sport">
+          <div class="member-num">#15</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="ธีรยา ศุภรธนากุล">
+          <div class="member-pos">ฝ่ายกีฬา</div>
+          <div class="member-name">ธีรยา ศุภรธนากุล</div>
+          <div class="member-class">ม.2/3</div>
+        </div>
+        <div class="member-card" data-dept="sport">
+          <div class="member-num">#16</div>
+          <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="ชุตินันท์ นกแสง">
+          <div class="member-pos">ฝ่ายกีฬา</div>
+          <div class="member-name">ชุตินันท์ นกแสง</div>
+          <div class="member-class">ม.2/3</div>
+        </div>
+
       </div>
-
-      <!-- ฝ่ายวิชาการ -->
-      <div class="dept-view" id="dept-academic">
-        <div class="dept-header">
-          <span class="dh-icon">📚</span>
-          <div><div class="dh-title">ฝ่ายวิชาการ</div><div class="dh-sub">Academic Department · 4 คน</div></div>
-          <div class="dh-line"></div>
-        </div>
-        <div class="dept-members-grid">
-          <div class="member-card">
-            <div class="member-num">#04</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-02-0cda17cb-851d-4707-b32f-797125398fea.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายวิชาการ</div>
-            <div class="member-name">กิตติภัค สุขเกิด</div>
-            <div class="member-class">ม.3/1</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#05</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">วิชาการ</div>
-            <div class="member-name">อริสา วัฒโน</div>
-            <div class="member-class">ม.2/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#06</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">วิชาการ</div>
-            <div class="member-name">ฉัตรเพชร บุญญภูษิต</div>
-            <div class="member-class">ม.2/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#07</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">วิชาการ</div>
-            <div class="member-name">พัทธนันท์ ฤทธิมะหันต์</div>
-            <div class="member-class">ม.2/4</div>
-          </div>
-        </div>
-        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
-      </div>
-
-      <!-- ฝ่ายกิจกรรม -->
-      <div class="dept-view" id="dept-activity">
-        <div class="dept-header">
-          <span class="dh-icon">🎉</span>
-          <div><div class="dh-title">ฝ่ายกิจกรรม</div><div class="dh-sub">Activity Department · 4 คน</div></div>
-          <div class="dh-line"></div>
-        </div>
-        <div class="dept-members-grid">
-          <div class="member-card">
-            <div class="member-num">#08</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายกิจกรรม</div>
-            <div class="member-name">รีอา ยาดาฟต์</div>
-            <div class="member-class">ม.3/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#09</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ฝ่ายกิจกรรม</div>
-            <div class="member-name">กัญญารัตน์ จันทะเรื่อง</div>
-            <div class="member-class">ม.3/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#10</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ฝ่ายกิจกรรม</div>
-            <div class="member-name">ฐิตาภา แซ่เตียว</div>
-            <div class="member-class">ม.2/3</div>
-          </div>
-        </div>
-        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
-      </div>
-
-      <!-- ฝ่ายประชาสัมพันธ์ -->
-      <div class="dept-view" id="dept-pr">
-        <div class="dept-header">
-          <span class="dh-icon">📢</span>
-          <div><div class="dh-title">ฝ่ายประชาสัมพันธ์</div><div class="dh-sub">PR Department · 3 คน</div></div>
-          <div class="dh-line"></div>
-        </div>
-        <div class="dept-members-grid">
-          <div class="member-card">
-            <div class="member-num">#11</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายประชาสัมพันธ์</div>
-            <div class="member-name">กาณฑ์ สุวรรณกูฎ</div>
-            <div class="member-class">ม.2/1</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#12</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ฝ่ายประชาสัมพันธ์</div>
-            <div class="member-name">อภิชาติ มั่งมี</div>
-            <div class="member-class">ม.2/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#13</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ฝ่ายประชาสัมพันธ์</div>
-            <div class="member-name">กัณญาพร รอดเจริญ</div>
-            <div class="member-class">ม.2/4</div>
-          </div>
-        </div>
-        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
-      </div>
-
-      <!-- ฝ่ายกีฬา -->
-      <div class="dept-view" id="dept-sport">
-        <div class="dept-header">
-          <span class="dh-icon">⚽</span>
-          <div><div class="dh-title">ฝ่ายกีฬา</div><div class="dh-sub">Sports Department · 3 คน</div></div>
-          <div class="dh-line"></div>
-        </div>
-        <div class="dept-members-grid">
-          <div class="member-card">
-            <div class="member-num">#14</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">หัวหน้าฝ่ายกีฬา</div>
-            <div class="member-name">ไมกาห์ เชเมย์ การ์เซีย</div>
-            <div class="member-class">ม.3/4</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#15</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ฝ่ายกีฬา</div>
-            <div class="member-name">ธีรยา ศุภรธนากุล</div>
-            <div class="member-class">ม.2/3</div>
-          </div>
-          <div class="member-card">
-            <div class="member-num">#16</div>
-            <img src="https://cdn.phototourl.com/free/2026-05-30-4a2745f0-52c1-4ff1-b7ce-fd80d09bb7fd.jpg" alt="" style="height:auto;width:80%">
-            <div class="member-pos" style="margin-top:14px">ฝ่ายกีฬา</div>
-            <div class="member-name">ชุตินันท์ นกแส</div>
-            <div class="member-class">ม.2/3</div>
-          </div>
-        </div>
-        <button class="back-btn" onclick="closeDept()">← กลับหน้าภาพรวม</button>
-      </div>
-
-    </div><!-- /members-overview -->
+    </div>
 
     <footer>
       <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
       <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
     </footer>
-  </div><!-- /members -->
+  </div>
 
 
-  <!-- ④ ABOUT PAGE -->
   <div id="page-about" class="page">
     <div class="page-hero" data-wm="ABOUT">
       <span class="tag">เกี่ยวกับเรา</span>
@@ -925,7 +766,7 @@
     </div>
     <footer>
       <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
-      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
+      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about">เกี่ยวกับเรา</button></div>
     </footer>
   </div>
 
@@ -939,8 +780,10 @@
       const link = document.getElementById('nav-' + name);
       if (link) link.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'instant' });
-      // reset dept view when leaving members
-      if (name !== 'members') closeDept(true);
+      
+      // Reset filter to 'all' when entering members page
+      if (name === 'members') filterDept('all');
+      
       initReveal();
       return false;
     }
@@ -966,41 +809,27 @@
       return false;
     }
 
-    /* DEPARTMENT SWITCHER */
-    let activeDept = null;
-
-    function showDept(name) {
-      // hide all dept views
-      document.querySelectorAll('.dept-view').forEach(d => d.classList.remove('active'));
-      // deactivate all buttons
-      document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
-
-      if (activeDept === name) {
-        // clicking same button again = close
-        activeDept = null;
-        return;
+    /* 🔥 NEW LIVE FILTER SYSTEM FOR MEMBERS */
+    function filterDept(deptName) {
+      // 1. Manage Active Button States
+      document.querySelectorAll('.dept-btn').forEach(btn => btn.classList.remove('active'));
+      
+      if(deptName === 'all') {
+        document.getElementById('btn-all').classList.add('active');
+      } else {
+        document.getElementById('btn-' + deptName).classList.add('active');
       }
 
-      activeDept = name;
-      document.getElementById('dept-' + name).classList.add('active');
-      document.getElementById('btn-' + name).classList.add('active');
-
-      // smooth scroll to dept view
-      setTimeout(() => {
-        const el = document.getElementById('dept-' + name);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 60);
-    }
-
-    function closeDept(silent) {
-      document.querySelectorAll('.dept-view').forEach(d => d.classList.remove('active'));
-      document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
-      activeDept = null;
-      if (!silent) {
-        // scroll back to group photo
-        const gp = document.querySelector('.group-photo-wrap');
-        if (gp) gp.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      // 2. Filter Member Cards with Animation
+      const cards = document.querySelectorAll('.member-card');
+      cards.forEach(card => {
+        const cardDept = card.getAttribute('data-dept');
+        if (deptName === 'all' || cardDept === deptName) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
     }
 
     /* SCROLL REVEAL */
@@ -1025,3 +854,5 @@
   </script>
 </body>
 </html>
+
+```
