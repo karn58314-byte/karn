@@ -36,6 +36,98 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* ==========================================
+       [เพิ่ม] สไตล์หน้า LOADING (SPLASH SCREEN) 
+       ========================================== */
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, #260003 0%, var(--g900) 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 24px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .splash-top {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--g400);
+      text-align: center;
+    }
+    .splash-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+      animation: splash-pulse 2.5s infinite ease-in-out;
+    }
+    @keyframes splash-pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255,0,0,0.15)); }
+      50% { transform: scale(1.02); filter: drop-shadow(0 0 32px rgba(255,0,0,0.45)); }
+    }
+    .splash-logo {
+      width: 100%;
+      max-width: 240px;
+      height: auto;
+      display: block;
+    }
+    .splash-badge-one {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid var(--red);
+      padding: 8px 24px;
+      border-radius: 50px;
+      box-shadow: 0 0 24px rgba(255, 0, 0, 0.25);
+    }
+    .splash-badge-one .txt {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--g200);
+    }
+    .splash-badge-one .num {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--red-mid);
+      line-height: 1;
+    }
+    .splash-bottom {
+      width: 100%;
+      max-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .splash-progress-track {
+      width: 100%;
+      height: 4px;
+      background: var(--g700);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .splash-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--red);
+      transition: width 0.1s ease-out;
+    }
+    .splash-status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--g400);
+      font-weight: 500;
+    }
+
+    /* สไตล์เดิมของเว็บไซต์หลัก */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--g800); }
     ::-webkit-scrollbar-thumb { background: var(--red); }
@@ -286,9 +378,7 @@
     .policy-content p  { font-size: 13px; font-weight: 300; color: var(--g400); line-height: 1.75; }
     .policy-badge { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 8px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; background: var(--red-glow); color: var(--red-mid); border: 1px solid rgba(255,0,0,0.25); }
 
-    /* ============================================================
-       MEMBERS PAGE — NEW UPDATED FILTER SYSTEM
-    ============================================================ */
+    /* MEMBERS */
     .members-overview {
       padding: var(--py) var(--px);
       display: flex;
@@ -297,7 +387,6 @@
       gap: 48px;
     }
 
-    /* Department filter buttons */
     .dept-filter {
       display: flex; flex-wrap: wrap; gap: 0;
       border: 1px solid var(--g700);
@@ -341,7 +430,6 @@
     }
     .dept-btn.active .di-count { color: var(--red-mid); }
 
-    /* unified dynamic grid */
     .dept-members-grid {
       width: 100%;
       max-width: 1000px;
@@ -361,7 +449,6 @@
       text-align: center;
       transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s, border-color 0.3s;
     }
-    /* Hidden state for filter animation */
     .member-card.hidden {
       display: none !important;
       opacity: 0;
@@ -409,8 +496,10 @@
     .ci-icon { width: 42px; height: 42px; flex-shrink: 0; background: var(--red-glow); border: 1px solid rgba(255,0,0,0.22); display: flex; align-items: center; justify-content: center; font-size: 16px; }
     .ci-label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 3px; }
     .ci-val   { font-size: 13px; font-weight: 400; color: var(--g200); }
+    
     .qr-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px 32px; background: var(--g900); border: 1px solid var(--g700); text-align: center; }
-    .qr-frame { padding: 0; background: var(--white); border: 3px solid var(--red); box-shadow: 0 0 32px rgba(255,0,0,0.3), 0 0 0 1px rgba(255,0,0,0.15); position: relative; overflow: hidden; width: 600px; height: auto; max-width: 100%; }
+    
+    .qr-frame { padding: 0; background: var(--white); border: 3px solid var(--red); box-shadow: 0 0 32px rgba(255,0,0,0.3), 0 0 0 1px rgba(255,0,0,0.15); position: relative; overflow: hidden; width: 100%; max-width: 280px; height: auto; }
     .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 22px; height: 22px; border-color: var(--red-deep); border-style: solid; z-index: 2; }
     .qr-frame::before { top: 0; left: 0; border-width: 4px 0 0 4px; }
     .qr-frame::after  { bottom: 0; right: 0; border-width: 0 4px 4px 0; }
@@ -424,7 +513,6 @@
     footer {
       background: var(--g900); padding: clamp(24px,4vw,40px) var(--px);
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
-      border-top: 1px solid var(--g700);
       width: 100%;
     }
     .foot-brand { display: flex; align-items: center; gap: 10px; }
@@ -461,6 +549,31 @@
   </style>
 </head>
 <body>
+
+  <div id="splash-screen">
+    <div class="splash-top">
+      Student Council 2569 • Connect ตธ.17
+    </div>
+
+    <div class="splash-center">
+      <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Connect Logo" class="splash-logo">
+      
+      <div class="splash-badge-one">
+        <span class="txt">เลือกพรรค</span>
+        <span class="num">เบอร์ 1</span>
+      </div>
+    </div>
+
+    <div class="splash-bottom">
+      <div class="splash-progress-track">
+        <div id="splash-bar" class="splash-progress-bar"></div>
+      </div>
+      <div class="splash-status">
+        <span>กำลังเตรียมข้อมูลเว็บไซต์...</span>
+        <span id="splash-text">0%</span>
+      </div>
+    </div>
+  </div>
 
   <nav id="mainNav">
     <a class="nav-logo" href="#" onclick="return showPage('home')">
@@ -556,7 +669,6 @@
 
 
   <div id="page-members" class="page">
-
     <div class="page-hero" data-wm="MEMBERS">
       <span class="tag">รวมคณะกรรมการ</span>
       <h1 class="section-title">คณะกรรมการ<br>สภานักเรียน</h1>
@@ -564,7 +676,6 @@
     </div>
 
     <div class="members-overview">
-
       <div class="dept-filter reveal">
         <button class="dept-btn active" id="btn-all" onclick="filterDept('all')">
           <span class="di-icon">👥</span>
@@ -599,7 +710,6 @@
       </div>
 
       <div class="dept-members-grid reveal">
-        
         <div class="member-card president" data-dept="exec">
           <div class="member-num">#01</div>
           <img src="https://cdn.phototourl.com/free/2026-06-03-758c1220-f012-443f-bb63-3c3521a00a58.png" alt="กัญญาพัชร อาจสามารถ">
@@ -716,7 +826,6 @@
           <div class="member-name">ชุตินันท์ นกแสง</div>
           <div class="member-class">ม.2/3</div>
         </div>
-
       </div>
     </div>
 
@@ -766,12 +875,48 @@
     </div>
     <footer>
       <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
-      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about">เกี่ยวกับเรา</button></div>
+      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
     </footer>
   </div>
 
 
   <script>
+    /* ==========================================
+       [เพิ่ม] ระบบนับตัวเลข LOADING & FADE OUT
+       ========================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      const splashBar = document.getElementById("splash-bar");
+      const splashText = document.getElementById("splash-text");
+      const splashScreen = document.getElementById("splash-screen");
+
+      let currentProgress = 0;
+      
+      // ฟังก์ชันสุ่มเพิ่มความเร็วในการดาวน์โหลดให้เสมือนจริง
+      const loadingInterval = setInterval(() => {
+        if (currentProgress >= 100) {
+          clearInterval(loadingInterval);
+          
+          // โหลดครบ 100% แล้วทิ้งเวลาเสี้ยววิ จากนั้นทำการ Fade Out จางหายไปด้านบน
+          setTimeout(() => {
+            splashScreen.style.opacity = "0";
+            splashScreen.style.transform = "translateY(-16px)";
+            
+            setTimeout(() => {
+              splashScreen.style.display = "none";
+              // บังคับให้เอฟเฟกต์ Fade-in ตอนเลื่อนหน้าจอทำงานทันทีหลังจากโหลดเสร็จ
+              initReveal();
+            }, 500);
+          }, 300);
+        } else {
+          currentProgress += Math.floor(Math.random() * 8) + 3;
+          if (currentProgress > 100) currentProgress = 100;
+          
+          splashBar.style.width = currentProgress + "%";
+          splashText.innerText = currentProgress + "%";
+        }
+      }, 50);
+    });
+
     /* PAGE ROUTING */
     function showPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -781,7 +926,6 @@
       if (link) link.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'instant' });
       
-      // Reset filter to 'all' when entering members page
       if (name === 'members') filterDept('all');
       
       initReveal();
@@ -809,18 +953,15 @@
       return false;
     }
 
-    /* 🔥 NEW LIVE FILTER SYSTEM FOR MEMBERS */
+    /* FILTER SYSTEM FOR MEMBERS */
     function filterDept(deptName) {
-      // 1. Manage Active Button States
       document.querySelectorAll('.dept-btn').forEach(btn => btn.classList.remove('active'));
-      
       if(deptName === 'all') {
         document.getElementById('btn-all').classList.add('active');
       } else {
         document.getElementById('btn-' + deptName).classList.add('active');
       }
 
-      // 2. Filter Member Cards with Animation
       const cards = document.querySelectorAll('.member-card');
       cards.forEach(card => {
         const cardDept = card.getAttribute('data-dept');
@@ -850,9 +991,7 @@
         window.scrollY > 40 ? '0 4px 28px rgba(0,0,0,0.5)' : 'none';
     }, { passive: true });
 
-    initReveal();
+    // เอา initReveal() ตัวล่างสุดออกเพื่อให้รอกระบวนการทำงานของตัว Loader ด้านบนเสร็จสิ้นก่อน
   </script>
 </body>
 </html>
-
-```
