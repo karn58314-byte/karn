@@ -37,22 +37,23 @@
     }
 
     /* ==========================================
-       [เพิ่ม] สไตล์หน้า LOADING (SPLASH SCREEN) 
+       [ปรับปรุงใหม่] หน้าต้อนรับส่วนแรก (จากรูปที่ 1815.jpg)
+       ให้เลื่อนลงไปเจอเนื้อหาถัดไปได้ทันที
        ========================================== */
-    #splash-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+    #welcome-section {
+      position: relative;
+      min-height: calc(100vh - var(--nav-h)); /* สูงเต็มหน้าจอใต้ Navbarพอดี */
       background: radial-gradient(circle at center, #260003 0%, var(--g900) 100%);
-      z-index: 9999;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 32px;
       padding: 60px 24px;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      border-bottom: 1px solid var(--g700);
     }
     .splash-top {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.25em;
       text-transform: uppercase;
@@ -81,50 +82,38 @@
       display: inline-flex;
       align-items: center;
       gap: 14px;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       border: 2px solid var(--red);
-      padding: 8px 24px;
+      padding: 8px 28px;
       border-radius: 50px;
       box-shadow: 0 0 24px rgba(255, 0, 0, 0.25);
     }
     .splash-badge-one .txt {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
       letter-spacing: 0.15em;
       color: var(--g200);
     }
     .splash-badge-one .num {
-      font-size: 34px;
+      font-size: 36px;
       font-weight: 900;
       color: var(--red-mid);
       line-height: 1;
     }
-    .splash-bottom {
-      width: 100%;
-      max-width: 280px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .splash-progress-track {
-      width: 100%;
-      height: 4px;
-      background: var(--g700);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .splash-progress-bar {
-      width: 0%;
-      height: 100%;
-      background: var(--red);
-      transition: width 0.1s ease-out;
-    }
-    .splash-status {
-      display: flex;
-      justify-content: space-between;
+    
+    /* ปุ่มแนะนำให้เลื่อนลงด้านล่าง */
+    .scroll-hint {
       font-size: 11px;
       color: var(--g400);
-      font-weight: 500;
+      letter-spacing: 0.1em;
+      animation: bounce 2s infinite;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+      60% { transform: translateY(-4px); }
     }
 
     /* สไตล์เดิมของเว็บไซต์หลัก */
@@ -284,7 +273,7 @@
 
     /* HOME */
     .hero {
-      min-height: 100vh; padding-top: var(--nav-h);
+      min-height: 100vh;
       display: grid; grid-template-columns: 1fr 1fr;
     }
     .hero-left {
@@ -550,31 +539,6 @@
 </head>
 <body>
 
-  <div id="splash-screen">
-    <div class="splash-top">
-      Student Council 2569 • Connect ตธ.17
-    </div>
-
-    <div class="splash-center">
-      <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Connect Logo" class="splash-logo">
-      
-      <div class="splash-badge-one">
-        <span class="txt">เลือกพรรค</span>
-        <span class="num">เบอร์ 1</span>
-      </div>
-    </div>
-
-    <div class="splash-bottom">
-      <div class="splash-progress-track">
-        <div id="splash-bar" class="splash-progress-bar"></div>
-      </div>
-      <div class="splash-status">
-        <span>กำลังเตรียมข้อมูลเว็บไซต์...</span>
-        <span id="splash-text">0%</span>
-      </div>
-    </div>
-  </div>
-
   <nav id="mainNav">
     <a class="nav-logo" href="#" onclick="return showPage('home')">
       <div class="logo-hex"><span>ตธ</span></div>
@@ -597,8 +561,28 @@
   </div>
 
 
-  <div id="page-home" class="page active">
-    <section class="hero">
+  <div id="page-home" class="page active" style="padding-top: var(--nav-h);">
+    
+    <section id="welcome-section">
+      <div class="splash-top">
+        Student Council 2569 • Connect ตธ.17
+      </div>
+
+      <div class="splash-center">
+        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Connect Logo" class="splash-logo">
+        
+        <div class="splash-badge-one">
+          <span class="txt">เลือกพรรค</span>
+          <span class="num">เบอร์ 1</span>
+        </div>
+      </div>
+
+      <div class="scroll-hint" onclick="document.getElementById('main-hero').scrollIntoView({behavior: 'smooth'})">
+        🔽 เลื่อนลงเพื่อดูรายละเอียดเว็บไซต์
+      </div>
+    </section>
+
+    <section class="hero" id="main-hero">
       <div class="hero-left">
         <span class="hero-eyebrow">ปีการศึกษา 2569</span>
         <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="" style="height:auto;width:80%">
@@ -622,12 +606,14 @@
         </div>
       </div>
     </section>
+    
     <div class="marquee-wrap">
       <div class="marquee-track">
         <span>ตัวแทนนักเรียน</span><span>Student Voice</span><span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span><span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span><span>Community</span><span>ปีการศึกษา 2569</span>
         <span>ตัวแทนนักเรียน</span><span>Student Voice</span><span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span><span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span><span>Community</span><span>ปีการศึกษา 2569</span>
       </div>
     </div>
+    
     <div class="news-strip">
       <div class="tag reveal">ข่าวสาร & ประกาศ</div>
       <h2 class="section-title reveal">ข่าวล่าสุด</h2>
@@ -638,6 +624,7 @@
         <div class="news-card reveal" style="transition-delay:.20s"><div class="news-date">1 มิ.ย. 2568</div><h3>ประกาศผลการเลือกตั้ง</h3><p>ประกาศผลการเลือกตั้งคณะกรรมการสภานักเรียนชุดใหม่อย่างเป็นทางการ</p></div>
       </div>
     </div>
+    
     <footer>
       <div class="foot-brand"><div class="logo-hex" style="animation:none;width:30px;height:30px"><span style="font-size:10px">ตธ</span></div><div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div></div>
       <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
@@ -881,40 +868,10 @@
 
 
   <script>
-    /* ==========================================
-       [เพิ่ม] ระบบนับตัวเลข LOADING & FADE OUT
-       ========================================== */
+    /* SYSTEM INIT ON LOAD */
     document.addEventListener("DOMContentLoaded", () => {
-      const splashBar = document.getElementById("splash-bar");
-      const splashText = document.getElementById("splash-text");
-      const splashScreen = document.getElementById("splash-screen");
-
-      let currentProgress = 0;
-      
-      // ฟังก์ชันสุ่มเพิ่มความเร็วในการดาวน์โหลดให้เสมือนจริง
-      const loadingInterval = setInterval(() => {
-        if (currentProgress >= 100) {
-          clearInterval(loadingInterval);
-          
-          // โหลดครบ 100% แล้วทิ้งเวลาเสี้ยววิ จากนั้นทำการ Fade Out จางหายไปด้านบน
-          setTimeout(() => {
-            splashScreen.style.opacity = "0";
-            splashScreen.style.transform = "translateY(-16px)";
-            
-            setTimeout(() => {
-              splashScreen.style.display = "none";
-              // บังคับให้เอฟเฟกต์ Fade-in ตอนเลื่อนหน้าจอทำงานทันทีหลังจากโหลดเสร็จ
-              initReveal();
-            }, 500);
-          }, 300);
-        } else {
-          currentProgress += Math.floor(Math.random() * 8) + 3;
-          if (currentProgress > 100) currentProgress = 100;
-          
-          splashBar.style.width = currentProgress + "%";
-          splashText.innerText = currentProgress + "%";
-        }
-      }, 50);
+      // เปิดให้เอฟเฟกต์เลื่อนอนิเมชันทำงานทันทีเมื่อเข้าเว็บ
+      initReveal();
     });
 
     /* PAGE ROUTING */
@@ -990,8 +947,6 @@
       document.getElementById('mainNav').style.boxShadow =
         window.scrollY > 40 ? '0 4px 28px rgba(0,0,0,0.5)' : 'none';
     }, { passive: true });
-
-    // เอา initReveal() ตัวล่างสุดออกเพื่อให้รอกระบวนการทำงานของตัว Loader ด้านบนเสร็จสิ้นก่อน
   </script>
 </body>
 </html>
