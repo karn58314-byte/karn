@@ -36,6 +36,78 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* ── WELCOME POPUP STYLES ── */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(11, 11, 11, 0.95);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .popup-box {
+      background: #1e1e1e;
+      border: 1px solid #444;
+      border-top: 4px solid var(--red);
+      width: 100%;
+      max-width: 460px;
+      padding: 32px 24px 40px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.8), 0 0 40px rgba(255,0,0,0.15);
+      position: relative;
+      animation: popupPopIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popupPopIn {
+      from { opacity: 0; transform: scale(0.95) translateY(15px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .popup-header-dots {
+      display: flex; gap: 6px; position: absolute; top: 16px; left: 20px;
+    }
+    .popup-header-dots span {
+      width: 8px; height: 8px; border-radius: 50%; display: block; background: #444;
+    }
+    .popup-header-dots span:nth-child(1) { background: var(--red); }
+    
+    .popup-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .popup-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--g400); margin-bottom: 24px; margin-top: 8px;
+    }
+    .popup-logo {
+      width: 120px; height: auto; display: block; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(255,0,0,0.3));
+    }
+    .popup-title {
+      font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); margin-bottom: 6px;
+    }
+    .popup-subtitle {
+      font-size: 13px; font-weight: 400; color: var(--g400); margin-bottom: 24px;
+    }
+    .popup-badge {
+      display: inline-flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); border: 1.5px solid var(--red); padding: 6px 20px; border-radius: 50px; margin-bottom: 24px; box-shadow: 0 0 15px rgba(255,0,0,0.15);
+    }
+    .popup-badge .b-txt { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--g200); }
+    .popup-badge .b-num { font-size: 20px; font-weight: 900; color: var(--red-mid); }
+    .popup-desc {
+      font-size: 13px; font-weight: 300; font-style: italic; color: var(--g200); line-height: 1.6; max-width: 340px; margin-bottom: 32px;
+    }
+    .popup-enter-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 240px; padding: 14px 28px; background: var(--red); color: #fff; border: none; font-family: var(--font); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+    }
+    .popup-enter-btn:hover {
+      background: var(--red-deep); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,0,0,0.4);
+    }
+    .popup-enter-btn svg { transition: transform 0.2s; }
+    .popup-enter-btn:hover svg { transform: translateX(3px); }
+
+    /* ── BASE STYLES ── */
     #welcome-section {
       position: relative;
       min-height: 100vh;
@@ -159,7 +231,6 @@
 
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
 
-    /* ===== LOGO IMAGE (แทน logo-hex เดิม) ===== */
     .nav-logo-img {
       width: 36px;
       height: 36px;
@@ -171,7 +242,6 @@
     .nav-logo:hover .nav-logo-img {
       filter: drop-shadow(0 0 12px rgba(255,0,0,0.65));
     }
-    /* ===== FOOTER LOGO IMAGE ===== */
     .foot-logo-img {
       width: 32px;
       height: 32px;
@@ -182,7 +252,6 @@
     .nav-brand { display: flex; flex-direction: column; line-height: 1.2; }
     .nav-brand .th { font-size: 13px; font-weight: 700; color: var(--white); }
     .nav-brand .en { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
-    .nav-links { display: none !important; }
 
     .menu-btn {
       display: flex; align-items: center; gap: 8px;
@@ -514,6 +583,37 @@
 </head>
 <body>
 
+  <div id="welcomePopupOverlay" class="popup-overlay">
+    <div class="popup-box">
+      <div class="popup-header-dots">
+        <span></span><span></span><span></span>
+      </div>
+      
+      <div class="popup-body">
+        <span class="popup-tag">ยินดีต้อนรับสู่เว็บไซต์</span>
+        
+        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Connect Logo" class="popup-logo">
+        
+        <h2 class="popup-title">Connect ตธ.17</h2>
+        <p class="popup-subtitle">สภานักเรียน โรงเรียนตั้งพิรุฬห์ธรรม ปีการศึกษา 2569</p>
+        
+        <div class="popup-badge">
+          <span class="b-txt">เข้าคูหากา</span>
+          <span class="b-num">เบอร์ 1</span>
+        </div>
+        
+        <p class="popup-desc">"เป็นตัวแทนของนักเรียนทุกคน สร้างสรรค์กิจกรรม พัฒนาโรงเรียน ส่งเสริมความเป็นเลิศ"</p>
+        
+        <button id="closeWelcomePopupBtn" class="popup-enter-btn">
+          เข้าสู่เว็บไซต์
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <nav id="mainNav" class="nav-hidden">
     <a class="nav-logo" href="#" onclick="return showPage('home')">
       <img
@@ -627,7 +727,7 @@
       
       <div class="policy-item reveal"><div class="policy-num">03</div><div class="policy-content"><h3>กล่องคำร้อง</h3><p>ทุกคนสามารถเขียนคำร้องเรียนหรือข้อเสนอแนะ พร้อมระบุชื่อ-นามสกุล ลงบนกระดาษที่จัดเตรียมไว้ แล้วหย่อนใส่กล่องรับคำร้อง</p><span class="policy-badge">การรับฟังปัญหา</span></div></div>
       
-      <div class="policy-item reveal"><div class="policy-num">04</div><div class="policy-content"><h3>กระดาษห่อผ้าอนามัย</h3><p>นำกระดาษที่ไม่ได้ใช้แล้วมาพับเป็นกระดาษห่อผ้าอนามัยแลเวจัดแจงวางให้น้องๆในห้องผู้หญิงทั้งระดับมัธยมและประถมปลาย</p><span class="policy-badge">บริการ</span></div></div>
+      <div class="policy-item reveal"><div class="policy-num">04</div><div class="policy-content"><h3>กระดาษห่อผ้าอนามัย</h3><p>นำกระดาษที่ไม่ได้ใช้แล้วมาพับเป็นกระดาษหอผ้าอนามัยแล้วจัดแจงวางให้น้องๆในห้องผู้หญิงทั้งระดับมัธยมและประถมปลาย</p><span class="policy-badge">บริการ</span></div></div>
       
       <div class="policy-item reveal"><div class="policy-num">05</div><div class="policy-content"><h3>ขยะแลกแต้ม</h3><p>การแลก ขวด/ฝากขวด/หรือขยะอื่นๆ ให้กับสภาด้วยตนเอง จะได้คะแนนความ ประพฤติ +1และ ลูกอมหรือขนม</p><span class="policy-badge">ส่งเสริมความเป็นระเบียบ</span></div></div>
       
@@ -801,7 +901,8 @@
       <p class="section-lead reveal" style="max-width:460px">มีข้อเสนอแนะ ปัญหา หรืออยากเข้าร่วมกิจกรรม? สภานักเรียนพร้อมรับฟังเสมอ</p>
       <div class="contact-grid">
         <div class="contact-items reveal">
-          <div class="ci"><div class="ci-icon">⏰</div><div><div class="ci-label">เวลาทำการ</div><div class="ci-val">จันทร์–ศุกร์ เวลา 08.00–16.00 น.</div></div></div>
+          <div class="ci"><div class="ci-icon">⏰</div><div><div class="ci-label">เวลาทำการ</div>
+          <div class="ci-val">จันทร์–ศุกร์ เวลา 07.30–16.00 น.</div></div></div>
           <div class="ci"><div class="ci-icon">📘</div><div><div class="ci-label">Facebook</div><div class="ci-val">โรงเรียนตั้งพิรุฬห์ธรรม</div></div></div>
           <div class="ci"><div class="ci-icon">📸</div><div><div class="ci-label">Instagram</div><div class="ci-val">@connect_tts17</div></div></div>
           <img src="https://cdn.phototourl.com/free/2026-06-06-34ad761a-7d3e-452c-bf88-4f91a09dba78.png" alt="" style="height:145px;width:70%">
@@ -827,6 +928,24 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // ── WELCOME POPUP LOGIC ──
+      const popupOverlay = document.getElementById('welcomePopupOverlay');
+      const closePopupBtn = document.getElementById('closeWelcomePopupBtn');
+      
+      if(popupOverlay && closePopupBtn) {
+        // ล็อกไม่ให้เลื่อนหน้าจอเมื่อเปิดหน้าเว็บ
+        document.body.style.overflow = 'hidden';
+        
+        closePopupBtn.addEventListener('click', () => {
+          popupOverlay.style.opacity = '0';
+          popupOverlay.style.visibility = 'hidden';
+          // ปลดล็อกให้เลื่อนหน้าจอได้ปกติ
+          document.body.style.overflow = '';
+          // อัพเดต Navbar ให้ทำงานต่อ
+          handleNavbar();
+        });
+      }
+
       initReveal();
       handleNavbar();
     });
@@ -914,5 +1033,73 @@
 
     window.addEventListener('scroll', handleNavbar, { passive: true });
   </script>
+  <script>
+  (function(){
+    const btn      = document.getElementById('codePopupBtn');
+    const overlay  = document.getElementById('codePopupOverlay');
+    const closeBtn = document.getElementById('codePopupClose');
+    const copyBtn  = document.getElementById('copyCodeBtn');
+    const display  = document.getElementById('codeDisplay');
+    const lineBadge= document.getElementById('lineCountBadge');
+
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function colorize(h){
+      return h
+        .replace(/(&lt;\/?)([\w-]+)/g,'<b style="color:#f47e7e">$1$2</b>')
+        .replace(/([\w-]+=)(&quot;[^&]*?&quot;)/g,'<span style="color:#e5c07b">$1</span><span style="color:#98c379">$2</span>')
+        .replace(/([\w-]+)(\s*:)(\s*)(#[0-9a-fA-F]{3,8}|[\d.]+px|[\d.]+em|[\d.]+rem|[\d.]+s|[\d.]+%)/g,
+                              '<span style="color:#61afef">$1</span>$2$3<span style="color:#d19a66">$4</span>')
+        .replace(/(\/\*[\s\S]*?\*\/)/g,'<i style="color:#5c6370">$1</i>')
+        .replace(/(\/\/[^\n]*)/g,'<i style="color:#5c6370">$1</i>');
+    }
+
+    function openPopup(){
+      const raw   = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const lines = raw.split('\n');
+      lineBadge.textContent = lines.length.toLocaleString() + ' บรรทัด';
+
+      const colored = colorize(esc(raw).replace(/&amp;quot;/g,'&quot;'));
+
+      const numbered = colored.split('\n').map((l, i) => {
+        const n = String(i + 1).padStart(5, ' ');
+        return '<span style="color:#2d2d2d;user-select:none;margin-right:20px;display:inline-block;min-width:36px;text-align:right;border-right:1px solid #2d2d2d;padding-right:12px">'
+               + n + '</span>' + l;
+      }).join('\n');
+
+      display.innerHTML = numbered;
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePopup(){
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', openPopup);
+    closeBtn.addEventListener('click', closePopup);
+    overlay.addEventListener('click', e => { if(e.target === overlay) closePopup(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closePopup(); });
+
+    copyBtn.addEventListener('click', function(){
+      const raw = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      navigator.clipboard.writeText(raw).then(() => {
+        const txt = document.getElementById('copyCodeTxt');
+        txt.textContent = 'คัดลอกแล้ว ✓';
+        copyBtn.style.cssText += ';background:rgba(40,200,64,0.15)!important;border-color:rgba(40,200,64,0.4)!important;color:#28c840!important';
+        copyBtn.dataset.copied = '1';
+        setTimeout(() => {
+          txt.textContent = 'คัดลอก';
+          copyBtn.style.background = 'rgba(255,0,0,0.1)';
+          copyBtn.style.borderColor = 'rgba(255,0,0,0.3)';
+          copyBtn.style.color = '#ff3333';
+          delete copyBtn.dataset.copied;
+        }, 2500);
+      });
+    });
+  })();
+  </script>
+
 </body>
 </html>
