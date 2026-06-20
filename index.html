@@ -3,328 +3,469 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบเก็บขยะแลกแต้ม</title>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>ขยะแลกแต้ม - Eco Points</title>
+<link rel="stylesheet" href="index.Node.js">
 <style>
   :root{
-    --blue:#0038a8;
-    --blue-dark:#001a4d;
+    --red:#e63946;
+    --blue:#1d3557;
+    --lightblue:#457b9d;
     --white:#ffffff;
-    --red:#ce1126;
-    --gray:#f2f4f8;
-    --dark:#2b2b2b;
-    --radius:16px;
+    --bg:#f1faee;
   }
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Kanit',sans-serif;}
-  body{background:var(--gray);color:var(--dark);min-height:100vh;}
-
-  /* ---------- LOGIN ---------- */
-  #login-section{
-    display:flex;justify-content:center;align-items:center;min-height:100vh;
-    background:linear-gradient(135deg,var(--blue) 0%, var(--blue) 45%, var(--white) 45%, var(--white) 55%, var(--red) 55%, var(--red) 100%);
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif;}
+  body{background:var(--bg);color:var(--blue);}
+  header{
+    background:linear-gradient(135deg,var(--blue),var(--red));
+    color:var(--white);
     padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
   }
-  .login-card{
-    background:var(--white);padding:clamp(28px,5vw,48px);border-radius:var(--radius);
-    box-shadow:0 15px 35px rgba(0,0,0,0.2);width:100%;max-width:420px;text-align:center;
+  header h1{font-size:1.6rem;}
+  header h1 span{color:#ffe66d;}
+  nav button{
+    background:var(--white);
+    color:var(--blue);
+    border:none;
+    padding:8px 16px;
+    margin-left:8px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.2s;
   }
-  .login-card i.fa-recycle{font-size:clamp(2.8rem,8vw,3.6rem);color:var(--blue);margin-bottom:12px;}
-  .login-card h2{color:var(--blue);font-size:clamp(1.2rem,4vw,1.5rem);margin-bottom:6px;}
-  .login-card p{color:#777;font-size:0.9rem;margin-bottom:26px;}
-  .input-group{margin-bottom:16px;text-align:left;}
-  .input-group label{display:block;font-size:0.85rem;color:#555;margin-bottom:6px;}
-  .input-group input{
-    width:100%;padding:12px 14px;border:2px solid #ddd;border-radius:10px;
-    font-size:1rem;font-family:'Kanit',sans-serif;transition:.2s;
+  nav button:hover{background:var(--red);color:var(--white);}
+  .container{max-width:1000px;margin:30px auto;padding:0 16px;}
+  .card{
+    background:var(--white);
+    border-radius:14px;
+    padding:24px;
+    margin-bottom:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    border-left:6px solid var(--red);
   }
-  .input-group input:focus{outline:none;border-color:var(--blue);}
-  .btn-login{
-    width:100%;padding:13px;background:var(--blue);color:white;border:none;
-    border-radius:10px;font-size:1rem;font-weight:500;cursor:pointer;margin-top:8px;
-    transition:.2s;
-  }
-  .btn-login:hover{background:var(--blue-dark);}
-  .btn-login:disabled{opacity:.6;cursor:not-allowed;}
-  #login-error{color:var(--red);font-size:0.85rem;margin-top:14px;min-height:18px;}
-
-  /* ---------- APP ---------- */
-  #main-app{display:none;}
-  nav{
-    background:var(--blue);color:white;padding:14px 0;position:sticky;top:0;z-index:100;
-    box-shadow:0 2px 8px rgba(0,0,0,0.15);
-  }
-  .nav-container{
-    display:flex;justify-content:space-around;max-width:900px;margin:0 auto;flex-wrap:wrap;
-    gap:4px;padding:0 10px;
-  }
-  .nav-item{
-    cursor:pointer;text-align:center;font-size:0.85rem;opacity:0.75;transition:.2s;
-    padding:4px 8px;border-radius:8px;
-  }
-  .nav-item.active{opacity:1;background:rgba(255,255,255,0.12);}
-  .nav-item i{display:block;font-size:1.15rem;margin-bottom:3px;}
-
-  .content-container{max-width:900px;margin:24px auto;padding:0 18px 70px;}
-  .tab-content{display:none;}
-  .tab-content.active{display:block;animation:fadeIn .3s;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-
-  /* member card */
-  .member-card{
-    background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:white;
-    padding:clamp(22px,4vw,32px);border-radius:20px;position:relative;overflow:hidden;
-    box-shadow:0 12px 24px rgba(0,0,0,0.2);margin-bottom:20px;
-  }
-  .member-card::after{
-    content:"";position:absolute;top:-60px;right:-60px;width:160px;height:160px;
-    background:var(--red);border-radius:50%;opacity:0.8;
-  }
-  .card-header{font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;opacity:.85;}
-  .card-id-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;position:relative;z-index:1;}
-  .user-info h1{font-size:clamp(1.2rem,3.5vw,1.6rem);margin-bottom:4px;}
-  .user-info p{font-size:0.85rem;opacity:0.85;}
+  .card h2{color:var(--blue);margin-bottom:14px;}
   .points-box{
-    margin-top:18px;background:rgba(255,255,255,0.12);padding:16px 20px;border-radius:12px;
-    display:inline-block;position:relative;z-index:1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--blue);
+    color:var(--white);
+    padding:20px;
+    border-radius:14px;
+    margin-bottom:20px;
   }
-  .points-box span{font-size:clamp(2rem,6vw,2.6rem);font-weight:700;color:#fff;}
-  .points-box small{opacity:.85;}
-
-  .info-box{background:white;padding:20px;border-radius:var(--radius);border-left:5px solid var(--blue);box-shadow:0 4px 12px rgba(0,0,0,0.05);}
-  .info-box h3{color:var(--blue);margin-bottom:6px;}
-  .info-box p{color:#666;font-size:0.9rem;}
-
-  /* rewards */
-  .reward-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;}
-  .reward-item{
-    background:white;border-radius:14px;overflow:hidden;text-align:center;
-    border-bottom:4px solid var(--blue);box-shadow:0 4px 12px rgba(0,0,0,0.06);
-    transition:.2s;
+  .points-box h2{color:#ffe66d;font-size:2rem;}
+  .points-box p{font-size:0.9rem;opacity:0.9;}
+  form{display:flex;flex-wrap:wrap;gap:12px;}
+  select,input{
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    flex:1;
+    min-width:140px;
   }
-  .reward-item.affordable{border-bottom-color:var(--red);}
-  .reward-item:hover{transform:translateY(-3px);}
-  .reward-img{height:110px;background:#eef1fa;display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:2.6rem;}
-  .reward-info{padding:14px;}
-  .reward-info h4{margin-bottom:6px;font-size:0.95rem;}
-  .reward-info p{color:var(--red);font-weight:bold;font-size:0.9rem;}
-  .reward-status{
-    margin-top:8px;font-size:0.75rem;padding:4px 8px;border-radius:6px;display:inline-block;
-    background:#eee;color:#888;
+  button.submit-btn{
+    background:var(--red);
+    color:white;
+    border:none;
+    padding:10px 24px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
   }
-  .reward-status.ok{background:#e3f4e6;color:#1e8e3e;}
+  button.submit-btn:hover{background:#c1121f;}
+  table{width:100%;border-collapse:collapse;margin-top:10px;}
+  th,td{padding:10px;text-align:left;border-bottom:1px solid #ddd;}
+  th{background:var(--lightblue);color:white;}
+  tr:hover{background:#f8f8f8;}
 
-  h2.section-title{margin-bottom:18px;color:var(--blue);font-size:clamp(1.1rem,3vw,1.4rem);}
-
-  /* logout in nav */
-  #btn-logout{color:#ffd9d9;}
-
-  @media (max-width:480px){
-    .nav-item span.label{display:none;}
-    .nav-item{font-size:0.7rem;}
+  /* Student ID Card */
+  .id-card{
+    width:340px;
+    background:var(--white);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+    border:3px solid var(--blue);
+    margin:0 auto;
+  }
+  .id-top{
+    background:linear-gradient(90deg,var(--red),var(--blue));
+    color:white;
+    text-align:center;
+    padding:10px;
+    font-weight:bold;
+    letter-spacing:1px;
+  }
+  .id-body{
+    display:flex;
+    padding:16px;
+    gap:14px;
+  }
+  .id-photo{
+    width:80px;
+    height:90px;
+    background:#ddd;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.7rem;
+    color:#777;
+    border:2px solid var(--blue);
+    overflow:hidden;
+  }
+  .id-photo img{width:100%;height:100%;object-fit:cover;}
+  .id-info{flex:1;font-size:0.85rem;}
+  .id-info p{margin:3px 0;}
+  .id-info b{color:var(--red);}
+  .id-bottom{
+    background:var(--bg);
+    text-align:center;
+    padding:8px;
+    font-size:0.75rem;
+    color:var(--blue);
+    border-top:2px dashed var(--lightblue);
+  }
+  .id-form{display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto 20px;}
+  .id-form input,.id-form select{width:100%;}
+  .badge{
+    display:inline-block;
+    background:var(--red);
+    color:white;
+    padding:3px 10px;
+    border-radius:12px;
+    font-size:0.75rem;
+  }
+  .hidden{display:none;}
+  footer{
+    text-align:center;
+    padding:20px;
+    color:var(--blue);
+    font-size:0.85rem;
+  }
+  @media(max-width:600px){
+    header{flex-direction:column;gap:10px;text-align:center;}
+    form{flex-direction:column;}
   }
 </style>
 </head>
 <body>
 
-  <!-- หน้าเข้าสู่ระบบ -->
-  <section id="login-section">
-    <div class="login-card">
-      <i class="fa-solid fa-recycle"></i>
-      <h2>โครงการเก็บขยะแลกแต้ม</h2>
-      <p>เข้าสู่ระบบด้วยชื่อ-นามสกุล และรหัสนักเรียน 4 หลัก</p>
+<header>
+  <h1>♻️ Eco<span>Points</span></h1>
+  <nav>
+    <button onclick="showSection('home')">หน้าหลัก</button>
+    <button onclick="showSection('idcard')">บัตรนักเรียน</button>
+    <button onclick="showSection('history')">ประวัติ</button>
+    <button onclick="showSection('reward')">แลกของรางวัล</button>
+  </nav>
+</header>
 
-      <form id="login-form">
-        <div class="input-group">
-          <label>ชื่อจริง</label>
-          <input type="text" id="input-firstname" required placeholder="ชื่อจริง">
-        </div>
-        <div class="input-group">
-          <label>นามสกุล</label>
-          <input type="text" id="input-lastname" required placeholder="นามสกุล">
-        </div>
-        <div class="input-group">
-          <label>รหัสผ่าน (เลขนักเรียน 4 หลัก)</label>
-          <input type="password" id="input-password" required maxlength="4" inputmode="numeric" pattern="[0-9]{4}" placeholder="0000">
-        </div>
-        <button type="submit" class="btn-login" id="btn-login">เข้าสู่ระบบ</button>
+<div class="container">
+
+  <!-- หน้าหลัก -->
+  <div id="home" class="section">
+    <div class="points-box">
+      <div>
+        <p>แต้มสะสมของคุณ</p>
+        <h2 id="pointsDisplay">0 แต้ม</h2>
+      </div>
+      <div style="text-align:right;">
+        <p id="nameDisplay">ยังไม่ได้สร้างบัตรนักเรียน</p>
+        <span class="badge" id="levelBadge">ระดับ: มือใหม่</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🗑️ บันทึกการทิ้งขยะแลกแต้ม</h2>
+      <form id="trashForm">
+        <select id="trashType" required>
+          <option value="">-- เลือกประเภทขยะ --</option>
+          <option value="plastic">ขวดพลาสติก (5 แต้ม/ขวด)</option>
+          <option value="paper">กระดาษ (3 แต้ม/กก.)</option>
+          <option value="can">กระป๋องอลูมิเนียม (8 แต้ม/ชิ้น)</option>
+          <option value="glass">แก้ว (4 แต้ม/ชิ้น)</option>
+          <option value="electronic">ขยะอิเล็กทรอนิกส์ (15 แต้ม/ชิ้น)</option>
+        </select>
+        <input type="number" id="trashAmount" min="1" placeholder="จำนวน" required>
+        <button type="submit" class="submit-btn">เพิ่มแต้ม</button>
       </form>
-      <p id="login-error"></p>
     </div>
-  </section>
 
-  <!-- หน้าหลักของแอป -->
-  <section id="main-app">
-    <nav>
-      <div class="nav-container">
-        <div class="nav-item active" onclick="switchTab('tab-member', this)">
-          <i class="fa-solid fa-id-card"></i><span class="label">บัตรสมาชิก</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('tab-rewards', this)">
-          <i class="fa-solid fa-gift"></i><span class="label">ของรางวัล</span>
-        </div>
-        <div class="nav-item" id="btn-logout">
-          <i class="fa-solid fa-right-from-bracket"></i><span class="label">ออกระบบ</span>
-        </div>
-      </div>
-    </nav>
+    <div class="card">
+      <h2>📊 อัตราแต้มต่อขยะแต่ละชนิด</h2>
+      <table>
+        <tr><th>ประเภทขยะ</th><th>แต้มที่ได้</th></tr>
+        <tr><td>ขวดพลาสติก</td><td>5 แต้ม / ขวด</td></tr>
+        <tr><td>กระดาษ</td><td>3 แต้ม / กก.</td></tr>
+        <tr><td>กระป๋องอลูมิเนียม</td><td>8 แต้ม / ชิ้น</td></tr>
+        <tr><td>แก้ว</td><td>4 แต้ม / ชิ้น</td></tr>
+        <tr><td>ขยะอิเล็กทรอนิกส์</td><td>15 แต้ม / ชิ้น</td></tr>
+      </table>
+    </div>
+  </div>
 
-    <div class="content-container">
-      <!-- บัตรสมาชิก -->
-      <div id="tab-member" class="tab-content active">
-        <div class="member-card">
-          <div class="card-header">Trash to Treasure Member</div>
-          <div class="card-id-row">
-            <div class="user-info">
-              <h1 id="user-display-name">Loading...</h1>
-              <p id="user-display-id">รหัสนักเรียน: ----</p>
-            </div>
-          </div>
-          <div class="points-box">
-            <p style="font-size:0.8rem;opacity:0.9;">แต้มสะสมปัจจุบัน</p>
-            <span id="user-display-points">0</span> <small>Points</small>
-          </div>
-        </div>
-        <div class="info-box">
-          <h3>ยินดีต้อนรับสู่ระบบแลกของรางวัล</h3>
-          <p>นำขยะมาส่งที่จุดคัดแยกเพื่อรับแต้มเพิ่มได้จากแอดมิน</p>
-        </div>
-      </div>
-
-      <!-- ของรางวัล -->
-      <div id="tab-rewards" class="tab-content">
-        <h2 class="section-title">ของรางวัลทั้งหมด</h2>
-        <div class="reward-grid" id="reward-grid">
-          <p style="padding:20px;text-align:center;color:#888;">กำลังโหลดของรางวัล...</p>
-        </div>
+  <!-- บัตรนักเรียน -->
+  <div id="idcard" class="section hidden">
+    <div class="card">
+      <h2>🪪 สร้าง/แก้ไขบัตรนักเรียน</h2>
+      <div class="id-form">
+        <input type="text" id="stuName" placeholder="ชื่อ-นามสกุล">
+        <input type="text" id="stuId" placeholder="รหัสนักเรียน">
+        <input type="text" id="stuClass" placeholder="ชั้น/ห้อง">
+        <input type="text" id="stuSchool" placeholder="ชื่อโรงเรียน">
+        <input type="file" id="stuPhoto" accept="image/*">
+        <button class="submit-btn" onclick="saveStudent()">บันทึกบัตร</button>
       </div>
     </div>
-  </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // ⚠️ วาง Supabase Config ของคุณตรงนี้ ⚠️
-    const SUPABASE_URL = "https://mrnuyhcfogqrvkjttzzt.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_nu_ojLfy8ehumJTQ5fa6hg_7uT2IPHp";
-
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    let currentUser = null;
-    const SESSION_KEY = "trash_points_session";
-
-    // ---------- LOGIN ----------
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const firstName = document.getElementById('input-firstname').value.trim();
-      const lastName = document.getElementById('input-lastname').value.trim();
-      const password = document.getElementById('input-password').value.trim();
-      const errorEl = document.getElementById('login-error');
-      const btn = document.getElementById('btn-login');
-
-      errorEl.textContent = "";
-
-      if (!/^[0-9]{4}$/.test(password)) {
-        errorEl.textContent = "รหัสผ่านต้องเป็นเลขนักเรียน 4 หลัก";
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = "กำลังตรวจสอบ...";
-
-      const { data, error } = await supabase
-        .from('students')
-        .select('*')
-        .ilike('first_name', firstName)
-        .ilike('last_name', lastName)
-        .eq('student_id', password)
-        .maybeSingle();
-
-      btn.disabled = false;
-      btn.textContent = "เข้าสู่ระบบ";
-
-      if (error) {
-        errorEl.textContent = "เกิดข้อผิดพลาด: " + error.message;
-        return;
-      }
-      if (!data) {
-        errorEl.textContent = "ชื่อ นามสกุล หรือรหัสผ่านไม่ถูกต้อง";
-        return;
-      }
-
-      currentUser = data;
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
-      showApp();
-    });
-
-    // ---------- SHOW APP ----------
-    function showApp() {
-      document.getElementById('login-section').style.display = 'none';
-      document.getElementById('main-app').style.display = 'block';
-
-      document.getElementById('user-display-name').innerText =
-        `${currentUser.first_name} ${currentUser.last_name}`;
-      document.getElementById('user-display-id').innerText =
-        `รหัสนักเรียน: ${currentUser.student_id}`;
-      document.getElementById('user-display-points').innerText =
-        currentUser.points.toLocaleString();
-
-      loadRewards();
-    }
-
-    // ---------- REWARDS ----------
-    async function loadRewards() {
-      const grid = document.getElementById('reward-grid');
-      const { data: rewards, error } = await supabase
-        .from('rewards')
-        .select('*')
-        .order('points_required', { ascending: true });
-
-      if (error) {
-        grid.innerHTML = `<p style="padding:20px;color:red;text-align:center;">โหลดของรางวัลไม่สำเร็จ: ${error.message}</p>`;
-        return;
-      }
-
-      grid.innerHTML = "";
-      rewards.forEach(r => {
-        const canAfford = currentUser.points >= r.points_required;
-        const item = document.createElement('div');
-        item.className = "reward-item" + (canAfford ? " affordable" : "");
-        item.innerHTML = `
-          <div class="reward-img"><i class="fa-solid ${r.icon || 'fa-gift'}"></i></div>
-          <div class="reward-info">
-            <h4>${r.name}</h4>
-            <p>${r.points_required.toLocaleString()} แต้ม</p>
-            <span class="reward-status ${canAfford ? 'ok' : ''}">
-              ${canAfford ? 'แลกได้แล้ว' : 'แต้มยังไม่พอ'}
-            </span>
+    <div class="card">
+      <h2 style="text-align:center;">ตัวอย่างบัตรนักเรียน</h2>
+      <div class="id-card">
+        <div class="id-top">บัตรสะสมแต้ม EcoPoints</div>
+        <div class="id-body">
+          <div class="id-photo" id="cardPhoto">ไม่มีรูป</div>
+          <div class="id-info">
+            <p><b>ชื่อ:</b> <span id="cardName">-</span></p>
+            <p><b>รหัสนักเรียน:</b> <span id="cardId">-</span></p>
+            <p><b>ชั้น:</b> <span id="cardClass">-</span></p>
+            <p><b>โรงเรียน:</b> <span id="cardSchool">-</span></p>
+            <p><b>แต้มสะสม:</b> <span id="cardPoints">0</span></p>
           </div>
-        `;
-        grid.appendChild(item);
-      });
-    }
+        </div>
+        <div class="id-bottom">ใช้บัตรนี้ทุกครั้งที่ทิ้งขยะแลกแต้ม</div>
+      </div>
+    </div>
+  </div>
 
-    // ---------- TAB SWITCH ----------
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      el.classList.add('active');
-    }
+  <!-- ประวัติ -->
+  <div id="history" class="section hidden">
+    <div class="card">
+      <h2>📜 ประวัติการทิ้งขยะ</h2>
+      <table id="historyTable">
+        <tr><th>วันที่</th><th>ประเภทขยะ</th><th>จำนวน</th><th>แต้มที่ได้</th></tr>
+      </table>
+    </div>
+  </div>
 
-    // ---------- LOGOUT ----------
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      sessionStorage.removeItem(SESSION_KEY);
-      location.reload();
+  <!-- แลกของรางวัล -->
+  <div id="reward" class="section hidden">
+    <div class="card">
+      <h2>🎁 แลกของรางวัล</h2>
+      <table>
+        <tr><th>ของรางวัล</th><th>แต้มที่ใช้</th><th></th></tr>
+        <tr><td>ดินสอ EcoPoints</td><td>20 แต้ม</td><td><button class="submit-btn" onclick="redeem(20,'ดินสอ EcoPoints')">แลก</button></td></tr>
+        <tr><td>สมุดรีไซเคิล</td><td>40 แต้ม</td><td><button class="submit-btn" onclick="redeem(40,'สมุดรีไซเคิล')">แลก</button></td></tr>
+        <tr><td>กระเป๋าผ้า</td><td>80 แต้ม</td><td><button class="submit-btn" onclick="redeem(80,'กระเป๋าผ้า')">แลก</button></td></tr>
+        <tr><td>ขวดน้ำสแตนเลส</td><td>150 แต้ม</td><td><button class="submit-btn" onclick="redeem(150,'ขวดน้ำสแตนเลส')">แลก</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 EcoPoints | โครงการเก็บขยะแลกแต้มเพื่อโลกสีเขียว</footer>
+
+<script>
+let points = 0;
+let student = {name:"",id:"",cls:"",school:"",photo:""};
+let history = [];
+
+const rates = {plastic:5,paper:3,can:8,glass:4,electronic:15};
+const names = {plastic:"ขวดพลาสติก",paper:"กระดาษ",can:"กระป๋องอลูมิเนียม",glass:"แก้ว",electronic:"ขยะอิเล็กทรอนิกส์"};
+
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function updatePointsDisplay(){
+  document.getElementById('pointsDisplay').textContent = points + ' แต้ม';
+  document.getElementById('cardPoints').textContent = points;
+  let level = 'มือใหม่';
+  if(points>=300) level='ปรมาจารย์รีไซเคิล 🌟';
+  else if(points>=150) level='นักอนุรักษ์ตัวจริง 🌿';
+  else if(points>=50) level='นักรีไซเคิลฝึกหัด ♻️';
+  document.getElementById('levelBadge').textContent = 'ระดับ: ' + level;
+}
+
+document.getElementById('trashForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const type = document.getElementById('trashType').value;
+  const amount = parseInt(document.getElementById('trashAmount').value);
+  if(!type || !amount) return;
+  const earned = rates[type]*amount;
+  points += earned;
+  updatePointsDisplay();
+
+  const date = new Date().toLocaleDateString('th-TH');
+  history.push({date, type:names[type], amount, earned});
+  renderHistory();
+
+  document.getElementById('trashForm').reset();
+  alert(`คุณได้รับ ${earned} แต้มจากการทิ้ง ${names[type]} จำนวน ${amount}`);
+});
+
+function renderHistory(){
+  const table = document.getElementById('historyTable');
+  table.innerHTML = '<tr><th>วันที่</th><th>ประเภทขยะ</th><th>จำนวน</th><th>แต้มที่ได้</th></tr>';
+  history.slice().reverse().forEach(h=>{
+    const row = `<tr><td>${h.date}</td><td>${h.type}</td><td>${h.amount}</td><td>+${h.earned}</td></tr>`;
+    table.innerHTML += row;
+  });
+}
+
+function saveStudent(){
+  student.name = document.getElementById('stuName').value || '-';
+  student.id = document.getElementById('stuId').value || '-';
+  student.cls = document.getElementById('stuClass').value || '-';
+  student.school = document.getElementById('stuSchool').value || '-';
+
+  document.getElementById('cardName').textContent = student.name;
+  document.getElementById('cardId').textContent = student.id;
+  document.getElementById('cardClass').textContent = student.cls;
+  document.getElementById('cardSchool').textContent = student.school;
+  document.getElementById('nameDisplay').textContent = student.name + ' (' + student.id + ')';
+
+  const photoInput = document.getElementById('stuPhoto');
+  if(photoInput.files && photoInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      document.getElementById('cardPhoto').innerHTML = `<img src="${e.target.result}">`;
+    };
+    reader.readAsDataURL(photoInput.files[0]);
+  }
+  alert('บันทึกบัตรนักเรียนเรียบร้อยแล้ว!');
+}
+
+function redeem(cost, name){
+  if(points < cost){
+    alert('แต้มไม่พอสำหรับแลก ' + name);
+    return;
+  }
+  points -= cost;
+  updatePointsDisplay();
+  alert(`แลก "${name}" สำเร็จ! ใช้ไป ${cost} แต้ม`);
+}
+
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
+
+const app = express();
+const PORT = 3000;
+
+// ตั้งค่าให้รับส่งข้อมูลขนาดใหญ่ได้ (สำหรับรูปภาพ Base64)
+app.use(express.json({ limit: '10mb' }));
+app.use(cors());
+
+// สร้าง/เชื่อมต่อฐานข้อมูล
+const db = new sqlite3.Database('./ecopoints.db', (err) => {
+    if (err) console.error(err.message);
+    else console.log('เชื่อมต่อฐานข้อมูล SQLite สำเร็จ');
+});
+
+// สร้างตาราง
+db.serialize(() => {
+    db.run(`CREATE TABLE IF NOT EXISTS students (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        cls TEXT,
+        school TEXT,
+        photo TEXT,
+        points INTEGER DEFAULT 0
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id TEXT,
+        date TEXT,
+        type TEXT,
+        amount INTEGER,
+        earned INTEGER
+    )`);
+});
+
+// 1. บันทึก/อัปเดต ข้อมูลนักเรียน
+app.post('/api/student', (req, res) => {
+    const { id, name, cls, school, photo } = req.body;
+    if (!id) return res.status(400).json({ error: 'ต้องระบุรหัสนักเรียน' });
+
+    // ใช้การ Upsert (ถ้ามีรหัสนี้แล้วให้อัปเดต ถ้าไม่มีให้สร้างใหม่)
+    const sql = `
+        INSERT INTO students (id, name, cls, school, photo) 
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET 
+        name=excluded.name, cls=excluded.cls, school=excluded.school, photo=excluded.photo
+    `;
+    db.run(sql, [id, name, cls, school, photo], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'บันทึกข้อมูลสำเร็จ' });
     });
+});
 
-    // ---------- AUTO LOGIN ON REFRESH ----------
-    (function checkSession() {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (saved) {
-        currentUser = JSON.parse(saved);
-        showApp();
-      }
-    })();
-  </script>
+// 2. ดึงข้อมูลนักเรียนและประวัติด้วยรหัสนักเรียน
+app.get('/api/student/:id', (req, res) => {
+    const { id } = req.params;
+    db.get(`SELECT * FROM students WHERE id = ?`, [id], (err, student) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!student) return res.status(404).json({ error: 'ไม่พบข้อมูล' });
+
+        db.all(`SELECT * FROM history WHERE student_id = ? ORDER BY id DESC`, [id], (err, history) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ student, history });
+        });
+    });
+});
+
+// 3. บันทึกการทิ้งขยะและเพิ่มแต้ม
+app.post('/api/trash', (req, res) => {
+    const { student_id, type, amount, earned, date } = req.body;
+    
+    db.run(`INSERT INTO history (student_id, date, type, amount, earned) VALUES (?, ?, ?, ?, ?)`, 
+    [student_id, date, type, amount, earned], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+
+        db.run(`UPDATE students SET points = points + ? WHERE id = ?`, [earned, student_id], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ message: 'บันทึกประวัติและเพิ่มแต้มสำเร็จ' });
+        });
+    });
+});
+
+// 4. แลกของรางวัล (ตัดแต้ม)
+app.post('/api/redeem', (req, res) => {
+    const { student_id, cost, item_name, date } = req.body;
+
+    db.get(`SELECT points FROM students WHERE id = ?`, [student_id], (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!row || row.points < cost) return res.status(400).json({ error: 'แต้มไม่พอ' });
+
+        // บันทึกประวัติการแลกของเป็นค่าติดลบ
+        db.run(`INSERT INTO history (student_id, date, type, amount, earned) VALUES (?, ?, ?, ?, ?)`, 
+        [student_id, date, 'แลกรางวัล: ' + item_name, 1, -cost]);
+
+        // ตัดแต้ม
+        db.run(`UPDATE students SET points = points - ? WHERE id = ?`, [cost, student_id], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ message: 'แลกของรางวัลสำเร็จ' });
+        });
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`https://mrnuyhcfogqrvkjttzzt.supabase.colocalhost:${PORT}`);
+});
+
+updatePointsDisplay();
+</script>
+
 </body>
 </html>
