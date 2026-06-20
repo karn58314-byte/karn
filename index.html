@@ -1,1105 +1,298 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>สภานักเรียน — Student Council 2569</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --red:       #ff0000;
-      --red-deep:  #cc0000;
-      --red-mid:   #ff3333;
-      --red-glow:  rgba(255,0,0,0.13);
-      --g900: #111111;
-      --g800: #1e1e1e;
-      --g700: #2d2d2d;
-      --g600: #444444;
-      --g400: #7a7a7a;
-      --g200: #c8c8c8;
-      --white: #ffffff;
-      --font: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
-      --nav-h: 60px;
-      --px: clamp(16px, 5vw, 80px);
-      --py: clamp(48px, 7vw, 100px);
-    }
-
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      background: var(--g900);
-      color: var(--white);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── WELCOME POPUP STYLES ── */
-    .popup-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: rgba(11, 11, 11, 0.95);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-    .popup-box {
-      background: #1e1e1e;
-      border: 1px solid #444;
-      border-top: 4px solid var(--red);
-      width: 100%;
-      max-width: 460px;
-      padding: 32px 24px 40px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.8), 0 0 40px rgba(255,0,0,0.15);
-      position: relative;
-      animation: popupPopIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes popupPopIn {
-      from { opacity: 0; transform: scale(0.95) translateY(15px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .popup-header-dots {
-      display: flex; gap: 6px; position: absolute; top: 16px; left: 20px;
-    }
-    .popup-header-dots span {
-      width: 8px; height: 8px; border-radius: 50%; display: block; background: #444;
-    }
-    .popup-header-dots span:nth-child(1) { background: var(--red); }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบเก็บขยะแลกแต้ม - Google Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .popup-body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .popup-tag {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--g400); margin-bottom: 24px; margin-top: 8px;
-    }
-    .popup-logo {
-      width: 120px; height: auto; display: block; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(255,0,0,0.3));
-    }
-    .popup-title {
-      font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); margin-bottom: 6px;
-    }
-    .popup-subtitle {
-      font-size: 13px; font-weight: 400; color: var(--g400); margin-bottom: 24px;
-    }
-    .popup-badge {
-      display: inline-flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); border: 1.5px solid var(--red); padding: 6px 20px; border-radius: 50px; margin-bottom: 24px; box-shadow: 0 0 15px rgba(255,0,0,0.15);
-    }
-    .popup-badge .b-txt { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--g200); }
-    .popup-badge .b-num { font-size: 20px; font-weight: 900; color: var(--red-mid); }
-    .popup-desc {
-      font-size: 13px; font-weight: 300; font-style: italic; color: var(--g200); line-height: 1.6; max-width: 340px; margin-bottom: 32px;
-    }
-    .popup-enter-btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 240px; padding: 14px 28px; background: var(--red); color: #fff; border: none; font-family: var(--font); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-    }
-    .popup-enter-btn:hover {
-      background: var(--red-deep); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,0,0,0.4);
-    }
-    .popup-enter-btn svg { transition: transform 0.2s; }
-    .popup-enter-btn:hover svg { transform: translateX(3px); }
+    <style>
+        :root {
+            --blue: #0038a8;
+            --white: #ffffff;
+            --red: #ce1126;
+            --gray: #f4f4f4;
+            --dark: #333;
+        }
 
-    /* ── BASE STYLES ── */
-    #welcome-section {
-      position: relative;
-      min-height: 100vh;
-      background: radial-gradient(circle at center, #260003 0%, var(--g900) 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      padding: 60px 24px;
-      border-bottom: 1px solid var(--g700);
-    }
-    .splash-top {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--g400);
-      text-align: center;
-    }
-    .splash-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      text-align: center;
-      animation: splash-pulse 2.5s infinite ease-in-out;
-    }
-    @keyframes splash-pulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255,0,0,0.15)); }
-      50% { transform: scale(1.02); filter: drop-shadow(0 0 32px rgba(255,0,0,0.45)); }
-    }
-    .splash-logo {
-      width: 100%;
-      max-width: 240px;
-      height: auto;
-      display: block;
-    }
-    .splash-badge-one {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      background: rgba(0, 0, 0, 0.6);
-      border: 2px solid var(--red);
-      padding: 8px 28px;
-      border-radius: 50px;
-      box-shadow: 0 0 24px rgba(255, 0, 0, 0.25);
-    }
-    .splash-badge-one .txt {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      color: var(--g200);
-    }
-    .splash-badge-one .num {
-      font-size: 36px;
-      font-weight: 900;
-      color: var(--red-mid);
-      line-height: 1;
-    }
-    
-    .scroll-hint {
-      font-size: 11px;
-      color: var(--g400);
-      letter-spacing: 0.1em;
-      animation: bounce 2s infinite;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-8px); }
-      60% { transform: translateY(-4px); }
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+        body { background-color: var(--gray); color: var(--dark); }
 
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--g800); }
-    ::-webkit-scrollbar-thumb { background: var(--red); }
+        /* --- หน้า Login --- */
+        #login-section {
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            background: linear-gradient(135deg, var(--blue) 50%, var(--red) 50%); padding: 20px;
+        }
+        .login-card {
+            background: var(--white); padding: 40px; border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center;
+        }
+        .login-card h2 { margin-bottom: 10px; color: var(--blue); }
+        .login-card p { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+        
+        /* ปุ่ม Google Login สไตล์มินิมอล */
+        .btn-google {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 12px; background: white; color: #444;
+            border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; font-weight: 500;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-google:hover { background: #f5f5f5; border-color: #bbb; }
+        .btn-google img { width: 20px; height: 20px; }
 
-    .tag {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--red-mid); margin-bottom: 14px;
-    }
-    .tag::before { content: ''; width: 16px; height: 2px; background: var(--red); }
+        /* --- หน้าหลักของแอป --- */
+        #main-app { display: none; }
+        nav { background: var(--blue); color: white; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+        .nav-container { display: flex; justify-content: space-around; max-width: 1200px; margin: 0 auto; }
+        .nav-item { cursor: pointer; text-align: center; font-size: 0.9rem; opacity: 0.7; transition: 0.3s; }
+        .nav-item.active { opacity: 1; border-bottom: 2px solid var(--white); }
+        .nav-item i { display: block; font-size: 1.2rem; margin-bottom: 3px; }
+        
+        .content-container { max-width: 800px; margin: 20px auto; padding: 0 20px 80px 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-    .section-title {
-      font-size: clamp(24px, 4vw, 50px);
-      font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
-      margin-bottom: 14px;
-    }
-    .section-lead {
-      font-size: clamp(13px, 1.5vw, 15px);
-      font-weight: 300; color: var(--g400); line-height: 1.8;
-    }
-    .divider { width: 40px; height: 3px; background: var(--red); margin: 18px 0; }
+        /* บัตรสมาชิก */
+        .member-card {
+            background: linear-gradient(135deg, var(--blue), #001a4d); color: white;
+            padding: 30px; border-radius: 20px; position: relative; overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom: 20px;
+        }
+        .member-card::after { content: ""; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--red); border-radius: 50%; opacity: 0.8; }
+        
+        .card-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .avatar { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--white); background: #ccc; }
+        
+        .card-header { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .user-info h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .user-info p { font-size: 0.85rem; opacity: 0.8; }
+        .points-box { margin-top: 15px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; display: inline-block; }
+        .points-box span { font-size: 2.5rem; font-weight: 600; color: #fff; }
 
-    .reveal {
-      opacity: 0; transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible { opacity: 1; transform: none; }
+        /* ของรางวัล */
+        .reward-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .reward-item { background: white; border-radius: 12px; overflow: hidden; text-align: center; border-bottom: 4px solid var(--blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .reward-img { height: 120px; background: #eee; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 3rem; }
+        .reward-info { padding: 15px; }
+        .reward-info p { color: var(--red); font-weight: bold; }
 
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
-      height: var(--nav-h);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--px);
-      background: rgba(17,17,17,0.95);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, box-shadow 0.3s;
-    }
-    nav.nav-hidden {
-      transform: translateY(-100%);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-
-    .nav-logo-img {
-      width: 36px;
-      height: 36px;
-      object-fit: contain;
-      flex-shrink: 0;
-      filter: drop-shadow(0 0 6px rgba(255,0,0,0.35));
-      transition: filter 0.3s;
-    }
-    .nav-logo:hover .nav-logo-img {
-      filter: drop-shadow(0 0 12px rgba(255,0,0,0.65));
-    }
-    .foot-logo-img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 5px rgba(255,0,0,0.3));
-    }
-
-    .nav-brand { display: flex; flex-direction: column; line-height: 1.2; }
-    .nav-brand .th { font-size: 13px; font-weight: 700; color: var(--white); }
-    .nav-brand .en { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g400); }
-
-    .menu-btn {
-      display: flex; align-items: center; gap: 8px;
-      background: none; border: 1.5px solid var(--g600);
-      cursor: pointer; padding: 8px 16px;
-      font-family: var(--font); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--g200);
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
-      position: relative; z-index: 310;
-    }
-    .menu-btn:hover { border-color: var(--red); color: var(--white); }
-    .menu-btn.open  { border-color: var(--red); color: var(--white); background: rgba(255,0,0,0.08); }
-    .menu-btn-icon { display: flex; flex-direction: column; gap: 4px; width: 16px; }
-    .menu-btn-icon span {
-      display: block; height: 1.5px; background: currentColor;
-      transition: transform 0.3s, opacity 0.3s, width 0.3s;
-    }
-    .menu-btn-icon span:nth-child(3) { width: 60%; }
-    .menu-btn.open .menu-btn-icon span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
-    .menu-btn.open .menu-btn-icon span:nth-child(2) { opacity: 0; }
-    .menu-btn.open .menu-btn-icon span:nth-child(3) { width: 100%; transform: translateY(-5.5px) rotate(-45deg); }
-
-    .nav-dropdown {
-      position: fixed;
-      top: var(--nav-h); right: var(--px);
-      width: 220px;
-      background: var(--g800);
-      border: 1px solid var(--g700);
-      border-top: 3px solid var(--red);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-      z-index: 299;
-      opacity: 0; pointer-events: none;
-      transform: translateY(-8px) scaleY(0.95);
-      transform-origin: top right;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-    .nav-dropdown.open { opacity: 1; pointer-events: auto; transform: translateY(0) scaleY(1); }
-    .nav-dropdown a {
-      display: flex; align-items: center; gap: 12px;
-      padding: 14px 20px;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--g200); text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: color 0.2s, background 0.2s, padding-left 0.2s;
-      position: relative;
-    }
-    .nav-dropdown a:last-child { border-bottom: none; }
-    .nav-dropdown a:hover { color: var(--white); background: rgba(255,0,0,0.07); padding-left: 26px; }
-    .nav-dropdown a.active { color: var(--red-mid); }
-    .nav-dropdown a.active::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; background: var(--red);
-    }
-    .nav-dropdown a .di {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--g600); flex-shrink: 0;
-      transition: background 0.2s;
-    }
-    .nav-dropdown a:hover .di,
-    .nav-dropdown a.active .di { background: var(--red); }
-
-    /* PAGE SYSTEM */
-    .page { display: none; }
-    .page.active { display: block; }
-
-    /* MARQUEE */
-    .marquee-wrap {
-      overflow: hidden; background: var(--red);
-      padding: 10px 0;
-      border-top: 1px solid var(--red-deep);
-      border-bottom: 1px solid var(--red-deep);
-    }
-    .marquee-track {
-      display: flex; width: max-content;
-      animation: marquee 22s linear infinite;
-    }
-    .marquee-track span {
-      font-size: 9px; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      padding: 0 28px; white-space: nowrap;
-    }
-    .marquee-track span::after { content: '◆'; margin-left: 28px; color: rgba(255,255,255,0.3); }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-    /* BUTTONS */
-    .btn {
-      display: inline-block; padding: 12px 28px;
-      font-family: var(--font); font-size: 11px;
-      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      cursor: pointer; border: none; text-decoration: none;
-      transition: all 0.25s; text-align: center;
-    }
-    .btn-red  { background: var(--red); color: #fff; }
-    .btn-red:hover  { background: var(--red-deep); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,0,0,0.3); }
-    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid var(--g600); }
-    .btn-outline:hover { border-color: var(--red); color: var(--red-mid); transform: translateY(-2px); }
-
-    /* HOME */
-    .hero {
-      min-height: 100vh;
-      display: grid; grid-template-columns: 1fr 1fr;
-    }
-    #main-hero { scroll-margin-top: var(--nav-h); }
-    .hero-left {
-      display: flex; flex-direction: column; justify-content: center;
-      padding: clamp(40px,6vw,90px) clamp(16px,4vw,60px) clamp(40px,6vw,90px) var(--px);
-      background: var(--g900); position: relative;
-    }
-    .hero-left::before {
-      content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
-      width: 4px; background: linear-gradient(to bottom, transparent, var(--red), transparent);
-    }
-    .hero-eyebrow {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--red-mid); margin-bottom: 18px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .hero-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--red); }
-    .hero-title {
-      font-size: clamp(42px, 6vw, 86px);
-      font-weight: 800; line-height: 1.0;
-      letter-spacing: -0.04em; margin-bottom: 8px;
-    }
-    .hero-title .line2 { display: block; color: var(--red-mid); text-shadow: 0 0 40px rgba(255,0,0,0.3); }
-    .hero-sub { font-size: 12px; font-weight: 400; color: var(--g400); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; }
-    .hero-desc { font-size: clamp(13px, 1.4vw, 15px); font-weight: 300; color: var(--g200); line-height: 1.8; max-width: 400px; margin-bottom: 36px; }
-    .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
-    .hero-right {
-      background: var(--g800); position: relative; overflow: hidden;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .hero-right::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 40% 50%, rgba(255,0,0,0.22) 0%, transparent 68%);
-    }
-    .geo { position: absolute; border: 1px solid rgba(255,255,255,0.05); }
-    .geo-1 { width: 360px; height: 360px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(12deg); animation: g-rot 20s linear infinite; }
-    .geo-2 { width: 240px; height: 240px; top:50%; left:50%; transform:translate(-50%,-50%) rotate(35deg); animation: g-rot 14s linear infinite reverse; }
-    .geo-3 { width: 140px; height: 140px; top:50%; left:50%; transform:translate(-50%,-50%); background: rgba(255,0,0,0.08); border-color: var(--red); animation: g-rot 8s linear infinite; }
-    @keyframes g-rot { to { transform: translate(-50%,-50%) rotate(360deg); } }
-    .hero-center-text { position: relative; z-index: 2; text-align: center; }
-    .hero-year { font-size: clamp(60px,8vw,110px); font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; letter-spacing: -0.05em; }
-    .hero-center-label { position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size: 12px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.8); white-space: nowrap; }
-    .hero-stats { position: absolute; bottom: 32px; left: 0; right: 0; display: flex; justify-content: center; gap: clamp(20px,5vw,56px); }
-    .stat { text-align: center; }
-    .stat-n { font-size: clamp(22px,3vw,34px); font-weight: 800; color: #fff; letter-spacing: -0.03em; }
-    .stat-n em { color: var(--red-mid); font-style: normal; }
-    .stat-l { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--g400); margin-top: 4px; }
-
-    .news-strip { background: var(--g800); padding: var(--py) var(--px); }
-    .news-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px; background: var(--g700); border: 1px solid var(--g700); margin-top: 36px;
-    }
-    .news-card { background: var(--g800); padding: 24px 20px; transition: background 0.3s; position: relative; overflow: hidden; }
-    .news-card::before { content: ''; position: absolute; top:0; left:0; right:0; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.35s; }
-    .news-card:hover::before { transform: scaleX(1); }
-    .news-card:hover { background: var(--g700); }
-    .news-date { font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 8px; }
-    .news-card h3 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
-    .news-card p  { font-size: 12px; font-weight: 300; color: var(--g400); line-height: 1.6; }
-
-    /* PAGE HERO */
-    .page-hero {
-      background: var(--g800);
-      padding: calc(var(--nav-h) + 48px) var(--px) 48px;
-      border-bottom: 1px solid var(--g700);
-      position: relative; overflow: hidden;
-    }
-    .page-hero::after {
-      content: attr(data-wm);
-      position: absolute; right: var(--px); top: 50%; transform: translateY(-50%);
-      font-size: clamp(56px, 10vw, 150px); font-weight: 800;
-      color: rgba(255,255,255,0.025); letter-spacing: -0.05em;
-      white-space: nowrap; pointer-events: none; line-height: 1;
-    }
-
-    /* POLICY */
-    .policy-list { padding: var(--py) var(--px); display: flex; flex-direction: column; gap: 2px; }
-    .policy-item {
-      display: grid; grid-template-columns: 64px 1fr;
-      align-items: start; gap: 20px; padding: 28px 24px;
-      background: var(--g800); border: 1px solid var(--g700);
-      position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s;
-    }
-    .policy-item:hover { background: var(--g700); border-color: var(--red); }
-    .policy-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--red); transform: scaleY(0); transform-origin: top; transition: transform 0.35s; }
-    .policy-item:hover::before { transform: scaleY(1); }
-    .policy-num { font-size: clamp(24px,3vw,34px); font-weight: 800; color: var(--red); line-height: 1; letter-spacing: -0.04em; opacity: 0.55; }
-    .policy-content h3 { font-size: clamp(14px,2vw,18px); font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
-    .policy-content p  { font-size: 13px; font-weight: 300; color: var(--g400); line-height: 1.75; }
-    .policy-badge { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 8px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; background: var(--red-glow); color: var(--red-mid); border: 1px solid rgba(255,0,0,0.25); }
-
-    /* MEMBERS */
-    .members-overview {
-      padding: var(--py) var(--px);
-      display: flex; flex-direction: column; align-items: center; gap: 48px;
-    }
-    .dept-filter {
-      display: flex; flex-wrap: wrap; gap: 0;
-      border: 1px solid var(--g700); overflow: hidden;
-      width: 100%; max-width: 1000px;
-    }
-    .dept-btn {
-      flex: 1; min-width: 120px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 6px; padding: 18px 10px;
-      background: var(--g800); border: none;
-      font-family: var(--font); cursor: pointer;
-      transition: background 0.25s, color 0.25s;
-      border-right: 1px solid var(--g700);
-      position: relative; overflow: hidden;
-    }
-    .dept-btn:last-child { border-right: none; }
-    .dept-btn::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
-    }
-    .dept-btn:hover::before, .dept-btn.active::before { transform: scaleX(1); }
-    .dept-btn.active { background: var(--g700); }
-    .dept-btn:hover  { background: var(--g700); }
-    .dept-btn .di-icon { font-size: 18px; }
-    .dept-btn .di-name { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--g200); transition: color 0.25s; }
-    .dept-btn.active .di-name, .dept-btn:hover .di-name { color: var(--white); }
-    .dept-btn .di-count { font-size: 9px; font-weight: 600; letter-spacing: 0.05em; color: var(--g400); transition: color 0.25s; }
-    .dept-btn.active .di-count { color: var(--red-mid); }
-    .dept-members-grid {
-      width: 100%; max-width: 1000px;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px; transition: all 0.4s ease;
-    }
-    .member-card {
-      background: var(--g800); padding: 28px 20px 20px;
-      position: relative; overflow: hidden; border: 1px solid var(--g700);
-      display: flex; flex-direction: column; align-items: center; text-align: center;
-      transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s, border-color 0.3s;
-    }
-    .member-card.hidden { display: none !important; opacity: 0; transform: scale(0.9) translateY(10px); }
-    .member-card:hover { background: var(--g700); border-color: var(--red); transform: translateY(-4px); }
-    .member-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0;
-      height: 3px; background: var(--red);
-      transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
-    }
-    .member-card:hover::before { transform: scaleX(1); }
-    .member-card.president .member-avatar {
-      background: linear-gradient(135deg, var(--red-deep), var(--red-mid));
-      border-color: var(--red-mid); box-shadow: 0 0 18px rgba(255,0,0,0.4);
-    }
-    .member-pos  { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 5px; text-align: center; }
-    .member-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; line-height: 1.3; text-align: center; }
-    .member-class{ font-size: 11px; font-weight: 300; color: var(--g400); text-align: center; }
-    .member-num  { position: absolute; top: 12px; right: 14px; font-size: 9px; font-weight: 800; color: var(--g600); }
-    .member-card img { width: 85% !important; height: auto !important; max-width: 140px; margin-bottom: 12px; display: block; border-radius: 6px; }
-
-    /* ABOUT */
-    .vm-grid { padding: var(--py) var(--px); display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--g700); }
-    .vm-card { background: var(--g800); padding: 40px 32px; }
-    .vm-card.red-bg { background: var(--red); }
-    .vm-card.red-bg .section-title, .vm-card.red-bg p { color: #fff; }
-    .vm-card.red-bg .tag { color: rgba(255,255,255,0.7); }
-    .vm-card.red-bg .tag::before { background: rgba(255,255,255,0.5); }
-    .vm-card p { font-size: 14px; font-weight: 300; color: var(--g400); line-height: 1.8; }
-    .values-row { padding: 0 var(--px) var(--py); display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 2px; background: var(--g700); }
-    .value-card { background: var(--g900); padding: 28px 20px; border-top: 3px solid transparent; transition: border-color 0.3s, background 0.3s; }
-    .value-card:hover { border-color: var(--red); background: var(--g800); }
-    .value-icon { font-size: 26px; margin-bottom: 12px; }
-    .value-card h3 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-    .value-card p  { font-size: 12px; font-weight: 300; color: var(--g400); line-height: 1.65; }
-
-    .contact-section { background: var(--g800); padding: var(--py) var(--px); border-top: 1px solid var(--g700); }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 40px; align-items: start; }
-    .contact-items { display: flex; flex-direction: column; }
-    .ci { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--g700); }
-    .ci:last-child { border: none; }
-    .ci-icon { width: 42px; height: 42px; flex-shrink: 0; background: var(--red-glow); border: 1px solid rgba(255,0,0,0.22); display: flex; align-items: center; justify-content: center; font-size: 16px; }
-    .ci-label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-mid); margin-bottom: 3px; }
-    .ci-val   { font-size: 13px; font-weight: 400; color: var(--g200); }
-    .qr-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px 32px; background: var(--g900); border: 1px solid var(--g700); text-align: center; }
-    .qr-frame { padding: 0; background: var(--white); border: 3px solid var(--red); box-shadow: 0 0 32px rgba(255,0,0,0.3), 0 0 0 1px rgba(255,0,0,0.15); position: relative; overflow: hidden; width: 100%; max-width: 280px; height: auto; }
-    .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 22px; height: 22px; border-color: var(--red-deep); border-style: solid; z-index: 2; }
-    .qr-frame::before { top: 0; left: 0; border-width: 4px 0 0 4px; }
-    .qr-frame::after  { bottom: 0; right: 0; border-width: 0 4px 4px 0; }
-    .qr-frame img { display: block; width: 100%; height: auto; object-fit: contain; }
-    .qr-handle { font-size: 16px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
-    .qr-handle span { color: var(--red-mid); }
-    .qr-sub { font-size: 11px; font-weight: 400; color: var(--g400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: -16px; }
-    .qr-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border: 1px solid rgba(255,0,0,0.3); background: var(--red-glow); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red-mid); }
-
-    /* FOOTER */
-    footer {
-      background: var(--g900); padding: clamp(24px,4vw,40px) var(--px);
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
-      width: 100%;
-    }
-    .foot-brand { display: flex; align-items: center; gap: 10px; }
-    .foot-brand .th   { font-size: 12px; font-weight: 700; color: var(--white); }
-    .foot-brand .copy { font-size: 10px; font-weight: 300; color: var(--g600); }
-    .foot-nav { display: flex; flex-wrap: wrap; gap: 4px; }
-    .foot-nav button { background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g400); padding: 6px 10px; transition: color 0.2s; }
-    .foot-nav button:hover { color: var(--red-mid); }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .vm-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-      .dept-filter { display: grid; grid-template-columns: 1fr 1fr; }
-      .dept-btn { border-right: 1px solid var(--g700); border-bottom: 1px solid var(--g700); }
-      .dept-btn:nth-child(even) { border-right: none; }
-      .nav-logo-img { width: 28px; height: 28px; }
-    }
-    @media (max-width: 640px) {
-      .hero-btns { flex-direction: column; }
-      .btn { width: 100%; text-align: center; }
-      .policy-item { grid-template-columns: 48px 1fr; gap: 12px; padding: 20px 16px; }
-      .policy-num  { font-size: 20px; }
-      .dept-filter { grid-template-columns: 1fr; }
-      .dept-btn { border-right: none !important; flex-direction: row; justify-content: flex-start; gap: 16px; padding: 14px 20px; }
-      footer { flex-direction: column; text-align: center; }
-      .foot-nav { justify-content: center; }
-    }
-  </style>
+        /* รายการอันดับ */
+        .ranking-list { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .rank-item { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .rank-number { width: 30px; font-weight: bold; color: var(--blue); }
+        .rank-name { flex: 1; }
+        .rank-points { font-weight: bold; color: var(--red); }
+        .rank-item:nth-child(1) .rank-number { color: #FFD700; font-size: 1.4rem; }
+        .rank-item:nth-child(2) .rank-number { color: #C0C0C0; }
+        .rank-item:nth-child(3) .rank-number { color: #CD7F32; }
+    </style>
 </head>
 <body>
 
-  <div id="welcomePopupOverlay" class="popup-overlay">
-    <div class="popup-box">
-      <div class="popup-header-dots">
-        <span></span><span></span><span></span>
-      </div>
-      
-      <div class="popup-body">
-        <span class="popup-tag">ยินดีต้อนรับสู่เว็บไซต์</span>
-        
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Connect Logo" class="popup-logo">
-        
-        <h2 class="popup-title">Connect ตธ.17</h2>
-        <p class="popup-subtitle">สภานักเรียน โรงเรียนตั้งพิรุฬห์ธรรม ปีการศึกษา 2569</p>
-        
-        <div class="popup-badge">
-          <span class="b-txt">เข้าคูหากา</span>
-          <span class="b-num">เบอร์ 1</span>
+    <!-- ส่วนที่ 1: หน้าเข้าสู่ระบบด้วย Google -->
+    <section id="login-section">
+        <div class="login-card">
+            <i class="fa-solid fa-recycle" style="font-size: 3.5rem; color: var(--blue); margin-bottom: 15px;"></i>
+            <h2>โครงการเก็บขยะแลกแต้ม</h2>
+            <p>กรุณาลงชื่อเข้าใช้ด้วยบัญชี Google เพื่อสะสมแต้ม</p>
+            
+            <button class="btn-google" id="btn-google-login">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_認證圖標.svg" alt="Google Logo">
+                เข้าสู่ระบบด้วย Google
+            </button>
         </div>
-        
-        <p class="popup-desc">"เป็นตัวแทนของนักเรียนทุกคน สร้างสรรค์กิจกรรม พัฒนาโรงเรียน ส่งเสริมความเป็นเลิศ"</p>
-        
-        <button id="closeWelcomePopupBtn" class="popup-enter-btn">
-          เข้าสู่เว็บไซต์
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <nav id="mainNav" class="nav-hidden">
-    <a class="nav-logo" href="#" onclick="return showPage('home')">
-      <img
-        src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png"
-        alt="Connect ตธ.17 Logo"
-        class="nav-logo-img"
-      />
-      <div class="nav-brand">
-        <span class="th">Connect ตธ.17</span>
-        <span class="en">เบอร์1</span>
-      </div>
-    </a>
-    <button class="menu-btn" id="menuBtn" aria-label="เมนู">
-      <div class="menu-btn-icon"><span></span><span></span><span></span></div>
-      เมนู
-    </button>
-  </nav>
-
-  <div class="nav-dropdown" id="dropdown">
-    <a href="#" onclick="return navTo('home')"    id="nav-home">   <span class="di"></span>หน้าแรก</a>
-    <a href="#" onclick="return navTo('policy')"  id="nav-policy"> <span class="di"></span>นโยบาย</a>
-    <a href="#" onclick="return navTo('members')" id="nav-members"><span class="di"></span>สมาชิก</a>
-    <a href="#" onclick="return navTo('about')"   id="nav-about">  <span class="di"></span>เกี่ยวกับเรา</a>
-  </div>
-
-
-  <div id="page-home" class="page active">
-    
-    <section id="welcome-section">
-      <div class="splash-top">Student Council 2569 • Connect ตธ.17</div>
-      <div class="splash-center">
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Connect Logo" class="splash-logo">
-        <div class="splash-badge-one">
-          <span class="txt">เลือกพรรค</span>
-          <span class="num">เบอร์ 1</span>
-        </div>
-      </div>
-      <div class="scroll-hint" onclick="document.getElementById('main-hero').scrollIntoView({behavior: 'smooth'})">
-        🔽 เลื่อนลงเพื่อดูรายละเอียดเว็บไซต์
-      </div>
     </section>
 
-    <section class="hero" id="main-hero">
-      <div class="hero-left">
-        <span class="hero-eyebrow">ปีการศึกษา 2569</span>
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="" style="height:auto;width:80%">
-        <p class="hero-sub">Student Council — โรงเรียนตั้งพิรุฬห์ธรรม</p>
-        <p class="hero-desc">เป็นตัวแทนของนักเรียนทุกคน สร้างสรรค์กิจกรรม ส่งเสริมสิทธิ์ และพัฒนาโรงเรียนให้เป็นพื้นที่แห่งการเรียนรู้อย่างยั่งยืน</p>
-        <div class="hero-btns">
-          <a class="btn btn-red"     href="#" onclick="return showPage('policy')">ดูนโยบาย</a>
-          <a class="btn btn-outline" href="#" onclick="return showPage('members')">รู้จักทีม</a>
+    <!-- ส่วนที่ 2: หน้าหลักของแอปพลิเคชัน -->
+    <section id="main-app">
+        <nav>
+            <div class="nav-container">
+                <div class="nav-item active" onclick="switchTab('tab-member', this)">
+                    <i class="fa-solid fa-id-card"></i>บัตรสมาชิก
+                </div>
+                <div class="nav-item" onclick="switchTab('tab-rewards', this)">
+                    <i class="fa-solid fa-gift"></i>ของรางวัล
+                </div>
+                <div class="nav-item" onclick="switchTab('tab-ranking', this)">
+                    <i class="fa-solid fa-trophy"></i>อันดับคะแนน
+                </div>
+                <div class="nav-item" id="btn-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>ออกระบบ
+                </div>
+            </div>
+        </nav>
+
+        <div class="content-container">
+            <!-- แถบ 1: บัตรสมาชิก -->
+            <div id="tab-member" class="tab-content active">
+                <div class="member-card">
+                    <div class="card-header">Trash to Treasure Member</div>
+                    <div class="card-profile">
+                        <img id="user-display-avatar" class="avatar" src="" alt="User Avatar">
+                        <div class="user-info">
+                            <h1 id="user-display-name">Loading...</h1>
+                            <p id="user-display-email">email@domain.com</p>
+                        </div>
+                    </div>
+                    <div class="points-box">
+                        <p style="font-size: 0.8rem; opacity: 0.9;">แต้มสะสมปัจจุบัน</p>
+                        <span id="user-display-points">0</span> <small>Points</small>
+                    </div>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 15px; border-left: 5px solid var(--blue);">
+                    <h3>ยินดีต้อนรับสู่ระบบแลกของรางวัล</h3>
+                    <p style="margin-top: 5px; color: #666;">นำขยะมาส่งที่จุดคัดแยกเพื่อรับแต้มเพิ่มได้จากแอดมิน</p>
+                </div>
+            </div>
+
+            <!-- แถบ 2: ของรางวัล -->
+            <div id="tab-rewards" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: var(--blue);">ของรางวัลทั้งหมด</h2>
+                <div class="reward-grid">
+                    <div class="reward-item"><div class="reward-img"><i class="fa-solid fa-pen"></i></div><div class="reward-info"><h4>ปากกา</h4><p>50 แต้ม</p></div></div>
+                    <div class="reward-item"><div class="reward-img"><i class="fa-solid fa-book"></i></div><div class="reward-info"><h4>สมุดโน้ต</h4><p>150 แต้ม</p></div></div>
+                    <div class="reward-item"><div class="reward-img"><i class="fa-solid fa-bottle-water"></i></div><div class="reward-info"><h4>กระบอกน้ำ</h4><p>500 แต้ม</p></div></div>
+                    <div class="reward-item"><div class="reward-img"><i class="fa-solid fa-shirt"></i></div><div class="reward-info"><h4>เสื้อยืด</h4><p>1,200 แต้ม</p></div></div>
+                </div>
+            </div>
+
+            <!-- แถบ 3: การจัดอันดับคะแนน -->
+            <div id="tab-ranking" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: var(--blue);">การจัดอันดับคะแนนรวมทั้งหมด</h2>
+                <div class="ranking-list" id="ranking-list">
+                    <p style="padding: 20px; text-align: center; color: #888;">กำลังโหลดตารางอันดับ...</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="hero-right">
-        <div class="geo geo-1"></div><div class="geo geo-2"></div><div class="geo geo-3"></div>
-        <div class="hero-center-text">
-          <div class="hero-year">2569</div>
-          <div class="hero-center-label">เข้าคูหากาเบอร์1</div>
-        </div>
-        <div class="hero-stats">
-          <div class="stat"><div class="stat-n">16<em></em></div><div class="stat-l">สมาชิก</div></div>
-          <div class="stat"><div class="stat-n">7<em></em></div><div class="stat-l">นโยบาย</div></div>
-        
-        </div>
-      </div>
     </section>
-    
-    <div class="marquee-wrap">
-      <div class="marquee-track">
-        <span>ตัวแทนนักเรียน</span><span>Student Voice</span><span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span><span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span><span>Community</span><span>ปีการศึกษา 2569</span>
-        <span>ตัวแทนนักเรียน</span><span>Student Voice</span><span>สร้างสรรค์กิจกรรม</span><span>พัฒนาโรงเรียน</span><span>Leadership</span><span>ส่งเสริมความเป็นเลิศ</span><span>Community</span><span>ปีการศึกษา 2569</span>
-      </div>
-    </div>
-    
-    <div class="news-strip">
-      <div class="tag reveal">ข่าวสาร & ประกาศ</div>
-      <h2 class="section-title reveal">ข่าวล่าสุด</h2>
-      <div class="news-grid">
-        <div class="news-card reveal"><div class="news-date">เปิดรับตลอดปีการศึกษา</div><h3>รับสมัครเข้าชมรมจิตอาสา</h3><p>พบพี่ๆจิตอาสาได้ที่โรงอาหารมัธยม รับผชและผญตั้งแต่ม.1-ม.3</p></div>
-        
-        <div class="news-card reveal" style="transition-delay:.08s"><div class="news-date">16 มิ.ย. 2569</div><h3>เข้าคูหาเลือกตั้ง</h3><p>มี5พรรคให้เลือกและอีก1ช่องไม่ลงคะแนนให้พรรคใดเลย</p></div>
-        
-        <div class="news-card reveal" style="transition-delay:.14s"><div class="news-date">18 มิ.ย. 2569</div><h3>กิจกรรม การไหว้ครู</h3><p>ร่วมกันทำความสะอาดโรงเรียนพร้อมกัน เพื่อสิ่งแวดล้อมที่ดีขึ้น</p></div>
-        
-        <div class="news-card reveal" style="transition-delay:.20s"><div class="news-date">16 มิ.ย. 2569</div><h3>ประกาศผลการเลือกตั้ง</h3><p>ประกาศผลการเลือกตั้งคณะกรรมการสภานักเรียนชุดใหม่อย่างเป็นทางการ</p></div>
-        
-      </div>
-    </div>
-    
-    <footer>
-      <div class="foot-brand">
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Logo" class="foot-logo-img"/>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
-    </footer>
-  </div>
 
+    <!-- เชื่อมต่อ Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  <div id="page-policy" class="page">
-    <div class="page-hero" data-wm="POLICY">
-      <span class="tag">นโยบาย 2569</span>
-      <h1 class="section-title">นโยบายสภานักเรียน</h1>
-      <p class="section-lead" style="max-width:500px">นโยบายที่เราตั้งใจดำเนินการเพื่อพัฒนาโรงเรียนและยกระดับคุณภาพชีวิตนักเรียน</p>
-    </div>
-    <div class="policy-list">
-      <div class="policy-item reveal"><div class="policy-num">01</div><div class="policy-content"><h3>พี่สภาให้ยืมร่ม</h3><p>สภาจะจัดเตรียมร่มไว้จุดต่างๆของโรงเรียนนำมาคืน8โมงเช้าของทุกวัน
-  <br>(*หากมีร่มหายเกิน3คันทางเราจะยุบงานนี้ทันที)</p><span class="policy-badge">บริการ</span></div></div>
+        // ⚠️ วาง Firebase Config ของคุณตรงนี้ ⚠️
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-      <div class="policy-item reveal"><div class="policy-num">02</div><div class="policy-content"><h3>Esport (มัธยม) (ประถม 5-6)</h3><p>-ไม่ใช่แค่การเล่นเกม: มีการฝึกซ้อมอย่างเป็น ระบบ มีระเบียบวินัย และต้องอาศัยทักษะเฉพาะตัวสูงเหมือนกีฬาทั่วไป เน้นการวางกลยุทธ์ การทำงานเป็นทีม เน้นฝึก การเล่นเป็นทีม ความสามัคคี</p></p><span class="policy-badge">กิจกรรม</span></div></div>
-      
-      <div class="policy-item reveal"><div class="policy-num">03</div><div class="policy-content"><h3>กล่องคำร้อง</h3><p>ทุกคนสามารถเขียนคำร้องเรียนหรือข้อเสนอแนะ พร้อมระบุชื่อ-นามสกุล ลงบนกระดาษที่จัดเตรียมไว้ แล้วหย่อนใส่กล่องรับคำร้อง</p><span class="policy-badge">การรับฟังปัญหา</span></div></div>
-      
-      <div class="policy-item reveal"><div class="policy-num">04</div><div class="policy-content"><h3>กระดาษห่อผ้าอนามัย</h3><p>นำกระดาษที่ไม่ได้ใช้แล้วมาพับเป็นกระดาษหอผ้าอนามัยแล้วจัดแจงวางให้น้องๆในห้องผู้หญิงทั้งระดับมัธยมและประถมปลาย</p><span class="policy-badge">บริการ</span></div></div>
-      
-      <div class="policy-item reveal"><div class="policy-num">05</div><div class="policy-content"><h3>ขยะแลกแต้ม</h3><p>การแลก ขวด/ฝากขวด/หรือขยะอื่นๆ ให้กับสภาด้วยตนเอง จะได้คะแนนความ ประพฤติ +1และ ลูกอมหรือขนม</p><span class="policy-badge">ส่งเสริมความเป็นระเบียบ</span></div></div>
-      
-      <div class="policy-item reveal"><div class="policy-num">06</div><div class="policy-content"><h3>น้องถามพี่ตอบ</h3><p>พี่น้องๆเข้ามาในOpen chat โดยจะเปิดเผยตัวตนหรือไม่ต้องเปิดเผยตัวตนก็ได้แต่ต้องใส่ มอ ของตนเพื่อทำให้ได้รู้ว่าเป็นพี่หรือเป็นน้อง และก็สามารถเปิดโพลด์ถามตอบพี่ๆน้องๆได้</p><span class="policy-badge">สัมพันธ์</span></div></div>
-      
-      <div class="policy-item reveal"><div class="policy-num">07</div><div class="policy-content"><h3>Music Box</h3><p>พี่ๆจะทำกล่องและวางกระดาษกับปากเอาไว้ที่บริเวณหน้าห้องดนตรีไทย ให้น้องๆทุกคนเขียนเพลงที่ชอบหรือเพลงที่อยากให้เปิดมาใส่ในกล่อง</p><span class="policy-badge">บริการ</span></div></div>
-     
-    </div>
-    <footer>
-      <div class="foot-brand">
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Logo" class="foot-logo-img"/>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
-    </footer>
-  </div>
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
+        let currentUserData = null;
 
-  <div id="page-members" class="page">
-    <div class="page-hero" data-wm="MEMBERS">
-      <span class="tag">รวมคณะกรรมการ</span>
-      <h1 class="section-title">คณะกรรมการ<br>สภานักเรียน</h1>
-      <p class="section-lead" style="max-width:460px">ทีมงานทั้งหมด 16 คนที่ทุ่มเทและพร้อมทำงานเพื่อนักเรียนทุกคน เลือกดูตามฝ่ายเพื่อทำความรู้จักได้ทันที</p>
-    </div>
-    <div class="members-overview">
-      <div class="dept-filter reveal">
-        <button class="dept-btn active" id="btn-all" onclick="filterDept('all')"><span class="di-icon">👥</span><span class="di-name">แสดงทั้งหมด</span><span class="di-count">16 คน</span></button>
-        <button class="dept-btn" id="btn-exec" onclick="filterDept('exec')"><span class="di-icon">👑</span><span class="di-name">คณะผู้บริหาร</span><span class="di-count">3 คน</span></button>
-        <button class="dept-btn" id="btn-academic" onclick="filterDept('academic')"><span class="di-icon">📚</span><span class="di-name">ฝ่ายวิชาการ</span><span class="di-count">4 คน</span></button>
-        <button class="dept-btn" id="btn-activity" onclick="filterDept('activity')"><span class="di-icon">🎉</span><span class="di-name">ฝ่ายกิจกรรม</span><span class="di-count">3 คน</span></button>
-        <button class="dept-btn" id="btn-pr" onclick="filterDept('pr')"><span class="di-icon">📢</span><span class="di-name">ฝ่ายประชาสัมพันธ์</span><span class="di-count">3 คน</span></button>
-        <button class="dept-btn" id="btn-sport" onclick="filterDept('sport')"><span class="di-icon">⚽</span><span class="di-name">ฝ่ายกีฬา</span><span class="di-count">3 คน</span></button>
-      </div>
-      <div class="dept-members-grid reveal">
-          <div class="member-card president" data-dept="exec"><div class="member-num">#01</div>
-          <img src="https://cdn.phototourl.com/free/2026-06-10-44dd2ffe-283c-495c-872c-07f82bfa60fc.png" alt="กัญญาพัชร อาจสามารถ">
-          <div class="member-pos">ประธานสภานักเรียน </div>
-          <div class="member-name">กัญญาพัชร อาจสามารถ</div>
-          <div class="member-class">ม.3/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="exec"><div class="member-num">#02</div>
-          <img src="https://cdn.phototourl.com/free/2026-06-13-e72691fc-f52c-4153-8bd0-36883b914156.png" alt="ณกมล เชาว์ปรีชา">
-          <div class="member-pos">รองประธาน</div>
-          <div class="member-name">ณกมล เชาว์ปรีชา </div>
-          <div class="member-class">ม.3/3</div>
-        </div>
-        
-        <div class="member-card" data-dept="exec"><div class="member-num">#03</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-10-d95a8c33-b5f1-4514-9122-30a5efbc5298.png" alt="วณิชชากร สีนวลจันทร์">
-            <div class="member-pos">เลขานุการ</div>
-            <div class="member-name">วณิชชากร สีนวลจันทร์ </div>
-            <div class="member-class">ม.3/4 </div>
-        </div>
-        
-        <div class="member-card" data-dept="academic"><div class="member-num">#04</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-11-a4beb0d8-fba0-45cc-b5cf-43a18837beb5.png" alt="กิตติภัค สุขเกิด">
-            <div class="member-pos">หัวหน้าฝ่ายวิชาการ</div>
-            <div class="member-name">กิตติภัค สุขเกิด
-            </div><div class="member-class">ม.3/1</div>
-        </div>
-        
-        <div class="member-card" data-dept="academic"><div class="member-num">#05</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-15-e8a50a98-4bb6-4d49-a18c-593d62f5f7f6.png" alt="อริสา วัฒโน">
-            <div class="member-pos">วิชาการ</div><div class="member-name">อริสา วัฒโน</div>
-            <div class="member-class">ม.2/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="academic"><div class="member-num">#06</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-15-a852a39c-be44-43ed-ac90-a351a86ecd74.png" alt="ฉัตรเพชร บุญญภูษิต">
-            <div class="member-pos">วิชาการ</div><div class="member-name">ฉัตรเพชร บุญญภูษิต</div>
-            <div class="member-class">ม.2/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="academic"><div class="member-num">#07</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-15-9e6206cb-4bbe-47a0-a3c7-d2b9d0d28920.png" alt="พัทธนันท์ ฤทธิมะหันต์">
-            <div class="member-pos">วิชาการ</div>
-            <div class="member-name">พัทธนันท์ ฤทธิมะหันต์</div><div class="member-class">ม.2/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="activity"><div class="member-num">#08</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-13-4627bb7a-79f1-4774-b84c-49a5161e5d0a.png" alt="รีอา ยาดาฟต์">
-            <div class="member-pos">หัวหน้าฝ่ายกิจกรรม</div><div class="member-name">รีอา ยาดาฟต์</div>
-            <div class="member-class">ม.3/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="activity"><div class="member-num">#09</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-15-73b1ae6c-ee53-4672-97c3-a0867ab6711d.png" alt="กัญญารัตน์ จันทะเรื่อง">
-            <div class="member-pos">ฝ่ายกิจกรรม</div>
-            <div class="member-name">กัญญารัตน์ จันทะเรื่อง</div>
-            <div class="member-class">ม.2/3</div>
-        </div>
-        
-        <div class="member-card" data-dept="activity"><div class="member-num">#10</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-13-8a67d6c5-d0d0-4826-a6fa-1632e18faa86.png" alt="ฐิตาภา แซ่เตียว">
-            <div class="member-pos">ฝ่ายกิจกรรม</div>
-            <div class="member-name">ฐิตาภา แซ่เตียว</div>
-            <div class="member-class">ม.2/3</div>
-        </div>
-        
-        <div class="member-card" data-dept="pr"><div class="member-num">#11</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-11-07387f86-7ff2-4ddf-ad6a-a2bbe0bd7cdc.png" alt="กาณฑ์ สุวรรณกูฎ">
-            <div class="member-pos">หัวหน้าฝ่ายประชาสัมพันธ์</div>
-            <div class="member-name">กาณฑ์ สุวรรณกูฎ</div>
-            <div class="member-class">ม.2/1</div>
-        </div>
-        
-        <div class="member-card" data-dept="pr"><div class="member-num">#12</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-13-bba0a310-5c0d-4c2a-86d4-5d7354c9ed62.png" alt="อภิชาติ มั่งมี">
-            <div class="member-pos">ฝ่ายประชาสัมพันธ์</div>
-            <div class="member-name">อภิชาติ มั่งมี</div>
-            <div class="member-class">ม.2/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="pr"><div class="member-num">#13</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-13-87f1e37d-c56a-4853-9600-863988d94ef9.png" alt="กัณญาพร รอดเจริญ">
-            <div class="member-pos">ฝ่ายประชาสัมพันธ์</div><div class="member-name">กัณญาพร รอดเจริญ</div>
-            <div class="member-class">ม.2/4</div>
-        </div>
-        
-        <div class="member-card" data-dept="sport"><div class="member-num">#14</div>
-            <img src="https://cdn.phototourl.com/free/2026-06-10-43a74f58-f44b-4aa1-97f0-f786df75bb93.jpg" alt="ไมกาห์ เชเมย์ การ์เซีย">
-            <div class="member-pos">หัวหน้าฝ่ายกีฬา</div>
-            <div class="member-name">ไมกาห์ เชเมย์ การ์เซีย</div><div class="member-class">ม.3/4</div>
-        </div>
-      
-        <div class="member-card" data-dept="sport"><div class="member-num">#15</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-13-21290d71-3966-4698-b8c9-14b6af5aa4cf.png" alt="ธีรยา ศุภรธนากุล">
-            <div class="member-pos">ฝ่ายกีฬา</div>
-            <div class="member-name">ธีรยา ศุภรธนากุล</div>
-            <div class="member-class">ม.2/3</div>
-        </div>
-        
-        <div class="member-card" data-dept="sport"><div class="member-num">#16</div>
-            <img src="https://cdn.phototourl.com/member/2026-06-13-921e7e7c-f09a-4236-85d4-1ad1c29a8d74.png" alt="ชุตินันท์ นกแสง">
-            <div class="member-pos">ฝ่ายกีฬา</div>
-            <div class="member-name">ชุตินันท์ นกแสง</div>
-            <div class="member-class">ม.2/3</div>
-        </div>
-        
-      </div>
-    </div>
-    <footer>
-      <div class="foot-brand">
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Logo" class="foot-logo-img"/>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
-    </footer>
-  </div>
-
-  <div id="page-about" class="page">
-    <div class="page-hero" data-wm="ABOUT">
-      <span class="tag">เกี่ยวกับเรา</span>
-      <h1 class="section-title">สภานักเรียน<br>คือเสียงของคุณ</h1>
-      <p class="section-lead" style="max-width:500px">องค์กรนักเรียนที่ทำงานเพื่อนักเรียนทุกคน ด้วยความโปร่งใสและมุ่งมั่น</p>
-    </div>
-    <div class="vm-grid">
-      <div class="vm-card reveal"><span class="tag">วิสัยทัศน์</span><h2 class="section-title" style="color:#fff">Vision</h2><div class="divider"></div><p>มุ่งสร้างโรงเรียนที่นักเรียนมีส่วนร่วมในการบริหารจัดการ ด้วยความโปร่งใส สร้างสรรค์ และตอบสนองความต้องการของนักเรียนอย่างแท้จริง เพื่อให้โรงเรียนเป็นสถานที่แห่งการเรียนรู้และเติบโตอย่างยั่งยืน</p></div>
-      <div class="vm-card red-bg reveal"><span class="tag">พันธกิจ</span><h2 class="section-title">Mission</h2><div class="divider" style="background:rgba(255,255,255,0.5)"></div><p>สร้างผู้นำรุ่นใหม่ที่มีคุณธรรมและจิตสาธารณะ รับฟังปัญหาและนำเสนอแนวทางแก้ไข จัดกิจกรรมที่หลากหลายเพื่อพัฒนาทักษะชีวิตและเสริมสร้างความสามัคคี</p></div>
-    </div>
-    <div class="values-row">
-      <div class="value-card reveal"><div class="value-icon">🎯</div><h3>มุ่งมั่น</h3><p>ทำงานด้วยความตั้งใจและรับผิดชอบต่อหน้าที่ที่ได้รับมอบหมาย</p></div>
-      <div class="value-card reveal" style="transition-delay:.08s"><div class="value-icon">🤝</div><h3>ร่วมมือ</h3><p>ทำงานเป็นทีม เคารพความคิดเห็น และสร้างความสามัคคี</p></div>
-      <div class="value-card reveal" style="transition-delay:.16s"><div class="value-icon">💡</div><h3>สร้างสรรค์</h3><p>คิดนอกกรอบและนำเสนอแนวทางแก้ปัญหาที่แปลกใหม่</p></div>
-      <div class="value-card reveal" style="transition-delay:.24s"><div class="value-icon">🔍</div><h3>โปร่งใส</h3><p>ดำเนินงานอย่างเปิดเผย ตรวจสอบได้ และซื่อสัตย์ต่อทุกคน</p></div>
-    </div>
-    <div class="contact-section">
-      <span class="tag reveal">ติดต่อเรา</span>
-      <h2 class="section-title reveal">ส่งข้อความถึงสภา</h2>
-      <p class="section-lead reveal" style="max-width:460px">มีข้อเสนอแนะ ปัญหา หรืออยากเข้าร่วมกิจกรรม? สภานักเรียนพร้อมรับฟังเสมอ</p>
-      <div class="contact-grid">
-        <div class="contact-items reveal">
-          <div class="ci"><div class="ci-icon">⏰</div><div><div class="ci-label">เวลาทำการ</div>
-          <div class="ci-val">จันทร์–ศุกร์ เวลา 07.30–16.00 น.</div></div></div>
-          <div class="ci"><div class="ci-icon">📘</div><div><div class="ci-label">Facebook</div><div class="ci-val">โรงเรียนตั้งพิรุฬห์ธรรม</div></div></div>
-          <div class="ci"><div class="ci-icon">📸</div><div><div class="ci-label">Instagram</div><div class="ci-val">@connect_tts17</div></div></div>
-          <img src="https://cdn.phototourl.com/free/2026-06-06-34ad761a-7d3e-452c-bf88-4f91a09dba78.png" alt="" style="height:145px;width:70%">
-        </div>
-        <div class="qr-panel reveal">
-          <span class="qr-badge">📸 ติดตามเราได้ที่ Instagram</span>
-          <div class="qr-frame">
-            <img src="https://cdn.phototourl.com/free/2026-06-06-04d72c2f-a636-4625-b3f4-401d68709c77.jpg" alt="QR Code Instagram"/>
-          </div>
-          <div class="qr-handle"><span>@</span>connect_tts17</div>
-          <div class="qr-sub">สแกน QR เพื่อติดตาม</div>
-        </div>
-      </div>
-    </div>
-    <footer>
-      <div class="foot-brand">
-        <img src="https://cdn.phototourl.com/free/2026-06-02-b8fa1c9c-d7b2-4593-a1cb-f9adce9f0701.png" alt="Logo" class="foot-logo-img"/>
-        <div><div class="th">สภานักเรียน</div><div class="copy">© 2569 Student Council</div></div>
-      </div>
-      <div class="foot-nav"><button onclick="showPage('home')">หน้าแรก</button><button onclick="showPage('policy')">นโยบาย</button><button onclick="showPage('members')">สมาชิก</button><button onclick="showPage('about')">เกี่ยวกับเรา</button></div>
-    </footer>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // ── WELCOME POPUP LOGIC ──
-      const popupOverlay = document.getElementById('welcomePopupOverlay');
-      const closePopupBtn = document.getElementById('closeWelcomePopupBtn');
-      
-      if(popupOverlay && closePopupBtn) {
-        // ล็อกไม่ให้เลื่อนหน้าจอเมื่อเปิดหน้าเว็บ
-        document.body.style.overflow = 'hidden';
-        
-        closePopupBtn.addEventListener('click', () => {
-          popupOverlay.style.opacity = '0';
-          popupOverlay.style.visibility = 'hidden';
-          // ปลดล็อกให้เลื่อนหน้าจอได้ปกติ
-          document.body.style.overflow = '';
-          // อัพเดต Navbar ให้ทำงานต่อ
-          handleNavbar();
+        // ฟังก์ชันกด Login ด้วย Google
+        document.getElementById('btn-google-login').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                await handleUserDatabase(user);
+            } catch (error) {
+                alert("การเข้าสู่ระบบล้มเหลว: " + error.message);
+            }
         });
-      }
 
-      initReveal();
-      handleNavbar();
-    });
+        // จัดการข้อมูลผู้ใช้ใน Firestore Database
+        async function handleUserDatabase(user) {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
 
-    function showPage(name) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page-' + name).classList.add('active');
-      document.querySelectorAll('.nav-dropdown a').forEach(a => a.classList.remove('active'));
-      const link = document.getElementById('nav-' + name);
-      if (link) link.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      if (name === 'members') filterDept('all');
-      initReveal();
-      handleNavbar();
-      return false;
-    }
-
-    const menuBtn  = document.getElementById('menuBtn');
-    const dropdown = document.getElementById('dropdown');
-    menuBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const isOpen = dropdown.classList.toggle('open');
-      menuBtn.classList.toggle('open', isOpen);
-    });
-    document.addEventListener('click', e => {
-      if (!dropdown.contains(e.target) && !menuBtn.contains(e.target)) {
-        dropdown.classList.remove('open');
-        menuBtn.classList.remove('open');
-      }
-    });
-    function navTo(name) {
-      showPage(name);
-      dropdown.classList.remove('open');
-      menuBtn.classList.remove('open');
-      return false;
-    }
-
-    function filterDept(deptName) {
-      document.querySelectorAll('.dept-btn').forEach(btn => btn.classList.remove('active'));
-      if(deptName === 'all') {
-        document.getElementById('btn-all').classList.add('active');
-      } else {
-        document.getElementById('btn-' + deptName).classList.add('active');
-      }
-      const cards = document.querySelectorAll('.member-card');
-      cards.forEach(card => {
-        const cardDept = card.getAttribute('data-dept');
-        if (deptName === 'all' || cardDept === deptName) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
+            if (userDoc.exists()) {
+                currentUserData = userDoc.data();
+            } else {
+                // ถ้าเป็นผู้ใช้ใหม่ ให้ดึงข้อมูลจาก Google มาสร้างบัญชีเริ่มต้นที่ 0 แต้ม
+                currentUserData = {
+                    uid: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    points: 0
+                };
+                await setDoc(userDocRef, currentUserData);
+            }
+            showApp();
         }
-      });
-    }
 
-    let revealObserver;
-    function initReveal() {
-      if (revealObserver) revealObserver.disconnect();
-      revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+        // แสดงผลหน้าหลัก
+        function showApp() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            
+            document.getElementById('user-display-name').innerText = currentUserData.name;
+            document.getElementById('user-display-email').innerText = currentUserData.email;
+            document.getElementById('user-display-avatar').src = currentUserData.photoURL || 'https://via.placeholder.com/60';
+            document.getElementById('user-display-points').innerText = currentUserData.points.toLocaleString();
+            
+            renderRanking();
+        }
+
+        // ฟังก์ชันดึงอันดับจาก Firebase เรียงแต้มมาก -> น้อย
+        async function renderRanking() {
+            const list = document.getElementById('ranking-list');
+            list.innerHTML = "";
+
+            try {
+                const q = query(collection(db, "users"), orderBy("points", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                let index = 1;
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const item = document.createElement('div');
+                    item.className = "rank-item";
+                    
+                    if (user.uid === currentUserData.uid) {
+                        item.style.backgroundColor = "rgba(0, 56, 168, 0.05)";
+                    }
+
+                    item.innerHTML = `
+                        <div class="rank-number">${index}</div>
+                        <div class="rank-name">${user.name}</div>
+                        <div class="rank-points">${user.points.toLocaleString()} แต้ม</div>
+                    `;
+                    list.appendChild(item);
+                    index++;
+                });
+            } catch (error) {
+                list.innerHTML = `<p style="padding: 20px; color: red; text-align:center;">ไม่สามารถโหลดอันดับได้: ${error.message}</p>`;
+            }
+        }
+
+        // ตรวจสอบสถานะการล็อกอินอัตโนมัติ (เมื่อกดรีเฟรชหน้าเว็บ)
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await handleUserDatabase(user);
+            } else {
+                document.getElementById('login-section').style.display = 'flex';
+                document.getElementById('main-app').style.display = 'none';
+            }
         });
-      }, { threshold: 0.08 });
-      document.querySelectorAll('.page.active .reveal').forEach(el => revealObserver.observe(el));
-    }
 
-    function handleNavbar() {
-      const mainNav = document.getElementById('mainNav');
-      const isHomePage = document.getElementById('page-home').classList.contains('active');
-      if (isHomePage) {
-        if (window.scrollY < 80) {
-          mainNav.classList.add('nav-hidden');
-          mainNav.style.boxShadow = 'none';
-          document.getElementById('dropdown').classList.remove('open');
-          document.getElementById('menuBtn').classList.remove('open');
-        } else {
-          mainNav.classList.remove('nav-hidden');
-          mainNav.style.boxShadow = '0 4px 28px rgba(0,0,0,0.5)';
+        // ปุ่มออกระบบ
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                location.reload();
+            });
+        });
+    </script>
+
+    <script>
+        // ฟังก์ชันสำหรับหน้าตา UI สลับแท็บทั่วไป
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
         }
-      } else {
-        mainNav.classList.remove('nav-hidden');
-        mainNav.style.boxShadow = window.scrollY > 40 ? '0 4px 28px rgba(0,0,0,0.5)' : 'none';
-      }
-    }
-
-    window.addEventListener('scroll', handleNavbar, { passive: true });
-  </script>
-  <script>
-  (function(){
-    const btn      = document.getElementById('codePopupBtn');
-    const overlay  = document.getElementById('codePopupOverlay');
-    const closeBtn = document.getElementById('codePopupClose');
-    const copyBtn  = document.getElementById('copyCodeBtn');
-    const display  = document.getElementById('codeDisplay');
-    const lineBadge= document.getElementById('lineCountBadge');
-
-    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    function colorize(h){
-      return h
-        .replace(/(&lt;\/?)([\w-]+)/g,'<b style="color:#f47e7e">$1$2</b>')
-        .replace(/([\w-]+=)(&quot;[^&]*?&quot;)/g,'<span style="color:#e5c07b">$1</span><span style="color:#98c379">$2</span>')
-        .replace(/([\w-]+)(\s*:)(\s*)(#[0-9a-fA-F]{3,8}|[\d.]+px|[\d.]+em|[\d.]+rem|[\d.]+s|[\d.]+%)/g,
-                              '<span style="color:#61afef">$1</span>$2$3<span style="color:#d19a66">$4</span>')
-        .replace(/(\/\*[\s\S]*?\*\/)/g,'<i style="color:#5c6370">$1</i>')
-        .replace(/(\/\/[^\n]*)/g,'<i style="color:#5c6370">$1</i>');
-    }
-
-    function openPopup(){
-      const raw   = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const lines = raw.split('\n');
-      lineBadge.textContent = lines.length.toLocaleString() + ' บรรทัด';
-
-      const colored = colorize(esc(raw).replace(/&amp;quot;/g,'&quot;'));
-
-      const numbered = colored.split('\n').map((l, i) => {
-        const n = String(i + 1).padStart(5, ' ');
-        return '<span style="color:#2d2d2d;user-select:none;margin-right:20px;display:inline-block;min-width:36px;text-align:right;border-right:1px solid #2d2d2d;padding-right:12px">'
-               + n + '</span>' + l;
-      }).join('\n');
-
-      display.innerHTML = numbered;
-      overlay.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePopup(){
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', openPopup);
-    closeBtn.addEventListener('click', closePopup);
-    overlay.addEventListener('click', e => { if(e.target === overlay) closePopup(); });
-    document.addEventListener('keydown', e => { if(e.key === 'Escape') closePopup(); });
-
-    copyBtn.addEventListener('click', function(){
-      const raw = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      navigator.clipboard.writeText(raw).then(() => {
-        const txt = document.getElementById('copyCodeTxt');
-        txt.textContent = 'คัดลอกแล้ว ✓';
-        copyBtn.style.cssText += ';background:rgba(40,200,64,0.15)!important;border-color:rgba(40,200,64,0.4)!important;color:#28c840!important';
-        copyBtn.dataset.copied = '1';
-        setTimeout(() => {
-          txt.textContent = 'คัดลอก';
-          copyBtn.style.background = 'rgba(255,0,0,0.1)';
-          copyBtn.style.borderColor = 'rgba(255,0,0,0.3)';
-          copyBtn.style.color = '#ff3333';
-          delete copyBtn.dataset.copied;
-        }, 2500);
-      });
-    });
-  })();
-  </script>
-
+    </script>
 </body>
 </html>
