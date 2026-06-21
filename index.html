@@ -299,7 +299,7 @@
             <p><b>ชื่อ-นามสกุล:</b> <span id="cardName">-</span></p>
             <p><b>รหัสประจำตัว:</b> <span id="cardPhone">-</span></p>
             <p><b>ชั้น:</b> <span id="cardClass">-</span></p>
-            <p><b>แต้มสะสม:</b> <span id="cardPoints">0</span> แต้ม</p>
+            <p><b>แต้มสะสม:</b> <span id="cardPoints"1>0</span> แต้ม</p>
           </div>
         </div>
         <div class="id-bottom">บัตรนี้ผูกกับรหัสประจำตัวนักเรียนของคุณ</div>
@@ -324,6 +324,7 @@
     <span class="icon">🪪</span>บัตรนักเรียน
   </button>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <div id="toast-container"></div>
 
@@ -586,6 +587,14 @@ function logoutCard(){
   const student = getStudent();
   if(student) enterApp();
 })();
+
+// เปลี่ยน URL และ KEY เป็นของคุณที่ก๊อปมาจากสเต็ปที่ 3
+const SUPABASE_URL = 'https://mrnuyhcfogqrvkjttzzt.supabase.coco';
+const SUPABASE_KEY = 'sb_publishable_nu_ojLfy8ehumJTQ5fa6hg_7uT2IPHpุณ';
+
+const supabase = json.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
 </script>
 
 </body>
