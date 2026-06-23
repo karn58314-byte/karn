@@ -3,40 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบขยะแลกรางวัลด้วยบัตรนักเรียน</title>
-    <link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="index.js">
+    <title>Recycle Hero - เก็บขยะแลกรางวัล</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.js">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
     <div class="container">
-        <h1>♻️ระบบขยะแลกรางวัล</h1>
+        <header>
+            <h1>🌱 Recycle Hero</h1>
+            <p class="subtitle">ระบบธนาคารขยะ เปลี่ยนของเสียเป็นคะแนนรักษ์โลก</p>
+        </header>
 
-        <div id="login-section" class="box">
-            <h2>เข้าสู่ระบบด้วยบัตรนักเรียน</h2>
-            <p style="font-size: 0.9rem; color: #666;">*(ในระบบจริงสามารถใช้ Email เป็น student_id@school.com ได้)*</p>
-            
-            <input type="password" id="password" placeholder="รหัสผ่าน">
-            <button id="btn-login">เข้าสู่ระบบ</button>
+        <div id="login-box" class="card">
+            <h2>เข้าสู่ระบบสมาชิก</h2>
+            <div class="input-group">
+                <input type="text" id="phone-input" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" maxlength="10">
+                <button onclick="login()">ตกลง</button>
+            </div>
+            <p style="font-size: 13px; color: #666; margin-top: 8px;">*หากไม่เคยมีประวัติ ระบบจะพาไปสมัครสมาชิกใหม่ทันที</p>
         </div>
 
-        <div id="dashboard-section" class="box hidden">
-            <div class="profile-card">
-                <h2>สวัสดี, <span id="student-name">กำลังโหลด...</span></h2>
-                <p>เลขประจำตัวนักเรียน: <span id="student-card-id">-</span></p>
-                <div class="points-display">
-                    คะแนนสะสม: <strong id="student-points">0</strong> แต้ม
+        <div id="app-dashboard" style="display: none;">
+            
+            <div class="user-panel">
+                <div>
+                    <h3>สวัสดีคุณ: <span id="user-name" style="color:#2e7d32;">-</span></h3>
+                    <div class="points-badge">คะแนนสะสม: <strong id="user-points">0</strong> แต้ม</div>
                 </div>
-                <button id="btn-logout" class="btn-danger">ออกจากระบบ</button>
+                <button onclick="logout()" class="btn-logout">ออกจากระบบ</button>
             </div>
 
-            <h2 style="margin-top: 30px;">🎁 รายการของรางวัลที่แลกได้</h2>
-            <div id="rewards-list" class="rewards-grid">
-          </div>
+            <div class="card">
+                <h2>♻️ นำขยะมาฝาก (เพิ่มคะแนน)</h2>
+                <form id="trash-form" onsubmit="addTrashPoints(event)">
+                    <div class="form-row">
+                        <select id="trash-type" required>
+                            <option value="">-- เลือกประเภทขยะ --</option>
+                            <option value="2">ขวดพลาสติกใส (PET) : 2 แต้ม / ชิ้น</option>
+                            <option value="3">กระป๋องอลูมิเนียม : 3 แต้ม / ชิ้น</option>
+                            <option value="1">กระดาษ / ลัง : 1 แต้ม / กิโลกรัม</option>
+                        </select>
+                        <input type="number" id="trash-qty" placeholder="จำนวน" min="1" required>
+                        <button type="submit" class="btn-success">บันทึกแต้ม</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>🎁 แลกของรางวัล</h2>
+                <div id="rewards-grid" class="rewards-grid">
+                    </div>
+            </div>
+
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
